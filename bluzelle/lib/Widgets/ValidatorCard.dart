@@ -1,5 +1,6 @@
-import 'package:bluzelle/Constants.dart';
+import 'package:bluzelle/Screens/NewStake.dart';
 import 'package:bluzelle/Utils/ColorRandminator.dart';
+import 'file:///I:/Bluzelle/bluzelle/lib/Models/HomeToNewStake.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,22 +13,35 @@ class ValidatorCard extends StatelessWidget{
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10.0,5,10,10),
-        child: Container(
-          width: MediaQuery.of(context).size.width*0.92,
+        padding: const EdgeInsets.fromLTRB(5.0,5,5,5),
+        child: FlatButton(
+          onPressed: (){
+            Navigator.pushNamed(
+              context,
+              NewStake.routeName,
+              arguments: HomeToNewStake(
+                name: name,
+                address: address,
+                commission: commission
+              ),
+            );
+          },
           child: Container(
+            width: MediaQuery.of(context).size.width*0.92,
+            child: Container(
 //            decoration: BoxDecoration(
 //              borderRadius: BorderRadius.all(Radius.circular(10)),
 //              border: Border.all(
 //                  color: Colors.grey
 //              ),
 //            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                leading: _circle(name.substring(0,1), context) ,
-                title: Text(name),
-                subtitle: Text(address),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  leading: _circle(name.substring(0,1), context) ,
+                  title: Text(name),
+                  subtitle: Text(address),
+                ),
               ),
             ),
           ),

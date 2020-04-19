@@ -1,4 +1,6 @@
 import 'package:bluzelle/Constants.dart';
+import 'package:bluzelle/Screens/NewStake.dart';
+import 'package:bluzelle/Screens/NewStakeConfirmation.dart';
 import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sacco/sacco.dart';
 import 'Screens/Home.dart';
+import 'Screens/TransactionNewStake.dart';
 
 void main() => runApp(MyApp());
 
@@ -42,21 +45,25 @@ class MyApp extends StatelessWidget {
         systemNavigationBarDividerColor: background,
         systemNavigationBarIconBrightness: Brightness.dark// status bar color
     ));
-    return CupertinoApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         DefaultMaterialLocalizations.delegate,
         DefaultCupertinoLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
       ],
+      routes: {
+        '/home': (context) => Home(),
+        '/newStake': (context) => NewStake(),
+        '/newStakeConfirmation': (context) => NewStakeConfirmation(),
+        '/transactionNewStake': (context) => TransactionNewStake(),
+      },
       title: 'Flutter Demo',
-      theme: CupertinoThemeData(
-        textTheme: CupertinoTextThemeData(
-          textStyle: TextStyle(fontFamily: AppTheme.fontName)
-        ) ,
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: notWhite,
-      ),
+      theme: ThemeData(
+      primarySwatch: Colors.blue,
+      textTheme: AppTheme.textTheme,
+      platform: TargetPlatform.iOS,
+    ),
       home: Home(),
     );
   }

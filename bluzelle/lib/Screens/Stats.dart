@@ -18,11 +18,9 @@ class StatsState extends State<Stats>{
   String balance = "123";
   String unbondedStake = "123";
   String bondedStake = "321";
-  bool loading = false;
+  bool loading = true;
   _getInfo()async {
-    setState(() {
-      loading =false;
-    });
+
     Response pools = await BluzelleWrapper.getPool();
     String body = utf8.decode(pools.bodyBytes);
     final json = jsonDecode(body);
@@ -86,8 +84,8 @@ class StatsState extends State<Stats>{
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  TopBottom(first: unbondedStake, second: "UBNT",size: 20, weight: FontWeight.bold,),
-                  Text("Unbonded Stake", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:grey),)
+                  TopBottom(first: bondedStake, second: "UBNT",size: 20, weight: FontWeight.bold,),
+                  Text("Bonded Stake", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:grey),)
                 ],
               ),
               VerticalDivider(
@@ -97,8 +95,8 @@ class StatsState extends State<Stats>{
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  TopBottom(first: bondedStake, second: "UBNT",size: 20, weight: FontWeight.bold,),
-                  Text("Bonded Stake", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:grey),)
+                  TopBottom(first: unbondedStake, second: "UBNT",size: 20, weight: FontWeight.bold,),
+                  Text("Unbonded Stake", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:grey),)
                 ],
               ),
             ],

@@ -1,8 +1,10 @@
 import 'package:sacco/sacco.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BluzelleTransactions {
+  static var  networkInfo = NetworkInfo( bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
+
   static sendTokens()async {
-    final networkInfo = NetworkInfo( bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
     var seed = "around buzz diagram captain obtain detail salon mango muffin brother morning jeans display attend knife carry green dwarf vendor hungry fan route pumpkin car";
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
@@ -31,6 +33,37 @@ class BluzelleTransactions {
     );
     if (result.success) {
       print("Tx send successfully. Hash: ${result.hash}");
+    } else {
+      print("Tx send error: ${result.error.errorMessage}");
+    }
+  }
+  static Future<String> sendDelegation(String amount, String validator)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String seed= prefs.getString("mnemonic");
+    final mnemonic = seed.split(" ");
+    final wallet = Wallet.derive(mnemonic,  networkInfo);
+    final message = StdMsg(
+      type: "cosmos-sdk/MsgDelegate",
+      value: {
+        "amount": {
+          "amount": amount,
+          "denom": "ubnt"
+        },
+        "delegator_address": wallet.bech32Address,
+        "validator_address": validator
+      },
+    );
+    final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+    );
+    final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
+    final result = await TxSender.broadcastStdTx(
+      wallet: wallet,
+      stdTx: signedStdTx,
+    );
+    if (result.success) {
+      print("Tx send successfully. Hash: ${result.hash}");
+      return(result.hash);
     } else {
       print("Tx send error: ${result.error.errorMessage}");
     }
