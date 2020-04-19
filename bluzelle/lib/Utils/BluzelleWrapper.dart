@@ -7,4 +7,14 @@ class BluzelleWrapper{
     var resp = await http.get(url);
     return resp;
   }
+  static Future<http.Response> getBalance(String address) async {
+    var url = baseUrl+"/bank/balances/"+address;
+    var resp = await http.get(url);
+    return resp;
+  }
+  static Future<http.Response> getPool() async {
+    var url = baseUrl+"/staking/pool";
+    var resp = await http.get(url);
+    return resp;
+  }
 }

@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:bluzelle/Constants.dart';
 import 'package:bluzelle/Models/ValidatorList.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
-import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:bluzelle/Widgets/ValidatorCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart' as http;
 class ValidatorListTab extends StatefulWidget {
   @override
   ValidatorListState createState() => ValidatorListState();

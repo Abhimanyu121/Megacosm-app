@@ -9,7 +9,9 @@ part of 'BalanceWrapper.dart';
 BalanceWrapper _$BalanceWrapperFromJson(Map<String, dynamic> json) {
   return BalanceWrapper(
     height: json['height'] as String,
-    result: Balance.fromJson(json['result'] as Map<String, dynamic>),
+    result: (json['result'] as List)
+        .map((e) => Balance.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 

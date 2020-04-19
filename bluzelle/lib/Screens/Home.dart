@@ -5,6 +5,8 @@ import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Stats.dart';
+
 class Home extends StatefulWidget {
 
   @override
@@ -82,7 +84,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           child: TabBarView(
             controller: _controller,
             children: <Widget>[
-              ValidatorListTab(),
+              Stats(),
               ValidatorListTab(),
               ValidatorListTab(),
               ValidatorListTab(),

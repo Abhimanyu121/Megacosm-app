@@ -16,12 +16,12 @@ class ValidatorCard extends StatelessWidget{
         child: Container(
           width: MediaQuery.of(context).size.width*0.92,
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              border: Border.all(
-                  color: Colors.grey
-              ),
-            ),
+//            decoration: BoxDecoration(
+//              borderRadius: BorderRadius.all(Radius.circular(10)),
+//              border: Border.all(
+//                  color: Colors.grey
+//              ),
+//            ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
