@@ -1,6 +1,6 @@
 import 'package:bluzelle/Models/Commission.dart';
 import 'package:bluzelle/Models/ValidatorDescription.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';  
 part 'Validator.g.dart';
 
 @JsonSerializable(nullable: false)

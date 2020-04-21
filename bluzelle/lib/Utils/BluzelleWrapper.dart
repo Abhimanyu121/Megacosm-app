@@ -17,4 +17,21 @@ class BluzelleWrapper{
     var resp = await http.get(url);
     return resp;
   }
+  static Future<http.Response> getDelegations(String address) async {
+    var url = baseUrl+"/staking/delegators/$address/validators";
+    var resp = await http.get(url);
+    return resp;
+  }
+  static Future<http.Response> delegationInfo(String delAddress, String valAddress) async {
+    var url = baseUrl+"/distribution/delegators/$delAddress/rewards/$valAddress";
+    var resp = await http.get(url);
+    return resp;
+  }
+  static Future<http.Response> delegatedAmount(String delAddress, String valAddress) async {
+    var url = baseUrl+"/staking/delegators/$delAddress/delegations/$valAddress";
+    print(url);
+    var resp = await http.get(url);
+    return resp;
+  }
+
 }

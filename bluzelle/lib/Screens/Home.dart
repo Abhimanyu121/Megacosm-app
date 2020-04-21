@@ -18,10 +18,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
   TabController _controller;
   void tabChange(int index){
-    setState(() {
-      currentIndex = index;
-      _controller.animateTo(index);
-    });
+
+    _controller.animateTo(index);
   }
   @override
   void initState() {
@@ -83,6 +81,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           child: TabBarView(
             controller: _controller,
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               Stats(),
               ValidatorListTab(),

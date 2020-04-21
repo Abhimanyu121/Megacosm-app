@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/BondedNotBondedWrapper.dart';
+import 'package:bluzelle/Models/ValidatorList.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/TopBottomText.dart';
+import 'package:bluzelle/Widgets/ValidatorCardStats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -14,11 +16,12 @@ class Stats extends StatefulWidget{
   @override
   StatsState createState() => StatsState();
 }
-class StatsState extends State<Stats>{
+class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   String balance = "123";
   String unbondedStake = "123";
   String bondedStake = "321";
   bool loading = true;
+  ValidatorList valList;
   _getInfo()async {
 
     Response pools = await BluzelleWrapper.getPool();
@@ -30,11 +33,15 @@ class StatsState extends State<Stats>{
     Response balModel = await BluzelleWrapper.getBalance(address);
     String body1 = utf8.decode(balModel.bodyBytes);
     final json1 = jsonDecode(body1);
+    Response delegations = await BluzelleWrapper.getDelegations(address);
+    String delBody = utf8.decode(delegations.bodyBytes);
+    final delJson = jsonDecode(delBody);
     BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
+    valList = ValidatorList.fromJson(delJson);
+    bondedStake = model.result.bonded_tokens;
+    unbondedStake = model.result.not_bonded_tokens;
+    balance = balanceWrapper.result[0].amount;
     setState(() {
-      bondedStake = model.result.bonded_tokens;
-      unbondedStake = model.result.not_bonded_tokens;
-      balance = balanceWrapper.result[0].amount;
       loading = false;
     });
   }
@@ -102,8 +109,24 @@ class StatsState extends State<Stats>{
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16,5,5,10),
+          child: Text("Delegations",style: TextStyle(fontSize:25,color: grey, fontWeight: FontWeight.bold),),
+        ),
+        ListView.builder(
+            itemCount: valList.result.length,
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            itemBuilder: (BuildContext context, int index){
+              return ValidatorCardStats(address: valList.result[index].operator_address,name: valList.result[index].description.moniker,commission: valList.result[0].commission.commission_rates.max_rate,);
+            }
+        )
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
 }

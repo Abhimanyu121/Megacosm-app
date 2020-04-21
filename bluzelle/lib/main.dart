@@ -1,14 +1,19 @@
 import 'package:bluzelle/Constants.dart';
 import 'package:bluzelle/Screens/NewStake.dart';
 import 'package:bluzelle/Screens/NewStakeConfirmation.dart';
+import 'package:bluzelle/Screens/UndelegateConfirmation.dart';
+import 'package:bluzelle/Screens/WithdrawSuccess.dart';
 import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sacco/sacco.dart';
+import 'Screens/DelegationInfo.dart';
 import 'Screens/Home.dart';
+import 'Screens/SetUndelegationAmount.dart';
 import 'Screens/TransactionNewStake.dart';
+import 'Screens/WithdrawConfirmation.dart';
 
 void main() => runApp(MyApp());
 
@@ -57,6 +62,11 @@ class MyApp extends StatelessWidget {
         '/newStake': (context) => NewStake(),
         '/newStakeConfirmation': (context) => NewStakeConfirmation(),
         '/transactionNewStake': (context) => TransactionNewStake(),
+        '/delegationInfo': (context) => DelegationInfo(),
+        '/withdrawConfirmation': (context) => WithdrawConfirmation(),
+        '/withdrawSuccess': (context) => WithdrawSuccess(),
+        '/setUndelegationAmount': (context) => SetUndelegationAmount(),
+        '/undelegateConfirmation': (context) => UndelegateConfirmation(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
