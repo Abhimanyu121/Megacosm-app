@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/CurrentDelegationWrapper.dart';
 import 'package:bluzelle/Models/DelegationInfo.dart';
+import 'package:bluzelle/Models/RelegationSelection.dart';
 import 'package:bluzelle/Models/ToWithdrawConfirmation.dart';
+import 'package:bluzelle/Screens/RedelegationSelection.dart';
 import 'package:bluzelle/Screens/SetUndelegationAmount.dart';
 import 'package:bluzelle/Screens/WithdrawConfirmation.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
@@ -30,7 +32,6 @@ class DelegationInfoState extends State<DelegationInfo>{
   DelegationInfoModel args;
   String bal = "0";
   String stake = "0";
-  TextEditingController _amount= new TextEditingController();
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -233,20 +234,20 @@ class DelegationInfoState extends State<DelegationInfo>{
                         return;
                       }
 
-//                      Navigator.pushNamed(
-//                        context,
-//                        NewStakeConfirmation.routeName,
-//                        arguments: HomeToNewStakeConfirm(
-//                            name: args.name,
-//                            address: args.address,
-//                            commission: args.commission,
-//                            amount: _amount.text
-//                        ),
-//                      );
+                      Navigator.pushNamed(
+                        context,
+                        RedelegationSelection.routeName,
+                        arguments: RedelegationSelectionModel(
+                            name: args.name,
+                            srcAddress: args.address,
+                            delegatorAddress: delegatorAddress,
+                            amount: stake
+                        ),
+                      );
                     },
                     padding: EdgeInsets.all(12),
                     color: appTheme,
-                    child:Text('Undelegate', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                    child:Text('Redelegate', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],

@@ -1,6 +1,9 @@
 import 'package:bluzelle/Constants.dart';
 import 'package:bluzelle/Screens/NewStake.dart';
 import 'package:bluzelle/Screens/NewStakeConfirmation.dart';
+import 'package:bluzelle/Screens/RedelegationAmount.dart';
+import 'package:bluzelle/Screens/RedelegationTx.dart';
+import 'package:bluzelle/Screens/RedlegationConfirmation.dart';
 import 'package:bluzelle/Screens/UndelegateConfirmation.dart';
 import 'package:bluzelle/Screens/WithdrawSuccess.dart';
 import 'package:bluzelle/Utils/BluzelleTransctions.dart';
@@ -11,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sacco/sacco.dart';
 import 'Screens/DelegationInfo.dart';
 import 'Screens/Home.dart';
+import 'Screens/RedelegationSelection.dart';
 import 'Screens/SetUndelegationAmount.dart';
 import 'Screens/TransactionNewStake.dart';
 import 'Screens/WithdrawConfirmation.dart';
@@ -67,6 +71,10 @@ class MyApp extends StatelessWidget {
         '/withdrawSuccess': (context) => WithdrawSuccess(),
         '/setUndelegationAmount': (context) => SetUndelegationAmount(),
         '/undelegateConfirmation': (context) => UndelegateConfirmation(),
+        '/redelegationSelection': (context) => RedelegationSelection(),
+        '/redelegationAmount': (context) => RedelegationAmount(),
+        '/redelegationConfirm': (context) => RedelegationConfirmation(),
+        '/redelegationTx': (context) => RedelegationTx(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(

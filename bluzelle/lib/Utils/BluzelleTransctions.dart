@@ -126,4 +126,36 @@ class BluzelleTransactions {
       print("Tx send error: ${result.error.errorMessage}");
     }
   }
+  static Future<String>redelegate(String srcValidator, String destValidator, String delegator,String amount)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String seed= prefs.getString("mnemonic");
+    final mnemonic = seed.split(" ");
+    final wallet = Wallet.derive(mnemonic,  networkInfo);
+    final message = StdMsg(
+        type: "cosmos-sdk/MsgBeginRedelegate",
+        value:{
+          "amount": {
+            "amount": amount,
+            "denom": "ubnt"
+          },
+          "delegator_address": delegator,
+          "validator_dst_address": destValidator,
+          "validator_src_address": srcValidator
+        }
+    );
+    final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+    );
+    final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
+    final result = await TxSender.broadcastStdTx(
+      wallet: wallet,
+      stdTx: signedStdTx,
+    );
+    if (result.success) {
+      print("Tx send successfully. Hash: ${result.hash}");
+      return(result.hash);
+    } else {
+      print("Tx send error: ${result.error.errorMessage}");
+    }
+  }
 }

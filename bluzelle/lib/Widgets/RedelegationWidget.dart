@@ -1,16 +1,20 @@
-import 'package:bluzelle/Screens/NewStake.dart';
+import 'package:bluzelle/Models/RedelegationAmountModel.dart';
+import 'package:bluzelle/Models/RelegationSelection.dart';
+import 'package:bluzelle/Screens/RedelegationAmount.dart';
 import 'package:bluzelle/Utils/ColorRandminator.dart';
-import 'file:///I:/Bluzelle/bluzelle/lib/Models/HomeToNewStake.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ValidatorCard extends StatelessWidget{
+class RedelegationCard extends StatelessWidget{
   final String name;
   final String commission;
   final String address;
-  ValidatorCard({this.commission, this.address, this.name});
+  final RedelegationSelectionModel srcInfo;
+  RedelegationCard({this.commission, this.address, this.name, this.srcInfo});
+
   @override
   Widget build(BuildContext context) {
+    print("widget:"+srcInfo.delegatorAddress);
     return Center(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(5.0,5,5,5),
@@ -18,11 +22,15 @@ class ValidatorCard extends StatelessWidget{
           onPressed: (){
             Navigator.pushNamed(
               context,
-              NewStake.routeName,
-              arguments: HomeToNewStake(
-                name: name,
-                address: address,
-                commission: commission
+              RedelegationAmount.routeName,
+              arguments: RedelegationAmountModel(
+                  srcAddress: srcInfo.srcAddress,
+                  srcName: srcInfo.name,
+                  delegatorAddress: srcInfo.delegatorAddress,
+                  desCommission: commission,
+                destAddress: address,
+                destName: name,
+                  totalAmount: srcInfo.amount
               ),
             );
           },
