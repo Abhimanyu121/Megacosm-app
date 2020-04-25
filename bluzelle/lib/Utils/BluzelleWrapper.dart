@@ -33,5 +33,12 @@ class BluzelleWrapper{
     var resp = await http.get(url);
     return resp;
   }
+  static Future<http.Response> proposalList() async {
+    var url = baseUrl+"/gov/proposals";
+    print(url);
+    var resp = await http.get(url);
+    print(resp);
+    return resp;
+  }
 
 }

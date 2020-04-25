@@ -158,4 +158,40 @@ class BluzelleTransactions {
       print("Tx send error: ${result.error.errorMessage}");
     }
   }
+  static Future<String>newProposal(String description, String title, String stake)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String seed= prefs.getString("mnemonic");
+    final mnemonic = seed.split(" ");
+    final wallet = Wallet.derive(mnemonic,  networkInfo);
+    final message = StdMsg(
+        type: "cosmos-sdk/MsgSubmitProposal",
+        value:{
+          "title": title,
+          "description": description,
+          "initial_deposit": [
+            {
+              "amount": stake,
+              "denom": "ubnt"
+            }
+          ],
+          "proposal_content": description,
+          "proposal_type": "text",
+          "proposer": wallet.bech32Address
+        }
+    );
+    final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+    );
+    final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
+    final result = await TxSender.broadcastStdTx(
+      wallet: wallet,
+      stdTx: signedStdTx,
+    );
+    if (result.success) {
+      print("Tx send successfully. Hash: ${result.hash}");
+      return(result.hash);
+    } else {
+      print("Tx send error: ${result.error.errorMessage}");
+    }
+  }
 }
