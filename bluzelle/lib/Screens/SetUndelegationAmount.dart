@@ -1,6 +1,5 @@
 
 import 'package:bluzelle/Models/ToWithdrawConfirmation.dart';
-import 'package:bluzelle/Models/WithdrawSuccessModel.dart';
 import 'package:bluzelle/Screens/UndelegateConfirmation.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,6 @@ import 'package:toast/toast.dart';
 import '../Constants.dart';
 class SetUndelegationAmount extends StatefulWidget{
   static const routeName = '/setUndelegationAmount';
-  final String name;
-  final String address;
-  SetUndelegationAmount({@required this.name, @required this.address});
   @override
   SetUndelegationAmountState createState() => new SetUndelegationAmountState();
 }

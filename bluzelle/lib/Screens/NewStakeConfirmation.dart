@@ -15,9 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Constants.dart';
 class NewStakeConfirmation extends StatefulWidget{
   static const routeName = '/newStakeConfirmation';
-  final String name;
-  final String address;
-  NewStakeConfirmation({@required this.name, @required this.address});
   @override
   NewStakeConfirmationState createState() => new NewStakeConfirmationState();
 }

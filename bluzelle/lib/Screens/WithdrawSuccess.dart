@@ -1,19 +1,12 @@
 
-import 'package:bluzelle/Models/ToWithdrawConfirmation.dart';
 import 'package:bluzelle/Models/WithdrawSuccessModel.dart';
-import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
-
 import '../Constants.dart';
 class WithdrawSuccess extends StatefulWidget{
   static const routeName = '/withdrawSuccess';
-  final String name;
-  final String address;
-  WithdrawSuccess({@required this.name, @required this.address});
   @override
   WithdrawSuccessState createState() => new WithdrawSuccessState();
 }

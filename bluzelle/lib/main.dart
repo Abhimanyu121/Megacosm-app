@@ -1,4 +1,5 @@
 import 'package:bluzelle/Constants.dart';
+import 'package:bluzelle/Screens/NewProposal.dart';
 import 'package:bluzelle/Screens/NewStake.dart';
 import 'package:bluzelle/Screens/NewStakeConfirmation.dart';
 import 'package:bluzelle/Screens/RedelegationAmount.dart';
@@ -62,19 +63,20 @@ class MyApp extends StatelessWidget {
         DefaultWidgetsLocalizations.delegate,
       ],
       routes: {
-        '/home': (context) => Home(),
-        '/newStake': (context) => NewStake(),
-        '/newStakeConfirmation': (context) => NewStakeConfirmation(),
-        '/transactionNewStake': (context) => TransactionNewStake(),
-        '/delegationInfo': (context) => DelegationInfo(),
-        '/withdrawConfirmation': (context) => WithdrawConfirmation(),
-        '/withdrawSuccess': (context) => WithdrawSuccess(),
-        '/setUndelegationAmount': (context) => SetUndelegationAmount(),
-        '/undelegateConfirmation': (context) => UndelegateConfirmation(),
-        '/redelegationSelection': (context) => RedelegationSelection(),
-        '/redelegationAmount': (context) => RedelegationAmount(),
-        '/redelegationConfirm': (context) => RedelegationConfirmation(),
-        '/redelegationTx': (context) => RedelegationTx(),
+        Home.routeName : (context) => Home(),
+        NewStake.routeName : (context) => NewStake(),
+        NewStakeConfirmation.routeName : (context) => NewStakeConfirmation(),
+        TransactionNewStake.routeName : (context) => TransactionNewStake(),
+        DelegationInfo.routeName : (context) => DelegationInfo(),
+        WithdrawConfirmation.routeName : (context) => WithdrawConfirmation(),
+        WithdrawSuccess.routeName : (context) => WithdrawSuccess(),
+        SetUndelegationAmount.routeName : (context) => SetUndelegationAmount(),
+        UndelegateConfirmation.routeName : (context) => UndelegateConfirmation(),
+        RedelegationSelection.routeName : (context) => RedelegationSelection(),
+        RedelegationAmount.routeName : (context) => RedelegationAmount(),
+        RedelegationConfirmation.routeName : (context) => RedelegationConfirmation(),
+        RedelegationTx.routeName : (context) => RedelegationTx(),
+        NewProposal.routeName : (context) => NewProposal()
       },
       title: 'Flutter Demo',
       theme: ThemeData(

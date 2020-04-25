@@ -1,27 +1,16 @@
 import 'dart:convert';
 
-import 'package:bluzelle/Models/BalanceWrapper.dart';
-import 'package:bluzelle/Models/CurrentDelegationWrapper.dart';
 import 'package:bluzelle/Models/RelegationSelection.dart';
-import 'package:bluzelle/Models/ToWithdrawConfirmation.dart';
 import 'package:bluzelle/Models/ValidatorList.dart';
-import 'package:bluzelle/Screens/SetUndelegationAmount.dart';
-import 'package:bluzelle/Screens/WithdrawConfirmation.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:bluzelle/Widgets/RedelegationWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
 
 import '../Constants.dart';
 class RedelegationSelection extends StatefulWidget{
   static const routeName = '/redelegationSelection';
-  final String name;
-  final String address;
-  RedelegationSelection({@required this.name, @required this.address});
   @override
   RedelegationSelectionState createState() => new RedelegationSelectionState();
 }

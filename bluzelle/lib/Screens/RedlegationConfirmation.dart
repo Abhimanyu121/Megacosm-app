@@ -2,7 +2,6 @@
 import 'package:bluzelle/Models/RedelegationTxModel.dart';
 import 'package:bluzelle/Models/RedelegatorConfirmation.dart';
 import 'package:bluzelle/Screens/RedelegationTx.dart';
-import 'package:bluzelle/Screens/WithdrawSuccess.dart';
 import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';

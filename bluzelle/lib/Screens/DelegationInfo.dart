@@ -19,9 +19,6 @@ import 'package:toast/toast.dart';
 import '../Constants.dart';
 class DelegationInfo extends StatefulWidget{
   static const routeName = '/delegationInfo';
-  final String name;
-  final String address;
-  DelegationInfo({@required this.name, @required this.address});
   @override
   DelegationInfoState createState() => new DelegationInfoState();
 }

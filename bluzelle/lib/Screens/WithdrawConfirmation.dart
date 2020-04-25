@@ -1,8 +1,4 @@
-import 'dart:convert';
 
-import 'package:bluzelle/Models/BalanceWrapper.dart';
-import 'package:bluzelle/Models/CurrentDelegationWrapper.dart';
-import 'package:bluzelle/Models/DelegationInfo.dart';
 import 'package:bluzelle/Models/ToWithdrawConfirmation.dart';
 import 'package:bluzelle/Models/WithdrawSuccessModel.dart';
 import 'package:bluzelle/Screens/WithdrawSuccess.dart';
@@ -16,9 +12,6 @@ import 'package:toast/toast.dart';
 import '../Constants.dart';
 class WithdrawConfirmation extends StatefulWidget{
   static const routeName = '/withdrawConfirmation';
-  final String name;
-  final String address;
-  WithdrawConfirmation({@required this.name, @required this.address});
   @override
   WithdrawConfirmationState createState() => new WithdrawConfirmationState();
 }

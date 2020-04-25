@@ -12,9 +12,6 @@ import 'package:toast/toast.dart';
 import '../Constants.dart';
 class UndelegateConfirmation extends StatefulWidget{
   static const routeName = '/undelegateConfirmation';
-  final String name;
-  final String address;
-  UndelegateConfirmation({@required this.name, @required this.address});
   @override
   UndelegateConfirmationState createState() => new UndelegateConfirmationState();
 }

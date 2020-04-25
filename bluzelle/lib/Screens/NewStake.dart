@@ -15,9 +15,6 @@ import 'package:toast/toast.dart';
 import '../Constants.dart';
 class NewStake extends StatefulWidget{
   static const routeName = '/newStake';
-  final String name;
-  final String address;
-  NewStake({@required this.name, @required this.address});
   @override
   NewStakeState createState() => new NewStakeState();
 }

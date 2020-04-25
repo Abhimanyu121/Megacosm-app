@@ -12,9 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Constants.dart';
 class TransactionNewStake extends StatefulWidget{
   static const routeName = '/transactionNewStake';
-  final String name;
-  final String address;
-  TransactionNewStake({@required this.name, @required this.address});
   @override
   TransactionNewStakeState createState() => new TransactionNewStakeState();
 }
