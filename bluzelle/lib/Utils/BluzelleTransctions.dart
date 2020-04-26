@@ -166,23 +166,25 @@ class BluzelleTransactions {
     final message = StdMsg(
         type: "cosmos-sdk/MsgSubmitProposal",
         value:{
-          "title": title,
-          "description": description,
+          "title": "$title",
+          "description": "$description",
           "initial_deposit": [
             {
               "amount": stake,
               "denom": "ubnt"
             }
           ],
-          "proposal_content": description,
           "proposal_type": "text",
+          "from": wallet.bech32Address  ,
           "proposer": wallet.bech32Address
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
         fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
     );
+
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
+    print(signedStdTx.toJson());
     final result = await TxSender.broadcastStdTx(
       wallet: wallet,
       stdTx: signedStdTx,

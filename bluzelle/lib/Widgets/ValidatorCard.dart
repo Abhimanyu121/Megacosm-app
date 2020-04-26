@@ -12,32 +12,29 @@ class ValidatorCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(5.0,5,5,5),
-        child: FlatButton(
-          onPressed: (){
-            Navigator.pushNamed(
-              context,
-              NewStake.routeName,
-              arguments: HomeToNewStake(
-                name: name,
-                address: address,
-                commission: commission
-              ),
-            );
-          },
+      child: FlatButton(
+        onPressed: (){
+          Navigator.pushNamed(
+            context,
+            NewStake.routeName,
+            arguments: HomeToNewStake(
+              name: name,
+              address: address,
+              commission: commission
+            ),
+          );
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width*0.92,
           child: Container(
-            width: MediaQuery.of(context).size.width*0.92,
-            child: Container(
 
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  leading: _circle(name.substring(0,1), context) ,
-                  title: Text(name),
-                  subtitle: Text("Commission : $commission"),
-                  isThreeLine: true,
-                ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: _circle(name.substring(0,1), context) ,
+                title: Text(name),
+                subtitle: Text("Commission : $commission"),
+                isThreeLine: true,
               ),
             ),
           ),

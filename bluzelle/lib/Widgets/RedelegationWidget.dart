@@ -20,7 +20,7 @@ class RedelegationCard extends StatelessWidget{
         padding: const EdgeInsets.fromLTRB(5.0,5,5,5),
         child: FlatButton(
           onPressed: (){
-            Navigator.pushNamed(
+            Navigator.popAndPushNamed(
               context,
               RedelegationAmount.routeName,
               arguments: RedelegationAmountModel(

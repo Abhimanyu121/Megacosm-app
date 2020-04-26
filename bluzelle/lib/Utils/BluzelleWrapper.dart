@@ -37,7 +37,7 @@ class BluzelleWrapper{
     var url = baseUrl+"/gov/proposals";
     print(url);
     var resp = await http.get(url);
-    print(resp);
+    print(resp.body);
     return resp;
   }
 

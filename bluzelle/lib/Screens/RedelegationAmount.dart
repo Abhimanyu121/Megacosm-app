@@ -2,7 +2,6 @@
 import 'package:bluzelle/Models/RedelegationAmountModel.dart';
 import 'package:bluzelle/Models/RedelegatorConfirmation.dart';
 import 'package:bluzelle/Screens/RedlegationConfirmation.dart';
-import 'package:bluzelle/Screens/UndelegateConfirmation.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -167,7 +166,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                     return;
                   }
 
-                  Navigator.pushNamed(
+                  Navigator.popAndPushNamed(
                     context,
                     RedelegationConfirmation.routeName,
                     arguments: RedelegationConfirmationModel(

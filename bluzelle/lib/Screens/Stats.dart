@@ -113,6 +113,15 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
           padding: const EdgeInsets.fromLTRB(16,5,5,10),
           child: Text("Delegations",style: TextStyle(fontSize:25,color: grey, fontWeight: FontWeight.bold),),
         ),
+        valList.result.length==0?Padding(
+          padding: const EdgeInsets.fromLTRB(16,25,15,16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(child: Text("Delegations",style: TextStyle(fontSize:20,color: grey, fontWeight: FontWeight.normal),)),
+            ],
+          ),
+        ):SizedBox(height: 0,),
         ListView.builder(
             itemCount: valList.result.length,
             shrinkWrap: true,

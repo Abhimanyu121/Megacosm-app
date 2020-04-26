@@ -12,6 +12,12 @@ class ValidatorListTab extends StatefulWidget {
 
 class ValidatorListState extends State<ValidatorListTab> with
     AutomaticKeepAliveClientMixin{
+  var _loadList;
+  @override
+  void initState() {
+    _loadList = BluzelleWrapper.getValidatorList();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,7 +28,7 @@ class ValidatorListState extends State<ValidatorListTab> with
           height: MediaQuery.of(context).size.height*0.02,
         ),
         FutureBuilder(
-          future: BluzelleWrapper.getValidatorList(),
+          future: _loadList,
           builder: (context, snapshot){
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Padding(

@@ -1,4 +1,5 @@
 import 'package:bluzelle/Models/Proposal.dart';
+import 'package:bluzelle/Screens/ProposalDetails.dart';
 import 'package:bluzelle/Utils/ColorRandminator.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +18,18 @@ class ProposalsWidget extends StatelessWidget{
       width: MediaQuery.of(context).size.width*0.92,
       child: Container(
 
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+        child: FlatButton(
+          onPressed: (){
+            Navigator.pushNamed(
+              context,
+              ProposalInfo.routeName,
+              arguments: model,
+            );
+          },
           child: ListTile(
             leading: _circle(model.proposal_type.substring(0,1), context) ,
             title: Text(model.title),
             subtitle: Text("Deposit : $deposit Status: $status"),
-            isThreeLine: true,
           ),
         ),
       ),

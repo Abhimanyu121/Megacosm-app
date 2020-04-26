@@ -151,7 +151,7 @@ class RedelegationConfirmationState extends State<RedelegationConfirmation>{
                     placingOrder =true;
                   });
                   String tx =await BluzelleTransactions.redelegate(args.srcAddress, args.destAddress, args.delegatorAddress,args.newAmount);
-                  Navigator.pushNamed(
+                  Navigator.popAndPushNamed(
                     context,
                     RedelegationTx.routeName,
                     arguments: RedelegationTxModel(

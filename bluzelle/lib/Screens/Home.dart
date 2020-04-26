@@ -45,7 +45,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            HeaderTitle(first: "List Of", second: "Validators",),
+            HeaderTitle(first: currentIndex==0?"User":currentIndex==1?"Validator":currentIndex==2?"Proposal":"About", second: currentIndex==0?"Dashboard":currentIndex==1?"List":currentIndex==2?"List":"Bluzelle",),
             Row(
               children: <Widget>[
                 Padding(
@@ -116,9 +116,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         inkColor: white ,//optional, uses theme color if not specified
         items: <BubbleBottomBarItem>[
           BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.dashboard, color: Colors.black,), activeIcon: Icon(Icons.dashboard, color: Colors.black,), title: Text("Home", style: TextStyle(color: Colors.black),)),
-          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.access_time, color: Colors.black,), activeIcon: Icon(Icons.access_time, color: Colors.black,), title: Text("Logs", style: TextStyle(color: Colors.black),)),
-          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.folder_open, color: Colors.black,), activeIcon: Icon(Icons.folder_open, color: Colors.black,), title: Text("Folders", style: TextStyle(color: Colors.black),)),
-          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.menu, color: Colors.black,), activeIcon: Icon(Icons.menu, color: Colors.black,), title: Text("Menu", style: TextStyle(color: Colors.black),))
+          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.account_balance, color: Colors.black,), activeIcon: Icon(Icons.account_balance, color: Colors.black,), title: Text("Validators", style: TextStyle(color: Colors.black),)),
+          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.menu, color: Colors.black,), activeIcon: Icon(Icons.menu, color: Colors.black,), title: Text("Proposals", style: TextStyle(color: Colors.black),)),
+          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.account_circle, color: Colors.black,), activeIcon: Icon(Icons.account_circle, color: Colors.black,), title: Text("About", style: TextStyle(color: Colors.black),))
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

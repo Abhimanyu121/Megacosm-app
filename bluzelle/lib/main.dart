@@ -1,11 +1,17 @@
 import 'package:bluzelle/Constants.dart';
+import 'package:bluzelle/Screens/ConfirmVote.dart';
 import 'package:bluzelle/Screens/NewProposal.dart';
+import 'package:bluzelle/Screens/NewProposalConfirmation.dart';
 import 'package:bluzelle/Screens/NewStake.dart';
 import 'package:bluzelle/Screens/NewStakeConfirmation.dart';
+import 'package:bluzelle/Screens/ProposalDepositConfirm.dart';
+import 'package:bluzelle/Screens/ProposalDepositTx.dart';
+import 'package:bluzelle/Screens/ProposalDetails.dart';
 import 'package:bluzelle/Screens/RedelegationAmount.dart';
 import 'package:bluzelle/Screens/RedelegationTx.dart';
 import 'package:bluzelle/Screens/RedlegationConfirmation.dart';
 import 'package:bluzelle/Screens/UndelegateConfirmation.dart';
+import 'package:bluzelle/Screens/VoteTx.dart';
 import 'package:bluzelle/Screens/WithdrawSuccess.dart';
 import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sacco/sacco.dart';
 import 'Screens/DelegationInfo.dart';
 import 'Screens/Home.dart';
+import 'Screens/NewProposalTx.dart';
 import 'Screens/RedelegationSelection.dart';
 import 'Screens/SetUndelegationAmount.dart';
 import 'Screens/TransactionNewStake.dart';
@@ -76,7 +83,14 @@ class MyApp extends StatelessWidget {
         RedelegationAmount.routeName : (context) => RedelegationAmount(),
         RedelegationConfirmation.routeName : (context) => RedelegationConfirmation(),
         RedelegationTx.routeName : (context) => RedelegationTx(),
-        NewProposal.routeName : (context) => NewProposal()
+        NewProposal.routeName : (context) => NewProposal(),
+        NewProposalConfirmation.routeName : (context) => NewProposalConfirmation(),
+        NewProposalTx.routeName : (context) => NewProposalTx(),
+        ProposalInfo.routeName : (context) => ProposalInfo(),
+        ProposalDepositConfirm.routeName : (context) => ProposalDepositConfirm(),
+        ProposalDepositTx.routeName : (context) => ProposalDepositTx(),
+        ConfirmVote.routeName : (context) => ConfirmVote(),
+        VoteTx.routeName : (context) => VoteTx(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(

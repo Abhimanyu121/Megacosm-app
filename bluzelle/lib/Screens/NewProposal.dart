@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/NewProposalModel.dart';
 import 'package:bluzelle/Models/RedelegatorConfirmation.dart';
+import 'package:bluzelle/Screens/NewProposalConfirmation.dart';
 import 'package:bluzelle/Screens/RedlegationConfirmation.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
@@ -20,6 +21,8 @@ class NewProposal extends StatefulWidget{
 }
 class NewProposalState extends State<NewProposal>{
   TextEditingController _amount = TextEditingController();
+  TextEditingController _title = TextEditingController();
+  TextEditingController _description = TextEditingController();
   bool fetching  = true;
   String balance = "";
   _getBalance()async {
@@ -36,11 +39,10 @@ class NewProposalState extends State<NewProposal>{
   }
   @override
   void initState() {
-    _loader();
+    _getBalance();
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         backgroundColor: nearlyWhite,
         appBar: AppBar(
@@ -57,7 +59,7 @@ class NewProposalState extends State<NewProposal>{
             Padding(
               padding: const EdgeInsets.fromLTRB(8,8,8,8),
               child: TextFormField(
-                controller: _amount,
+                controller: _title,
                 keyboardType: TextInputType.text,
                 autovalidate: false,
                 decoration: InputDecoration(
@@ -70,7 +72,7 @@ class NewProposalState extends State<NewProposal>{
             Padding(
               padding: const EdgeInsets.fromLTRB(8,8,8,8),
               child: TextFormField(
-                controller: _amount,
+                controller: _description,
                 keyboardType: TextInputType.text,
                 autovalidate: false,
                 decoration: InputDecoration(
@@ -105,22 +107,25 @@ class NewProposalState extends State<NewProposal>{
                   borderRadius: BorderRadius.circular(24),
                 ),
                 onPressed: (){
-                  if(BigInt.parse(_amount.text)>BigInt.parse(balance)||balance==""){
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  if((BigInt.parse(_amount.text)>BigInt.parse(balance)||balance=="")&& _title.text.isNotEmpty&& _description.text.isNotEmpty){
                     Toast.show("Invalid Input", context,);
                     return;
                   }
 
                   Navigator.pushNamed(
                     context,
-                    RedelegationConfirmation.routeName,
+                    NewProposalConfirmation.routeName,
                     arguments: NewProposalModel(
-
+                      stake: _amount.text,
+                      title: _title.text,
+                      description: _description.text,
                     )
                   );
                 },
                 padding: EdgeInsets.all(12),
                 color: appTheme,
-                child:Text('Redelegate', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                child:Text('Create Proposal', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
               ),
             )
           ],
