@@ -169,13 +169,13 @@ class DelegationInfoState extends State<DelegationInfo>{
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    onPressed: (){
+                    onPressed: ()async {
                       if(!balance){
                         Toast.show("Please wait",context, duration: Toast.LENGTH_LONG);
                         return;
                       }
 
-                      Navigator.pushNamed(
+                      await Navigator.pushNamed(
                         context,
                         WithdrawConfirmation.routeName,
                         arguments: ToWithdrawConfirmation(
@@ -185,6 +185,9 @@ class DelegationInfoState extends State<DelegationInfo>{
                             amount: bal
                         ),
                       );
+                      setState(() {
+                        _getAddress();
+                      });
                     },
                     padding: EdgeInsets.all(12),
                     color: appTheme,
@@ -197,13 +200,13 @@ class DelegationInfoState extends State<DelegationInfo>{
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    onPressed: (){
+                    onPressed: ()async {
                       if(!balance){
                         Toast.show("Please wait",context, duration: Toast.LENGTH_LONG);
                         return;
                       }
 
-                      Navigator.pushNamed(
+                      await Navigator.pushNamed(
                         context,
                         SetUndelegationAmount.routeName,
                         arguments: ToWithdrawConfirmation(
@@ -213,6 +216,9 @@ class DelegationInfoState extends State<DelegationInfo>{
                             amount: stake
                         ),
                       );
+                      setState(() {
+                        _getAddress();
+                      });
                     },
                     padding: EdgeInsets.all(12),
                     color: appTheme,
@@ -225,13 +231,13 @@ class DelegationInfoState extends State<DelegationInfo>{
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    onPressed: (){
+                    onPressed: ()async {
                       if(!balance){
                         Toast.show("Please wait",context, duration: Toast.LENGTH_LONG);
                         return;
                       }
 
-                      Navigator.pushNamed(
+                      await Navigator.pushNamed(
                         context,
                         RedelegationSelection.routeName,
                         arguments: RedelegationSelectionModel(
@@ -241,6 +247,9 @@ class DelegationInfoState extends State<DelegationInfo>{
                             amount: stake
                         ),
                       );
+                      setState(() {
+                        _getAddress();
+                      });
                     },
                     padding: EdgeInsets.all(12),
                     color: appTheme,

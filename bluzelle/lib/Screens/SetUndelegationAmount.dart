@@ -152,7 +152,7 @@ class SetUndelegationAmountState extends State<SetUndelegationAmount>{
                       return;
                     }
 
-                      Navigator.pushNamed(
+                      Navigator.popAndPushNamed(
                         context,
                         UndelegateConfirmation.routeName,
                         arguments: ToWithdrawConfirmation(

@@ -157,7 +157,7 @@ class NewStakeState extends State<NewStake>{
                     return;
                   }
 
-                  Navigator.pushNamed(
+                  Navigator.popAndPushNamed(
                     context,
                     NewStakeConfirmation.routeName,
                     arguments: HomeToNewStakeConfirm(
