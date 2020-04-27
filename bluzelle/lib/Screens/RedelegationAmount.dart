@@ -166,7 +166,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                     return;
                   }
 
-                  Navigator.popAndPushNamed(
+                  Navigator.pushNamed(
                     context,
                     RedelegationConfirmation.routeName,
                     arguments: RedelegationConfirmationModel(

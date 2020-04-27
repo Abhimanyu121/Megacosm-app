@@ -175,7 +175,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                         return;
                       }
 
-                      Navigator.popAndPushNamed(
+                      Navigator.pushNamed(
                         context,
                         WithdrawConfirmation.routeName,
                         arguments: ToWithdrawConfirmation(

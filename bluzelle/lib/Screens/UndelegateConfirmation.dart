@@ -143,7 +143,7 @@ class UndelegateConfirmationState extends State<UndelegateConfirmation>{
                     placingOrder =true;
                   });
                   String tx =await BluzelleTransactions.undelegate(delegatorAddress, args.address, args.amount);
-                  Navigator.pushNamed(
+                  Navigator.popAndPushNamed(
                     context,
                     WithdrawSuccess.routeName,
                     arguments: WithdrawSuccessModel(

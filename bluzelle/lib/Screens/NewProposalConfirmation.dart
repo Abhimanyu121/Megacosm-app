@@ -103,7 +103,7 @@ class NewProposalConfirmationState extends State<NewProposalConfirmation>{
                     _loading  =true;
                   });
                   String tx =await BluzelleTransactions.newProposal(args.description, args.title, args.stake);
-                  Navigator.pushNamed(
+                  Navigator.popAndPushNamed(
                     context,
                     NewProposalTx.routeName,
                     arguments: NewProposalModel(
