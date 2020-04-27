@@ -29,14 +29,24 @@ class ValidatorCardStats extends StatelessWidget{
           child: Container(
             width: MediaQuery.of(context).size.width*0.92,
             child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  leading: _circle(name.substring(0,1), context) ,
-                  title: Text(name),
-                  subtitle: Text(address),
-                  isThreeLine: true,
-                ),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      leading: _circle(name.substring(0,1), context) ,
+                      title: Text(name),
+                      subtitle: Text(address),
+                      isThreeLine: true,
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width*0.6,
+                    child: Divider(
+                      thickness: 1,
+                    ),
+                  )
+                ],
               ),
             ),
           ),

@@ -3,6 +3,8 @@ import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/BondedNotBondedWrapper.dart';
 import 'package:bluzelle/Models/ValidatorList.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
+import 'package:bluzelle/Utils/HexColor.dart';
+import 'package:bluzelle/Widgets/CurvePainter.dart';
 import 'package:bluzelle/Widgets/TopBottomText.dart';
 import 'package:bluzelle/Widgets/ValidatorCardStats.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +23,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   String unbondedStake = "123";
   String bondedStake = "321";
   bool loading = true;
+  String address;
   ValidatorList valList;
   _getInfo()async {
 
@@ -43,8 +46,22 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     balance = balanceWrapper.result[0].amount;
     setState(() {
       loading = false;
+      this.address = address;
     });
   }
+  _curveAngle(){
+    double bstake= double.parse(bondedStake);
+    double ustake = double.parse(unbondedStake);
+    int sum = (bstake+ustake).toInt();
+    if (sum ==0){
+      return 0;
+    }
+    double maticDiff = (sum - ustake.toInt())/sum;
+    int angle = (360.0*maticDiff).toInt();
+    print(angle);
+    return angle;
+  }
+
   @override
   void initState() {
     _getInfo();
@@ -55,60 +72,170 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       child: SpinKitCubeGrid(size:50, color: appTheme),
     ):ListView(
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                    child: Text(balance, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35, color: appTheme)),
-                  ),
-                  Text("UNBT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50, color: Colors.black)),
-                ],
-              ),
-            )
-          ],
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height*0.02,
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16,5,5,10),
-          child: Text("Staking Pools",style: TextStyle(fontSize:25,color: grey, fontWeight: FontWeight.bold),),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height*0.02,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height*0.16,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  TopBottom(first: bondedStake, second: "UBNT",size: 20, weight: FontWeight.bold,),
-                  Text("Bonded Stake", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:grey),)
-                ],
-              ),
-              VerticalDivider(
-                thickness: 3,
-                color: Colors.blue,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  TopBottom(first: unbondedStake, second: "UBNT",size: 20, weight: FontWeight.bold,),
-                  Text("Unbonded Stake", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color:grey),)
-                ],
-              ),
-            ],
+        Card(
+          elevation: 0,
+          color: nearlyWhite,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Container(
+            width: MediaQuery.of(context).size.width*0.9,
+            height: MediaQuery.of(context).size.height*0.3,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+                Colors.black,
+                Colors.black87
+              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  bottomLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0)),
+
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16,5,5,4),
+                      child: Text("Account",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16,5,5,4),
+                      child: SizedBox(
+                          height: MediaQuery.of(context).size.height*0.08,
+                          width: MediaQuery.of(context).size.width*0.2,
+                          child: Image.asset("logo.png"))
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text("Balance: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text(balance+" UNBT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text("Address: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width*0.8,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text(address, overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
+
+        Card(
+          elevation: 0,
+          color: Colors.transparent,
+          child: Container(
+            height: MediaQuery.of(context).size.height*0.35,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+                HexColor("#00264d"),
+                HexColor("#003366"),
+              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  bottomLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0)),
+
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16,20,5,6),
+                  child: Text("Staking Pools",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
+                ),
+
+                SizedBox(
+                  height: MediaQuery.of(context).size.height*0.25,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text("Bonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text(bondedStake+" UNBT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height*0.04,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text("Unbonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text(unbondedStake +" UBNT", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                          ),
+                        ],
+                      ),
+//              VerticalDivider(
+//                thickness: 3,
+//                color: Colors.blue,
+//              ),
+                      CustomPaint(
+                        painter: CurvePainter(
+                            colors: [
+                              Colors.red,
+                              Colors.white,
+                              Colors.black87
+                            ],
+                            angle: _curveAngle() +
+                                (360 - _curveAngle()) *
+                                    (1.0 - 0.5)),
+                        child: SizedBox(
+                          width: 108,
+                          height: 108,
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ),
+
+        SizedBox(
+          height: MediaQuery.of(context).size.height*0.02,
+        ),
+
         Padding(
           padding: const EdgeInsets.fromLTRB(16,5,5,10),
           child: Text("Delegations",style: TextStyle(fontSize:25,color: grey, fontWeight: FontWeight.bold),),

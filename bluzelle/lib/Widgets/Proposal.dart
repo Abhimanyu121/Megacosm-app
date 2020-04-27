@@ -26,10 +26,20 @@ class ProposalsWidget extends StatelessWidget{
               arguments: model,
             );
           },
-          child: ListTile(
-            leading: _circle(model.proposal_type.substring(0,1), context) ,
-            title: Text(model.title),
-            subtitle: Text("Deposit : $deposit Status: $status"),
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                leading: _circle(model.proposal_type.substring(0,1), context) ,
+                title: Text(model.title),
+                subtitle: Text("Deposit : $deposit Status: $status"),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width*0.6,
+                child: Divider(
+                  thickness: 1,
+                ),
+              )
+            ],
           ),
         ),
       ),

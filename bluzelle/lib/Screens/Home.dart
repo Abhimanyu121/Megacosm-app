@@ -78,7 +78,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           decoration: BoxDecoration(
               color: nearlyWhite,
             border: Border.all(
-              color: Colors.grey
+              color: currentIndex==0?Colors.transparent:Colors.grey
             ),
             borderRadius: BorderRadius.all(Radius.circular(10))
           ),
