@@ -1,4 +1,6 @@
 import 'package:bluzelle/Constants.dart';
+import 'package:bluzelle/Models/ValidatorList.dart';
+import 'package:bluzelle/Screens/Login.dart';
 import 'package:bluzelle/Screens/NewProposal.dart';
 import 'package:bluzelle/Screens/PoposalsScreen.dart';
 import 'package:bluzelle/Screens/ValidatorListTab.dart';
@@ -7,7 +9,10 @@ import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import 'AboutBluzelle.dart';
 import 'Stats.dart';
 
 class Home extends StatefulWidget {
@@ -18,7 +23,8 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> with TickerProviderStateMixin {
   var currentIndex=0;
-
+  Stats stats;
+  ValidatorListTab vList;
   TabController _controller;
   void tabChange(int index){
 
@@ -32,7 +38,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         currentIndex = _controller.index;
       });
     });
-
+    stats = new Stats();
+    vList = new ValidatorListTab();
   }
   @override
   Widget build(BuildContext context) {
@@ -46,27 +53,34 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             HeaderTitle(first: currentIndex==0?"User":currentIndex==1?"Validator":currentIndex==2?"Proposal":"About", second: currentIndex==0?"Dashboard":currentIndex==1?"List":currentIndex==2?"List":"Bluzelle",),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Icon(
-                    Icons.power_settings_new,
-                    color: Colors.black87,
-                    size: 18,
+            FlatButton(
+              onPressed: ()async{
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString(mnemonic, null);
+                Navigator.popAndPushNamed(context, Login.routeName);
+              },
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      Icons.power_settings_new,
+                      color: Colors.black87,
+                      size: 18,
+                    ),
                   ),
-                ),
-                Text(
-                  "Logout",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 18,
-                    letterSpacing: -0.2,
-                    color: Colors.black87,
+                  Text(
+                    "Logout",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 18,
+                      letterSpacing: -0.2,
+                      color: Colors.black87,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -86,10 +100,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             controller: _controller,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              Stats(),
-              ValidatorListTab(),
+              stats,
+              vList,
               ProposalListTab(),
-              ValidatorListTab(),
+              AboutBluezelle(),
             ],
 
           ),
@@ -102,11 +116,34 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         onPressed: () {
           Navigator.pushNamed(context, NewProposal.routeName);
         },
-      ):null,
+      ): currentIndex ==3?
+      FloatingActionButton(
+        child: Icon(Icons.alternate_email),
+        backgroundColor: Colors.red,
+        onPressed: () async {
+          const url = 'mailto:smith@example.org';
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
+      ):
+      FloatingActionButton(
+        child: Icon(Icons.refresh),
+        backgroundColor: Colors.red,
+        onPressed: () {
+          if(currentIndex ==0){
+            stats.refresh();
+          }else if(currentIndex==1){
+            vList.refresh();
+          }
+        },
+      ),
       bottomNavigationBar: BubbleBottomBar(
         backgroundColor: white,
         opacity: 1,
-        fabLocation: currentIndex==2?BubbleBottomBarFabLocation.end:null,
+        fabLocation: BubbleBottomBarFabLocation.end,
         onTap: tabChange,
         currentIndex: currentIndex,
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),

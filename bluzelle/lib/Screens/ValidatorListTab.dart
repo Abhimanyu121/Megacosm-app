@@ -6,6 +6,7 @@ import 'package:bluzelle/Widgets/ValidatorCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 class ValidatorListTab extends StatefulWidget {
+  Function refresh;
   @override
   ValidatorListState createState() => ValidatorListState();
 }
@@ -17,6 +18,11 @@ class ValidatorListState extends State<ValidatorListTab> with
   void initState() {
     _loadList = BluzelleWrapper.getValidatorList();
     super.initState();
+    widget.refresh =(){
+      setState(() {
+        _loadList = BluzelleWrapper.getValidatorList();
+      });
+    };
   }
   @override
   Widget build(BuildContext context) {

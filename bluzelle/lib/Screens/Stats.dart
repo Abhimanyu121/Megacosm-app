@@ -5,7 +5,6 @@ import 'package:bluzelle/Models/ValidatorList.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Utils/HexColor.dart';
 import 'package:bluzelle/Widgets/CurvePainter.dart';
-import 'package:bluzelle/Widgets/TopBottomText.dart';
 import 'package:bluzelle/Widgets/ValidatorCardStats.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Constants.dart';
 
 class Stats extends StatefulWidget{
+  Function refresh;
   @override
   StatsState createState() => StatsState();
 }
@@ -22,11 +22,13 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   String balance = "123";
   String unbondedStake = "123";
   String bondedStake = "321";
-  bool loading = true;
+  bool loading = false;
   String address;
   ValidatorList valList;
-  _getInfo()async {
-
+  getInfo()async {
+    setState(() {
+      loading = true;
+    });
     Response pools = await BluzelleWrapper.getPool();
     String body = utf8.decode(pools.bodyBytes);
     final json = jsonDecode(body);
@@ -57,17 +59,22 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       return 0;
     }
     double maticDiff = (sum - ustake.toInt())/sum;
-    int angle = (360.0*maticDiff).toInt();
+    double  angle = (360.0*maticDiff);
     print(angle);
     return angle;
   }
 
   @override
   void initState() {
-    _getInfo();
+    getInfo();
+    widget.refresh = (){
+      getInfo();
+    };
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return loading==true?Center(
       child: SpinKitCubeGrid(size:50, color: appTheme),
     ):ListView(
@@ -210,13 +217,12 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                       CustomPaint(
                         painter: CurvePainter(
                             colors: [
-                              Colors.red,
-                              Colors.white,
-                              Colors.black87
+                              Colors.greenAccent,
+                              Colors.green,
+                              Colors.lightGreen
                             ],
-                            angle: _curveAngle() +
-                                (360 - _curveAngle()) *
-                                    (1.0 - 0.5)),
+                            angle: _curveAngle()
+                        ),
                         child: SizedBox(
                           width: 108,
                           height: 108,
@@ -262,7 +268,6 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
 }

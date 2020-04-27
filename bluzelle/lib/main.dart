@@ -13,7 +13,6 @@ import 'package:bluzelle/Screens/RedlegationConfirmation.dart';
 import 'package:bluzelle/Screens/UndelegateConfirmation.dart';
 import 'package:bluzelle/Screens/VoteTx.dart';
 import 'package:bluzelle/Screens/WithdrawSuccess.dart';
-import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sacco/sacco.dart';
 import 'Screens/DelegationInfo.dart';
 import 'Screens/Home.dart';
+import 'Screens/Login.dart';
 import 'Screens/NewProposalTx.dart';
 import 'Screens/RedelegationSelection.dart';
 import 'Screens/SetUndelegationAmount.dart';
@@ -29,31 +29,34 @@ import 'Screens/WithdrawConfirmation.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
 
-  _setPrefs()async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString("mnemonic","around buzz diagram captain obtain detail salon mango muffin brother morning jeans display attend knife carry green dwarf vendor hungry fan route pumpkin car");
-    final networkInfo = NetworkInfo( bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317");
-    var seed = "around buzz diagram captain obtain detail salon mango muffin brother morning jeans display attend knife carry green dwarf vendor hungry fan route pumpkin car";
-    final mnemonic = seed.split(" ");
-    final wallet = Wallet.derive(mnemonic,  networkInfo);
-    //var seed2 = "core fatigue rabbit trust soft country kitten energy punch little case mutual old mimic erupt interest voice inner category stand voice speed patient era";
-    //final mnemonic2 = seed2.split(" ");
-    //final wallet2 = Wallet.derive(mnemonic2,  networkInfo);
-    print("main address");
-    print(wallet.bech32Address);
-    pref.setString("address", wallet.bech32Address.toString());
-    print("my address");
-    //print(wallet2.bech32Address);
-    //print(wallet2.toJson());
-    //BluzelleTransactions.sendTokens();
-  }
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  Widget initialRoute = Login();
+  _getPrefs()async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var mn =pref.getString(mnemonic);
+    print(mn);
+    if(mn!=null){
+      setState(() {
+        initialRoute =Home();
+      });
+    }
+
+  }
+  @override
+  void initState() {
+    _getPrefs();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    _setPrefs();
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarColor: notWhite, // navigation bar color
         statusBarColor: notWhite,
@@ -91,15 +94,18 @@ class MyApp extends StatelessWidget {
         ProposalDepositTx.routeName : (context) => ProposalDepositTx(),
         ConfirmVote.routeName : (context) => ConfirmVote(),
         VoteTx.routeName : (context) => VoteTx(),
+        Login.routeName :(context) => Login()
       },
       title: 'Flutter Demo',
       theme: ThemeData(
       primarySwatch: Colors.blue,
       textTheme: AppTheme.textTheme,
       platform: TargetPlatform.iOS,
+
     ),
-      home: Home(),
+      home: initialRoute,
     );
+
   }
 }
-
+//around buzz diagram captain obtain detail salon mango muffin brother morning jeans display attend knife carry green dwarf vendor hungry fan route pumpkin car

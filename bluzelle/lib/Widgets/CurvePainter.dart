@@ -43,8 +43,8 @@ class CurvePainter extends CustomPainter {
         false,
         shdowPaint);
 
-    shdowPaint.color = Colors.grey.withOpacity(0.2);
-    shdowPaint.strokeWidth = 20;
+    shdowPaint.color = Colors.grey.withOpacity(0);
+    shdowPaint.strokeWidth = 0;
     canvas.drawArc(
         new Rect.fromCircle(center: shdowPaintCenter, radius: shdowPaintRadius),
         degreeToRadians(278),
