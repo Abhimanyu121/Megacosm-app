@@ -23,10 +23,12 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   String unbondedStake = "123";
   String bondedStake = "321";
   bool loading = false;
+  bool error = false;
   String address;
   ValidatorList valList;
   getInfo()async {
     setState(() {
+      error =false;
       loading = true;
     });
     Response pools = await BluzelleWrapper.getPool();
@@ -66,16 +68,30 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
 
   @override
   void initState() {
-    getInfo();
-    widget.refresh = (){
+    try {
       getInfo();
+    } catch(e){
+      setState(() {
+        error = true;
+      });
+    }
+    widget.refresh = (){
+      try {
+        getInfo();
+      } catch(e){
+        setState(() {
+          error = true;
+        });
+      }
     };
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return loading==true?Center(
+    return error?Center(
+      child: Text("Something went wrong :("),
+    ):loading==true?Center(
       child: SpinKitCubeGrid(size:50, color: appTheme),
     ):ListView(
       children: <Widget>[
