@@ -267,7 +267,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Center(child: Text("Delegations",style: TextStyle(fontSize:20,color: grey, fontWeight: FontWeight.normal),)),
+              Center(child: Text("No Delegations",style: TextStyle(fontSize:20,color: grey, fontWeight: FontWeight.normal),)),
             ],
           ),
         ):SizedBox(height: 0,),
