@@ -144,7 +144,10 @@ class NewStakeState extends State<NewStake>{
                 ),
               ),
             ),
-
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("Note: If you are already a delegator to this validator, this action will add specified tokens to you existing stake amount"),
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
               child: RaisedButton(
