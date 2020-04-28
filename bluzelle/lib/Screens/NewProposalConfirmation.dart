@@ -110,7 +110,7 @@ class NewProposalConfirmationState extends State<NewProposalConfirmation>{
                       stake: args.stake,
                       description: args.description,
                       title: args.title,
-                      tx: "tx",
+                      tx: tx,
                     )
                   );
                 },

@@ -80,7 +80,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                   ],
                 )
             ),
-            args.proposal_status=="deposit"? Padding(
+            args.proposal_status=="DepositPeriod"? Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                   ],
                 )
             ): SizedBox(height: 0,),
-            args.proposal_status!="deposit"?Padding(
+            args.proposal_status!="DepositPeriod"?Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +114,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                   ],
                 )
             ):SizedBox(height: 0,),
-            args.proposal_status=="deposit"? Padding(
+            args.proposal_status=="DepositPeriod"? Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

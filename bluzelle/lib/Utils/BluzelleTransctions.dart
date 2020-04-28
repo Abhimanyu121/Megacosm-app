@@ -2,7 +2,7 @@ import 'package:sacco/sacco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BluzelleTransactions {
-  static var  networkInfo = NetworkInfo( bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
+  static var  networkInfo = NetworkInfo(bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
 
   static sendTokens()async {
     var seed = "around buzz diagram captain obtain detail salon mango muffin brother morning jeans display attend knife carry green dwarf vendor hungry fan route pumpkin car";
@@ -166,24 +166,28 @@ class BluzelleTransactions {
     final message = StdMsg(
         type: "cosmos-sdk/MsgSubmitProposal",
         value:{
-          "title": "$title",
-          "description": "$description",
+          "content": {
+            "type": "cosmos-sdk/TextProposal",
+            "value": {
+              "title": title,
+              "description": description
+            }
+          },
           "initial_deposit": [
             {
               "amount": stake,
               "denom": "ubnt"
             }
           ],
-          "proposal_type": "text",
-          "from": wallet.bech32Address  ,
           "proposer": wallet.bech32Address
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")]),
+
     );
 
-    final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
+    final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx,);
     print(signedStdTx.toJson());
     final result = await TxSender.broadcastStdTx(
       wallet: wallet,

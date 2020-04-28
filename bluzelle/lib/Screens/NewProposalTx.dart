@@ -115,7 +115,7 @@ class NewProposalTxState extends State<NewProposalTx>{
                 onPressed: ()async{
                   int count = 0;
                   Navigator.popUntil(context, (route) {
-                    return count++ == 3;
+                    return count++ == 2;
                   });
                 },
                 padding: EdgeInsets.all(12),

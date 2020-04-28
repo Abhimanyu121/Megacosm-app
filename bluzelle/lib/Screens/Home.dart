@@ -25,6 +25,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   var currentIndex=0;
   Stats stats;
   ValidatorListTab vList;
+  ProposalListTab pList;
   TabController _controller;
   void tabChange(int index){
 
@@ -40,6 +41,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     });
     stats = new Stats();
     vList = new ValidatorListTab();
+    pList = new ProposalListTab();
   }
   @override
   Widget build(BuildContext context) {
@@ -113,8 +115,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       floatingActionButton: currentIndex==2?FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.red,
-        onPressed: () {
-          Navigator.pushNamed(context, NewProposal.routeName);
+        onPressed: () async {
+          await Navigator.pushNamed(context, NewProposal.routeName);
+          pList.refresh();
         },
       ): currentIndex ==3?
       FloatingActionButton(
