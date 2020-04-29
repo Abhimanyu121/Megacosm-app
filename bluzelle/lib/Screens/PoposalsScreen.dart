@@ -17,13 +17,15 @@ class ProposalListState extends State<ProposalListTab> with
     var _loadingData;
  @override
  void initState() {
-   _loadingData = BluzelleWrapper.proposalList();
-    super.initState();
+   super.initState();
    widget.refresh =(){
      setState(() {
        _loadingData = BluzelleWrapper.proposalList();
      });
    };
+   _loadingData = BluzelleWrapper.proposalList();
+
+
   }
   @override
   Widget build(BuildContext context) {

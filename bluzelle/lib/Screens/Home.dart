@@ -8,6 +8,7 @@ import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -104,7 +105,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             children: <Widget>[
               stats,
               vList,
-              ProposalListTab(),
+              pList,
               AboutBluezelle(),
             ],
 
@@ -112,13 +113,35 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: currentIndex==2?FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.red,
-        onPressed: () async {
-          await Navigator.pushNamed(context, NewProposal.routeName);
-          pList.refresh();
-        },
+      floatingActionButton: currentIndex==2?SizedBox(
+        height: MediaQuery.of(context).size.height*0.25,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: Colors.red,
+              heroTag: "newprop",
+              onPressed: () async {
+                Navigator.pushNamed(context, NewProposal.routeName);
+              },
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height*0.02,
+            ),
+            FloatingActionButton(
+              child: Icon(Icons.refresh),
+              backgroundColor: Colors.red,
+              heroTag: "refresh",
+              onPressed: () async {
+                pList.refresh();
+              },
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height*0.041,
+            ),
+          ],
+        ),
       ): currentIndex ==3?
       FloatingActionButton(
         child: Icon(Icons.alternate_email),
@@ -174,3 +197,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
 }
+//FloatingActionButton(
+//        child: Icon(Icons.add),
+//        backgroundColor: Colors.red,
+//        onPressed: () async {
+//          await Navigator.pushNamed(context, NewProposal.routeName);
+//          pList.refresh();
+//        },
+//      )
