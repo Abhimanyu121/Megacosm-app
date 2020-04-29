@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/BondedNotBondedWrapper.dart';
 import 'package:bluzelle/Models/ValidatorList.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Utils/HexColor.dart';
 import 'package:bluzelle/Widgets/CurvePainter.dart';
@@ -45,9 +46,9 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     final delJson = jsonDecode(delBody);
     BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
     valList = ValidatorList.fromJson(delJson);
-    bondedStake = model.result.bonded_tokens;
-    unbondedStake = model.result.not_bonded_tokens;
-    balance = balanceWrapper.result[0].amount;
+    bondedStake = BNT.toBNT(model.result.bonded_tokens);
+    unbondedStake = BNT.toBNT(model.result.not_bonded_tokens);
+    balance = BNT.toBNT(balanceWrapper.result[0].amount);
     setState(() {
       loading = false;
       this.address = address;
@@ -147,7 +148,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text(balance+" UNBT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                            child: Text(BNT.seperator(balance)+" BNT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0,0,8,0),
@@ -211,7 +212,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text(bondedStake+" UNBT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                            child: Text(BNT.seperator(bondedStake)+" BNT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height*0.04,
@@ -222,7 +223,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text(unbondedStake +" UBNT", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                            child: Text(BNT.seperator(unbondedStake) +" BNT", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
                           ),
                         ],
                       ),

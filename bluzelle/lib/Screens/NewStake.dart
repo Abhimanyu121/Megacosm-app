@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/NewStakeToConfirm.dart';
 import 'package:bluzelle/Screens/NewStakeConfirmation.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'file:///I:/Bluzelle/bluzelle/lib/Models/HomeToNewStake.dart';
@@ -34,7 +35,7 @@ class NewStakeState extends State<NewStake>{
     final json = jsonDecode(body);
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
     setState(() {
-      bal = model.result[0].amount;
+      bal = BNT.toBNT(model.result[0].amount);
     });
   }
   @override
@@ -124,7 +125,7 @@ class NewStakeState extends State<NewStake>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Your Balance", style: TextStyle(color: Colors.black,)),
-                    Text(bal, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(bal) +"BNT", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -134,7 +135,7 @@ class NewStakeState extends State<NewStake>{
                 controller: _amount,
                 keyboardType: TextInputType.number,
                 autovalidate: true,
-                validator: (val) => (val!=""?BigInt.parse(val)<BigInt.parse(bal):true)
+                validator: (val) => (val!=""?double.parse(val)<double.parse(bal):true)
                     ? null
                     : 'Please enter a valid amount',
                 decoration: InputDecoration(

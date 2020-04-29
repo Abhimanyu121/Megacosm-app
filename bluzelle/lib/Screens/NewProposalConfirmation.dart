@@ -1,6 +1,6 @@
 import 'package:bluzelle/Models/NewProposalModel.dart';
 import 'package:bluzelle/Screens/NewProposalTx.dart';
-import 'package:bluzelle/Screens/WithdrawSuccess.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +84,8 @@ class NewProposalConfirmationState extends State<NewProposalConfirmation>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Stake", style: TextStyle(color: Colors.black,)),
-                    Text(args.stake, style: TextStyle(color: Colors.grey,))
+                    Text("Deposit ", style: TextStyle(color: Colors.black,)),
+                    Text(BNT.seperator(args.stake)+" BNT", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

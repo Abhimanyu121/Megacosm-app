@@ -65,7 +65,7 @@ class VoteTxState extends State<VoteTx>{
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(16,8,8,8),
-                child: Text(args.model.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
+                child: Text(args.model.content.value.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
@@ -73,7 +73,7 @@ class VoteTxState extends State<VoteTx>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(args.model.description, style: TextStyle(color: Colors.grey,))
+                    Text(args.model.content.value.description, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

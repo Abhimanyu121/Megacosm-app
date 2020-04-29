@@ -1,5 +1,6 @@
 
 import 'package:bluzelle/Models/RedelegationTxModel.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -133,7 +134,7 @@ class RedelegationTxState extends State<RedelegationTx>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Redelegated Amount ", style: TextStyle(color: Colors.black,)),
-                    Text(args.newAmount, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.newAmount), style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

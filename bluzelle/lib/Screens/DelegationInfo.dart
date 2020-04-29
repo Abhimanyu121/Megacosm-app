@@ -8,6 +8,7 @@ import 'package:bluzelle/Models/ToWithdrawConfirmation.dart';
 import 'package:bluzelle/Screens/RedelegationSelection.dart';
 import 'package:bluzelle/Screens/SetUndelegationAmount.dart';
 import 'package:bluzelle/Screens/WithdrawConfirmation.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +47,8 @@ class DelegationInfoState extends State<DelegationInfo>{
     CurrentDelegationWrapper model2 = new CurrentDelegationWrapper.fromJson(json2);
     setState(() {
       balance = true;
-      bal = model.result[0].amount;
-      stake = model2.result.balance.amount.toString();
+      bal = BNT.toBNT(model.result[0].amount);
+      stake = BNT.toBNT( model2.result.balance.amount.toString());
     });
   }
   @override
@@ -143,7 +144,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Staked Amount", style: TextStyle(color: Colors.black,)),
-                    Text(stake, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(stake)+ "BNT", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -154,7 +155,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Rewards", style: TextStyle(color: Colors.black,)),
-                    Text(bal, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(bal) +" BNT", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

@@ -5,6 +5,7 @@ import 'package:bluzelle/Models/NewProposalModel.dart';
 import 'package:bluzelle/Models/RedelegatorConfirmation.dart';
 import 'package:bluzelle/Screens/NewProposalConfirmation.dart';
 import 'package:bluzelle/Screens/RedlegationConfirmation.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class NewProposalState extends State<NewProposal>{
     BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
     setState(() {
       fetching = false;
-      balance = balanceWrapper.result[0].amount;
+      balance = BNT.toBNT(balanceWrapper.result[0].amount);
     });
   }
   @override
@@ -108,7 +109,7 @@ class NewProposalState extends State<NewProposal>{
                 ),
                 onPressed: (){
                   FocusScope.of(context).requestFocus(FocusNode());
-                  if((BigInt.parse(_amount.text)>BigInt.parse(balance)||balance=="")&& _title.text.isNotEmpty&& _description.text.isNotEmpty){
+                  if((double.parse(_amount.text)>double.parse(balance)||balance=="")&& _title.text.isNotEmpty&& _description.text.isNotEmpty){
                     Toast.show("Invalid Input", context,);
                     return;
                   }

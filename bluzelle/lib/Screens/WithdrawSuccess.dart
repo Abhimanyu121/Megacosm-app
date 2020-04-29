@@ -1,5 +1,6 @@
 
 import 'package:bluzelle/Models/WithdrawSuccessModel.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -124,7 +125,7 @@ class WithdrawSuccessState extends State<WithdrawSuccess>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Amount", style: TextStyle(color: Colors.black,)),
-                    Text(args.amount, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.amount), style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

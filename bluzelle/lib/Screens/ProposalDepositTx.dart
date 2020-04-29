@@ -1,5 +1,6 @@
 
 import 'package:bluzelle/Models/ProposalDepositModel.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class ProposalDepositTxState extends State<ProposalDepositTx>{
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(16,8,8,8),
-                child: Text(args.model.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
+                child: Text(args.model.content.value.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
@@ -72,7 +73,7 @@ class ProposalDepositTxState extends State<ProposalDepositTx>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(args.model.description, style: TextStyle(color: Colors.grey,))
+                    Text(args.model.content.value.description, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -83,7 +84,7 @@ class ProposalDepositTxState extends State<ProposalDepositTx>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Deposit you Made: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.amount+" UBNT", style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.amount)+" BNT", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

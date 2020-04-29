@@ -2,6 +2,7 @@
 import 'package:bluzelle/Models/RedelegationAmountModel.dart';
 import 'package:bluzelle/Models/RedelegatorConfirmation.dart';
 import 'package:bluzelle/Screens/RedlegationConfirmation.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -99,7 +100,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Staked Amount ", style: TextStyle(color: Colors.black,)),
-                    Text(args.totalAmount, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.totalAmount)+ "BNT", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -143,7 +144,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                 controller: _amount,
                 keyboardType: TextInputType.number,
                 autovalidate: true,
-                validator: (val) => (val!=""?BigInt.parse(val)<=BigInt.parse(args.totalAmount):true)
+                validator: (val) => (val!=""?double.parse(val)<=double.parse(BNT.toBNT(args.totalAmount)):true)
                     ? null
                     : 'Please enter a valid amount',
                 decoration: InputDecoration(
@@ -161,7 +162,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   borderRadius: BorderRadius.circular(24),
                 ),
                 onPressed: (){
-                  if(BigInt.parse(_amount.text)>BigInt.parse(args.totalAmount)||_amount.text==""){
+                  if(double.parse(_amount.text)>double.parse(BNT.toBNT(args.totalAmount))||_amount.text==""){
                     Toast.show("Invalid Input", context,);
                     return;
                   }

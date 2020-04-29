@@ -2,6 +2,7 @@
 import 'package:bluzelle/Models/RedelegationTxModel.dart';
 import 'package:bluzelle/Models/RedelegatorConfirmation.dart';
 import 'package:bluzelle/Screens/RedelegationTx.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,7 @@ class RedelegationConfirmationState extends State<RedelegationConfirmation>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Total Stake:", style: TextStyle(color: Colors.black,)),
-                    Text(args.totalAmount, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.totalAmount), style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -132,7 +133,7 @@ class RedelegationConfirmationState extends State<RedelegationConfirmation>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Stake to Redelegate: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.newAmount, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.newAmount), style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

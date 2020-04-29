@@ -6,6 +6,7 @@ import 'package:bluzelle/Models/ProposalDepositModel.dart';
 import 'package:bluzelle/Models/VoteModel.dart';
 import 'package:bluzelle/Screens/ConfirmVote.dart';
 import 'package:bluzelle/Screens/ProposalDepositConfirm.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +39,7 @@ class ProposalInfoState extends State<ProposalInfo>{
     print(json);
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
     setState(() {
-      bal = model.result[0].amount;
+      bal = BNT.toBNT(model.result[0].amount);
       loading = false;
     });
   }
@@ -68,7 +69,7 @@ class ProposalInfoState extends State<ProposalInfo>{
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(16,8,8,8),
-              child: Text(args.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
+              child: Text(args.content.value.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
@@ -76,7 +77,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(args.description, style: TextStyle(color: Colors.grey,))
+                    Text(args.content.value.description, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -87,7 +88,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Deposits: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.total_deposit[0].amount+" UBNT", style: TextStyle(color: Colors.grey,))
+                    Text(BNT.toBNT(args.total_deposit[0].amount)+" BNT", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ): SizedBox(height: 0,),
@@ -139,7 +140,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                         controller: _amount,
                         keyboardType: TextInputType.number,
                         autovalidate: true,
-                        validator: (val) => (val!=""?BigInt.parse(val)<BigInt.parse(bal):true)
+                        validator: (val) => (val!=""?double.parse(val)<double.parse(bal):true)
                             ? null
                             : 'Please enter a valid amount',
                         decoration: InputDecoration(

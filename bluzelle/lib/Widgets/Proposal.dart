@@ -1,26 +1,24 @@
 import 'package:bluzelle/Models/Proposal.dart';
 import 'package:bluzelle/Screens/ProposalDetails.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/ColorRandminator.dart';
 import 'package:flutter/material.dart';
 
 class ProposalsWidget extends StatelessWidget{
   final Proposal model;
-  ProposalsWidget({this.model});
+  Function refresh;
+  ProposalsWidget({this.model, this.refresh});
   @override
   Widget build(BuildContext context) {
-    String deposit = model.total_deposit[0].amount;
-    String yes = model.final_tally_result.yes;
-    String no = model.final_tally_result.no;
-    String no_with_veto = model.final_tally_result.no_with_veto;
-    String abstain = model.final_tally_result.abstain;
+    String deposit = BNT.seperator(BNT.toBNT(model.total_deposit[0].amount));
     String status = model.proposal_status;
     return Container(
       width: MediaQuery.of(context).size.width*0.92,
       child: Container(
 
         child: FlatButton(
-          onPressed: (){
-            Navigator.pushNamed(
+          onPressed: ()async {
+           await  Navigator.pushNamed(
               context,
               ProposalInfo.routeName,
               arguments: model,
@@ -29,8 +27,8 @@ class ProposalsWidget extends StatelessWidget{
           child: Column(
             children: <Widget>[
               ListTile(
-                leading: _circle(model.proposal_type.substring(0,1), context) ,
-                title: Text(model.title),
+                leading: _circle(model.content.value.title.substring(0,1), context) ,
+                title: Text(model.content.value.title),
                 subtitle: Text("Deposit : $deposit Status: $status"),
               ),
               SizedBox(

@@ -1,5 +1,6 @@
 
 import 'package:bluzelle/Models/NewProposalModel.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -88,8 +89,8 @@ class NewProposalTxState extends State<NewProposalTx>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Stake", style: TextStyle(color: Colors.black,)),
-                    Text(args.stake, style: TextStyle(color: Colors.grey,))
+                    Text("Deposit ", style: TextStyle(color: Colors.black,)),
+                    Text(BNT.seperator(args.stake)+" BNT", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

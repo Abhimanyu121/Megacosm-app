@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/ConfirmToTransactionNewStake.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,7 @@ class TransactionNewStakeState extends State<TransactionNewStake> {
                   children: <Widget>[
                     Text("Staked Amount",
                         style: TextStyle(color: Colors.black,)),
-                    Text(args.amount, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.amount), style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

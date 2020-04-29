@@ -2,6 +2,7 @@
 import 'package:bluzelle/Models/ToWithdrawConfirmation.dart';
 import 'package:bluzelle/Models/WithdrawSuccessModel.dart';
 import 'package:bluzelle/Screens/WithdrawSuccess.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,7 @@ class UndelegateConfirmationState extends State<UndelegateConfirmation>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Amount", style: TextStyle(color: Colors.black,)),
-                    Text(args.amount, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.amount), style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

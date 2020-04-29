@@ -1,6 +1,7 @@
 
 import 'package:bluzelle/Models/ToWithdrawConfirmation.dart';
 import 'package:bluzelle/Screens/UndelegateConfirmation.dart';
+import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -118,7 +119,7 @@ class SetUndelegationAmountState extends State<SetUndelegationAmount>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Total Amount", style: TextStyle(color: Colors.black,)),
-                    Text(args.amount, style: TextStyle(color: Colors.grey,))
+                    Text(BNT.seperator(args.amount), style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -129,7 +130,7 @@ class SetUndelegationAmountState extends State<SetUndelegationAmount>{
                 controller: _amount,
                 keyboardType: TextInputType.number,
                 autovalidate: true,
-                validator: (val) => (val!=""?BigInt.parse(val)<BigInt.parse(args.amount):true)
+                validator: (val) => (val!=""?double.parse(val)<double.parse(args.amount):true)
                     ? null
                     : 'Please enter a valid amount',
                 decoration: InputDecoration(
