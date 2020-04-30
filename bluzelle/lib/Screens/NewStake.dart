@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:bluzelle/Models/BalanceWrapper.dart';
+import 'package:bluzelle/Models/HomeToNewStake.dart';
 import 'package:bluzelle/Models/NewStakeToConfirm.dart';
 import 'package:bluzelle/Screens/NewStakeConfirmation.dart';
 import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
-import 'file:///I:/Bluzelle/bluzelle/lib/Models/HomeToNewStake.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
@@ -50,7 +50,6 @@ class NewStakeState extends State<NewStake>{
   @override
   Widget build(BuildContext context) {
     final HomeToNewStake args = ModalRoute.of(context).settings.arguments;
-    // TODO: implement build
     return Scaffold(
         backgroundColor: nearlyWhite,
         appBar: AppBar(

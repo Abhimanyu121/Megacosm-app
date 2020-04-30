@@ -1,6 +1,6 @@
+import 'package:bluzelle/Models/HomeToNewStake.dart';
 import 'package:bluzelle/Screens/NewStake.dart';
 import 'package:bluzelle/Utils/ColorRandminator.dart';
-import 'file:///I:/Bluzelle/bluzelle/lib/Models/HomeToNewStake.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
