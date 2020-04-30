@@ -47,7 +47,13 @@ class DelegationInfoState extends State<DelegationInfo>{
     CurrentDelegationWrapper model2 = new CurrentDelegationWrapper.fromJson(json2);
     setState(() {
       balance = true;
-      bal = BNT.toBNT(model.result[0].amount);
+      if(model.result.isEmpty){
+        bal = "0.0";
+      }
+      else{
+        bal = BNT.toBNT(model.result[0].amount);
+      }
+
       stake = BNT.toBNT( model2.result.balance.amount.toString());
     });
   }

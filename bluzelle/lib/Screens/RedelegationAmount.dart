@@ -144,7 +144,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                 controller: _amount,
                 keyboardType: TextInputType.number,
                 autovalidate: true,
-                validator: (val) => (val!=""?double.parse(val)<=double.parse(BNT.toBNT(args.totalAmount)):true)
+                validator: (val) => (val!=""?double.parse(val)<=double.parse(args.totalAmount):true)
                     ? null
                     : 'Please enter a valid amount',
                 decoration: InputDecoration(
@@ -162,7 +162,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   borderRadius: BorderRadius.circular(24),
                 ),
                 onPressed: (){
-                  if(double.parse(_amount.text)>double.parse(BNT.toBNT(args.totalAmount))||_amount.text==""){
+                  if(double.parse(_amount.text)>double.parse(args.totalAmount)||_amount.text==""){
                     Toast.show("Invalid Input", context,);
                     return;
                   }

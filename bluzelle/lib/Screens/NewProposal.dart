@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/NewProposalModel.dart';
-import 'package:bluzelle/Models/RedelegatorConfirmation.dart';
 import 'package:bluzelle/Screens/NewProposalConfirmation.dart';
-import 'package:bluzelle/Screens/RedlegationConfirmation.dart';
 import 'package:bluzelle/Utils/BNT.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/HeadingCard.dart';
@@ -76,6 +74,7 @@ class NewProposalState extends State<NewProposal>{
                 controller: _description,
                 keyboardType: TextInputType.text,
                 autovalidate: false,
+                maxLines: null,
                 decoration: InputDecoration(
                   hintText: "Proposal Content",
                   border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -90,7 +89,7 @@ class NewProposalState extends State<NewProposal>{
                 controller: _amount,
                 keyboardType: TextInputType.number,
                 autovalidate: true,
-                validator: (val) => (val!=""?BigInt.parse(val)<=BigInt.parse(balance):true)
+                validator: (val) => (val!=""?double.parse(val)<=double.parse(balance):true)
                     ? null
                     : 'Invalid amount',
                 decoration: InputDecoration(

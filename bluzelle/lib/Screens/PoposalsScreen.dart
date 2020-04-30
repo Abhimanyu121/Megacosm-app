@@ -81,7 +81,7 @@ class ProposalListState extends State<ProposalListTab> with
                   itemBuilder: (BuildContext ctx, int index ){
 
                     return ProposalsWidget(
-                      model: model.result[index],
+                      model: model.result[model.result.length -1 - index],
                       refresh: widget.refresh,
                     );
                   },

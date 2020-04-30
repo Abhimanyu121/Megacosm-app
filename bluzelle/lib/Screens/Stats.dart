@@ -48,7 +48,11 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     valList = ValidatorList.fromJson(delJson);
     bondedStake = BNT.toBNT(model.result.bonded_tokens);
     unbondedStake = BNT.toBNT(model.result.not_bonded_tokens);
-    balance = BNT.toBNT(balanceWrapper.result[0].amount);
+    if(balanceWrapper.result.isEmpty){
+      balance = "0.0";
+    }else {
+      balance = BNT.toBNT(balanceWrapper.result[0].amount);
+    }
     setState(() {
       loading = false;
       this.address = address;

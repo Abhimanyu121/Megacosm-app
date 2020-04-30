@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:sacco/sacco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BluzelleTransactions {
-  static var  networkInfo = NetworkInfo(bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
+  static var  networkInfo = NetworkInfo(bech32Hrp: "bluzelle", lcdUrl: "http://testnet.private.bluzelle.com:1317", defaultTokenDenom: "ubnt");
 
   static sendTokens()async {
     var seed = "around buzz diagram captain obtain detail salon mango muffin brother morning jeans display attend knife carry green dwarf vendor hungry fan route pumpkin car";
@@ -48,7 +47,7 @@ class BluzelleTransactions {
       type: "cosmos-sdk/MsgDelegate",
       value: {
         "amount": {
-          "amount": _stake,
+          "amount": _stake.toString(),
           "denom": "ubnt"
         },
         "delegator_address": wallet.bech32Address,
@@ -78,7 +77,7 @@ class BluzelleTransactions {
     final message = StdMsg(
       type: "cosmos-sdk/MsgWithdrawDelegationReward",
       value: {
-        "delegator_address": delegator,
+        "delegator_address": wallet.bech32Address,
         "validator_address": validator
       }
     );
@@ -107,7 +106,7 @@ class BluzelleTransactions {
         type: "cosmos-sdk/MsgUndelegate",
         value: {
           "amount": {
-            "amount": _stake,
+            "amount": _stake.toString(),
             "denom": "ubnt"
           },
           "delegator_address": delegator,
@@ -139,7 +138,7 @@ class BluzelleTransactions {
         type: "cosmos-sdk/MsgBeginRedelegate",
         value:{
           "amount": {
-            "amount": _stake,
+            "amount": _stake.toString(),
             "denom": "ubnt"
           },
           "delegator_address": delegator,
@@ -180,7 +179,7 @@ class BluzelleTransactions {
           },
           "initial_deposit": [
             {
-              "amount": _stake,
+              "amount": _stake.toString(),
               "denom": "ubnt"
             }
           ],
@@ -222,6 +221,37 @@ class BluzelleTransactions {
           ],
           "depositor": wallet.bech32Address,
           "proposal_id": id
+        }
+    );
+    final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
+      fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")]),
+
+    );
+
+    final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx,);
+    print(signedStdTx.toJson());
+    final result = await TxSender.broadcastStdTx(
+      wallet: wallet,
+      stdTx: signedStdTx,
+    );
+    if (result.success) {
+      print("Tx send successfully. Hash: ${result.hash}");
+      return(result.hash);
+    } else {
+      print("Tx send error: ${result.error.errorMessage}");
+    }
+  }
+  static Future<String>vote(String id, String vote)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String seed= prefs.getString("mnemonic");
+    final mnemonic = seed.split(" ");
+    final wallet = Wallet.derive(mnemonic,  networkInfo);
+    final message = StdMsg(
+        type: "cosmos-sdk/MsgVote",
+        value: {
+          "option": vote,	// Yes, No, NowithVeto, Abstain
+          "proposal_id": id,
+          "voter": wallet.bech32Address
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bluzelle/Models/BalanceWrapper.dart';
 import 'package:bluzelle/Models/Proposal.dart';
 import 'package:bluzelle/Models/ProposalDepositModel.dart';
+import 'package:bluzelle/Models/UserVoteWrapper.dart';
 import 'package:bluzelle/Models/VoteModel.dart';
 import 'package:bluzelle/Screens/ConfirmVote.dart';
 import 'package:bluzelle/Screens/ProposalDepositConfirm.dart';
@@ -39,7 +40,11 @@ class ProposalInfoState extends State<ProposalInfo>{
     print(json);
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
     setState(() {
-      bal = BNT.toBNT(model.result[0].amount);
+      if(model.result.isEmpty){
+        bal = "0.0";
+      }else {
+        bal = BNT.toBNT(model.result[0].amount);
+      }
       loading = false;
     });
   }
@@ -92,7 +97,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                   ],
                 )
             ): SizedBox(height: 0,),
-            args.proposal_status!="DepositPeriod"?Padding(
+            args.proposal_status!="DepositPeriod"&&args.proposal_status!="VotingPeriod"?Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,10 +120,59 @@ class ProposalInfoState extends State<ProposalInfo>{
                   ],
                 )
             ):SizedBox(height: 0,),
+            args.proposal_status == "VotingPeriod"?FutureBuilder(
+              future : BluzelleWrapper.castedVote(args.id, delegatorAddress),
+              builder: (BuildContext context, snapshot){
+                try{
+                  if(snapshot.error==null){
+                    print("status error");
+                    if(snapshot.data.statusCode == 404){
+                      print("status 404");
+                      return SizedBox(
+                        height: 0,
+                      );
+                    }
+                    else{
+                      print("status not 404");
+                      String body = utf8.decode(snapshot.data.bodyBytes);
+                      final json = jsonDecode(body);
+                      UserVoteWrapper model = UserVoteWrapper.fromJson(json);
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("You have casted:"),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(model.result.option),
+                            )
+                          ],
+                        ),
+                      );
+
+                    }
+                  }
+                  else{
+                    print("status not error");
+                    return SizedBox(
+                      height: 0,
+                    );
+                  }
+                }
+                catch(e){
+                  print(e);
+                  return SizedBox(
+                    height: 0,
+                  );
+                }
+
+              },
+            ):SizedBox(height: 0,),
             args.proposal_status=="DepositPeriod"? Padding(
-                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                padding: const EdgeInsets.fromLTRB(30,8,30,8),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     depositing?SizedBox(height: 0,):RaisedButton(
@@ -178,7 +232,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                   ],
                 )
             ):SizedBox(height: 0,) ,
-            args.proposal_status=="voting"?Padding(
+            args.proposal_status=="VotingPeriod"?Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,7 +242,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                   ],
                 )
             ):SizedBox(height: 0,) ,
-            args.proposal_status=="voting"?
+            args.proposal_status=="VotingPeriod"?
             Column(
               children: <Widget>[
                 Row(

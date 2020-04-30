@@ -120,8 +120,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           children: <Widget>[
             FloatingActionButton(
               child: Icon(Icons.add),
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.deepOrange,
               heroTag: "newprop",
+              tooltip: "Add new proposal",
               onPressed: () async {
                 Navigator.pushNamed(context, NewProposal.routeName);
               },
@@ -133,6 +134,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
               child: Icon(Icons.refresh),
               backgroundColor: Colors.red,
               heroTag: "refresh",
+              tooltip: "Refresh",
               onPressed: () async {
                 pList.refresh();
               },
@@ -187,21 +189,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  _loader(){
-    return Center(
-      child: SpinKitCubeGrid(
-        size: 50,
-        color: appTheme,
-      ),
-    );
-  }
+
 
 }
-//FloatingActionButton(
-//        child: Icon(Icons.add),
-//        backgroundColor: Colors.red,
-//        onPressed: () async {
-//          await Navigator.pushNamed(context, NewProposal.routeName);
-//          pList.refresh();
-//        },
-//      )

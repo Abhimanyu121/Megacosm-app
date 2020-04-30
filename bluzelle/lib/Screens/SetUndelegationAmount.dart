@@ -148,7 +148,7 @@ class SetUndelegationAmountState extends State<SetUndelegationAmount>{
                   borderRadius: BorderRadius.circular(24),
                 ),
                 onPressed: (){
-                    if(BigInt.parse(_amount.text)>BigInt.parse(args.amount)||_amount.text==""){
+                    if(double.parse(_amount.text)>double.parse(args.amount)||_amount.text==""){
                       Toast.show("Invalid Input", context,);
                       return;
                     }

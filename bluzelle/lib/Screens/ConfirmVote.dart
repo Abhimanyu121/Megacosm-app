@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'package:bluzelle/Utils/BluzelleTransctions.dart';
 import '../Constants.dart';
 class ConfirmVote extends StatefulWidget{
   static const routeName = '/confirmVote';
@@ -96,14 +97,14 @@ class ConfirmVoteState extends State<ConfirmVote>{
                   setState(() {
                     loading =true;
                   });
-                  // String tx =await BluzelleTransactions.redelegate(args.srcAddress, args.destAddress, args.delegatorAddress,args.newAmount);
+                   String tx =await BluzelleTransactions.vote(args.model.id, args.vote);
                   Navigator.popAndPushNamed(
                       context,
                       VoteTx.routeName,
                       arguments: VoteModel(
                           model: args.model,
                           vote: args.vote,
-                          tx: "Tx"
+                          tx: tx
                       )
 
                   );

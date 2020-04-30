@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 class BluzelleWrapper{
-  static const String baseUrl = "http://testnet.public.bluzelle.com:1317";
+  static const String baseUrl = "http://testnet.private.bluzelle.com:1317";
   static Future<http.Response> getValidatorList() async {
     const url = baseUrl+"/staking/validators";
     var resp = await http.get(url);
@@ -40,5 +40,13 @@ class BluzelleWrapper{
     print(resp.body);
     return resp;
   }
+  static Future<http.Response> castedVote(String id, String address) async {
+    var url = baseUrl+"/gov/proposals/$id/votes/$address";
+    print(url);
+    var resp = await http.get(url);
+    print(resp.body);
+    return resp;
+  }
+
 
 }

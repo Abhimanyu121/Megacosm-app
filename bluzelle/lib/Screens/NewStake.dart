@@ -35,7 +35,12 @@ class NewStakeState extends State<NewStake>{
     final json = jsonDecode(body);
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
     setState(() {
-      bal = BNT.toBNT(model.result[0].amount);
+      if(model.result.isEmpty){
+        bal ="0";
+      }
+      else{
+        bal = BNT.toBNT(model.result[0].amount);
+      }
     });
   }
   @override
