@@ -106,7 +106,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Container(
             width: MediaQuery.of(context).size.width*0.9,
-            height: MediaQuery.of(context).size.height*0.3,
+            //height: MediaQuery.of(context).size.height*0.3,
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
                 Colors.black,
@@ -119,58 +119,61 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                   topRight: Radius.circular(20.0)),
 
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16,5,5,4),
-                      child: Text("Account",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16,5,5,4),
-                      child: SizedBox(
-                          height: MediaQuery.of(context).size.height*0.08,
-                          width: MediaQuery.of(context).size.width*0.2,
-                          child: Image.asset("logo.png"))
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text("Balance: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text(BNT.seperator(balance)+" BNT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text("Address: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width*0.8,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                              child: Text(address, overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                            ),
-                          ),
-                        ],
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(5.0,10,5,20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16,5,5,4),
+                        child: Text("Account",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
                       ),
-                    )
-                  ],
-                ),
-              ],
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16,5,5,4),
+                        child: SizedBox(
+                            height: MediaQuery.of(context).size.height*0.08,
+                            width: MediaQuery.of(context).size.width*0.2,
+                            child: Image.asset("logo.png"))
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text("Balance: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text(BNT.seperator(balance)+" BNT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text("Address: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width*0.8,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                                child: Text(address, overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -179,7 +182,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
           elevation: 0,
           color: Colors.transparent,
           child: Container(
-            height: MediaQuery.of(context).size.height*0.35,
+            //height: MediaQuery.of(context).size.height*0.35,
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
                 HexColor("#00264d"),
@@ -192,69 +195,78 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                   topRight: Radius.circular(20.0)),
 
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(5.0,8,5,15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
 
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16,20,5,6),
-                  child: Text("Staking Pools",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
-                ),
-
-                SizedBox(
-                  height: MediaQuery.of(context).size.height*0.25,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text("Bonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text(BNT.seperator(bondedStake)+" BNT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height*0.04,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text("Unbonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text(BNT.seperator(unbondedStake) +" BNT", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16,20,5,6),
+                        child: Text("Staking Pools",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
                       ),
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height*0.25,
+                    width: MediaQuery.of(context).size.width*0.83,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text("Bonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text(BNT.seperator(bondedStake)+" BNT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height*0.04,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text("Unbonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text(BNT.seperator(unbondedStake) +" BNT", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                            ),
+                          ],
+                        ),
 //              VerticalDivider(
 //                thickness: 3,
 //                color: Colors.blue,
 //              ),
-                      CustomPaint(
-                        painter: CurvePainter(
-                            colors: [
-                              Colors.greenAccent,
-                              Colors.green,
-                              Colors.lightGreen
-                            ],
-                            angle: _curveAngle()
+                        CustomPaint(
+                          painter: CurvePainter(
+                              colors: [
+                                Colors.greenAccent,
+                                Colors.green,
+                                Colors.lightGreen
+                              ],
+                              angle: _curveAngle()
+                          ),
+                          child: SizedBox(
+                            width: 108,
+                            height: 108,
+                          ),
                         ),
-                        child: SizedBox(
-                          width: 108,
-                          height: 108,
-                        ),
-                      ),
 
-                    ],
+                      ],
+                    ),
                   ),
-                ),
 
-              ],
+                ],
+              ),
             ),
           ),
         ),
