@@ -3,8 +3,11 @@ import 'package:bluzelle/Constants.dart';
 import 'package:bluzelle/Models/ProposalListModel.dart';
 import 'package:bluzelle/Utils/BluzelleWrapper.dart';
 import 'package:bluzelle/Widgets/Proposal.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'NewProposal.dart';
 class ProposalListTab extends StatefulWidget {
   Function refresh;
   @override
@@ -30,6 +33,7 @@ class ProposalListState extends State<ProposalListTab> with
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -74,18 +78,38 @@ class ProposalListState extends State<ProposalListTab> with
                   child: Text("No Proposals So far")
                 );
               }
-              return Expanded(
-                child: ListView.builder(
-                  cacheExtent: 100,
-                  itemCount: model.result.length,
-                  itemBuilder: (BuildContext ctx, int index ){
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0,0,8,25),
+                    child: OutlineButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: SizedBox(width:MediaQuery.of(context).size.width*0.7,
+                          child: Center(child: Text("ADD NEW PROPOSAL"))),
+                      onPressed: (){
+                        Navigator.pushNamed(context, NewProposal.routeName);
+                      },
+                      
+                      borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                    ),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      cacheExtent: 100,
+                      itemCount: model.result.length,
+                      itemBuilder: (BuildContext ctx, int index ){
 
-                    return ProposalsWidget(
-                      model: model.result[model.result.length -1 - index],
-                      refresh: widget.refresh,
-                    );
-                  },
-                ),
+                        return ProposalsWidget(
+                          model: model.result[model.result.length -1 - index],
+                          refresh: widget.refresh,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             }
           },

@@ -113,38 +113,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: currentIndex==2?SizedBox(
-        height: MediaQuery.of(context).size.height*0.25,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            FloatingActionButton(
-              child: Icon(Icons.add),
-              backgroundColor: Colors.deepOrange,
-              heroTag: "newprop",
-              tooltip: "Add new proposal",
-              onPressed: () async {
-                Navigator.pushNamed(context, NewProposal.routeName);
-              },
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height*0.02,
-            ),
-            FloatingActionButton(
-              child: Icon(Icons.refresh),
-              backgroundColor: Colors.red,
-              heroTag: "refresh",
-              tooltip: "Refresh",
-              onPressed: () async {
-                pList.refresh();
-              },
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height*0.041,
-            ),
-          ],
-        ),
-      ): currentIndex ==3?
+      floatingActionButton: currentIndex ==3?
       FloatingActionButton(
         child: Icon(Icons.alternate_email),
         backgroundColor: Colors.red,
@@ -165,6 +134,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             stats.refresh();
           }else if(currentIndex==1){
             vList.refresh();
+          }else if(currentIndex==2){
+            pList.refresh();
           }
         },
       ),
