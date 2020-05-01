@@ -1,6 +1,8 @@
 # Bluzelle Wallet
 This Flutter based application aims to facilitate the delegation and governance process of Bluzelle's testnet.
 ## Feature List
+### Banking
+1. Transfer BNT to a different account
 ### Staking
 1. Stake BNT to a validator.
 2. Withdraw rewards from Validators.
