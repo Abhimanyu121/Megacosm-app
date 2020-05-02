@@ -22,8 +22,7 @@ This Flutter based application aims to facilitate the delegation and governance 
 ### Video
 You can watch the small demo video [here](https://drive.google.com/file/d/1v3YkxVCM9DL5dL5tEpPPj2w4auE8qMRw/view?usp=sharing).
 ### Screenshots
-|<img src="Screenshots/1.png" width="400">|<img src="Screenshots/2.png" width="400">
+|<img src="Screenshots/6.png" width="400">|<img src="Screenshots/2.png" width="400">
 |<img src="Screenshots/3.png" width="400">|<img src="Screenshots/4.png" width="400">
 |<img src="Screenshots/5.png" width="400">|<img src="Screenshots/6.png" width="400">
-|<img src="Screenshots/6.png" width="400">|<img src="Screenshots/7.png" width="400">
 - Head over to screenshots folder for more screenshots.
