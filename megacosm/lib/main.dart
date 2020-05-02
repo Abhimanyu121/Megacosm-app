@@ -44,7 +44,6 @@ class _MyAppState extends State<MyApp> {
   _getPrefs()async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var mn =pref.getString(mnemonic);
-    print(mn);
     if(mn!=null){
       setState(() {
         initialRoute =Home();
