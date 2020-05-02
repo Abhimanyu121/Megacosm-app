@@ -1,4 +1,4 @@
-# Bluzelle Wallet
+# Project Megacosm
 This Flutter based application aims to facilitate the delegation and governance process of Bluzelle's testnet.
 ## Feature List
 ### Banking
