@@ -2,7 +2,7 @@ import 'package:sacco/sacco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BluzelleTransactions {
-  static var  networkInfo = NetworkInfo(bech32Hrp: "bluzelle", lcdUrl: "http://testnet.private.bluzelle.com:1317", defaultTokenDenom: "ubnt");
+  static var  networkInfo = NetworkInfo(bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
 
   static sendTokens(String addr, String amount)async {
     int _stake = (1000000*double.parse(amount)).toInt();
