@@ -155,7 +155,14 @@ class NewStakeConfirmationState extends State<NewStakeConfirmation>{
                   setState(() {
                     placingOrder=true;
                   });
-                  var tx = await Transactions.sendDelegation(args.amount, args.address);
+                  var tx = await Transactions.sendDelegation(args.amount, args.address,context);
+                  if(tx =="cancel"){
+                    setState(() {
+                      placingOrder = false;
+
+                    });
+                    return;
+                  }
                   print(tx);
                   Navigator.pushNamed(
                     context,

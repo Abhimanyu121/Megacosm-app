@@ -9,6 +9,8 @@ const Color grey = Colors.black54;
 const Color nearlyWhite = Color(0xFFFEFEFE);
 const Color notWhite = Color(0xFFF2F2F2);
 const String mnemonic = "mnemonic";
+const String known ="known";
+const String yo = "yo";
 const String prefAddress= "address";
 class AppTheme {
   AppTheme._();

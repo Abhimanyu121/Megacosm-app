@@ -83,7 +83,14 @@ class ProposalDepositConfirmState extends State<ProposalDepositConfirm>{
                   setState(() {
                     loading =true;
                   });
-                  String tx =await Transactions.proposalDeposit(args.model.id, args.amount);
+                  String tx =await Transactions.proposalDeposit(args.model.id, args.amount, context);
+                  if(tx =="cancel"){
+                    setState(() {
+                      loading = false;
+
+                    });
+                    return;
+                  }
                   Navigator.popAndPushNamed(
                       context,
                       ProposalDepositTx.routeName,

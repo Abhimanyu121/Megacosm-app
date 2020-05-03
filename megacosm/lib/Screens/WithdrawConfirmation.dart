@@ -144,7 +144,14 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
                   setState(() {
                     placingOrder =true;
                   });
-                  String tx =await Transactions.withdrawReward(delegatorAddress, args.address);
+                  String tx =await Transactions.withdrawReward(delegatorAddress, args.address, context);
+                  if(tx =="cancel"){
+                    setState(() {
+                      placingOrder = false;
+
+                    });
+                    return;
+                  }
                       Navigator.popAndPushNamed(
                         context,
                         WithdrawSuccess.routeName,

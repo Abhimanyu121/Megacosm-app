@@ -40,6 +40,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool loading = false;
   Widget initialRoute = Login();
   _getPrefs()async {
     SharedPreferences pref = await SharedPreferences.getInstance();
