@@ -451,7 +451,7 @@ final cryptor = new PlatformStringCryptor();
           backgroundColor: nearlyWhite,
           title: Text('Enter Password'),
           content:  TextFormField(
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
             autovalidate: true,
             obscureText: true,
             validator: (val) => status
