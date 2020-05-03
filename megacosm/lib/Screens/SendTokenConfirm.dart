@@ -130,7 +130,14 @@ class SendTokenConfirmsState extends State<SendTokenConfirm> {
                   setState(() {
                     placingOrder = true;
                   });
-                  String tx = await Transactions.sendTokens(args.dAddress, args.amount);
+                  String tx = await Transactions.sendTokens(args.dAddress, args.amount, context);
+                  if(tx =="cancel"){
+                    setState(() {
+                      placingOrder = false;
+
+                    });
+                    return;
+                  }
                   print(tx);
                   Navigator.popAndPushNamed(
                     context,

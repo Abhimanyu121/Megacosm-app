@@ -151,7 +151,14 @@ class RedelegationConfirmationState extends State<RedelegationConfirmation>{
                   setState(() {
                     placingOrder =true;
                   });
-                  String tx =await Transactions.redelegate(args.srcAddress, args.destAddress, args.delegatorAddress,args.newAmount);
+                  String tx =await Transactions.redelegate(args.srcAddress, args.destAddress, args.delegatorAddress,args.newAmount, context);
+                  if(tx =="cancel"){
+                    setState(() {
+                      placingOrder = false;
+
+                    });
+                    return;
+                  }
                   Navigator.popAndPushNamed(
                     context,
                     RedelegationTx.routeName,

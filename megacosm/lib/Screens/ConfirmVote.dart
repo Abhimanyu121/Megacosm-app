@@ -96,7 +96,14 @@ class ConfirmVoteState extends State<ConfirmVote>{
                   setState(() {
                     loading =true;
                   });
-                   String tx =await Transactions.vote(args.model.id, args.vote);
+                   String tx =await Transactions.vote(args.model.id, args.vote, context);
+                  if(tx =="cancel"){
+                    setState(() {
+                      loading = false;
+
+                    });
+                    return;
+                  }
                   Navigator.popAndPushNamed(
                       context,
                       VoteTx.routeName,

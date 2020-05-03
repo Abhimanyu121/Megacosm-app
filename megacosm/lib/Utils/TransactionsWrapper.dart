@@ -1,13 +1,35 @@
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
+import 'package:megacosm/Constants.dart';
 import 'package:sacco/sacco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 class Transactions {
   static var  networkInfo = NetworkInfo(bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
 
-  static sendTokens(String addr, String amount)async {
+  static sendTokens(String addr, String amount, BuildContext context)async {
     int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String seed= prefs.getString("mnemonic");
+    final cryptor = new PlatformStringCryptor();
+    String enc= prefs.getString("mnemonic");
+    var seed = "";
+    var salt = prefs.getString("salt");
+    bool status =true;
+    do{
+      String password = await _asyncInputDialog(context, status);
+      if(password =="cancel"){
+        return "cancel";
+      }else {
+        final String key = await cryptor.generateKeyFromPassword(password, salt);
+        try {
+          final String decrypted = await cryptor.decrypt(enc, key);
+          seed = decrypted;
+          status = true;// - A string to encrypt.
+        } on MacMismatchException {
+          status =false;
+        }
+      }
+    }while(!status);
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -40,10 +62,30 @@ class Transactions {
     }
 
   }
-  static Future<String> sendDelegation(String amount, String validator)async {
+  static Future<String> sendDelegation(String amount, String validator,BuildContext context)async {
     int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String seed= prefs.getString("mnemonic");
+    final cryptor = new PlatformStringCryptor();
+    String enc= prefs.getString("mnemonic");
+    var seed = "";
+    var salt = prefs.getString("salt");
+    bool status =true;
+    do{
+      String password = await _asyncInputDialog(context, status);
+      if(password =="cancel"){
+        return "cancel";
+      }else {
+        final String key = await cryptor.generateKeyFromPassword(password, salt);
+        try {
+          final String decrypted = await cryptor.decrypt(enc, key);
+          seed = decrypted;
+          status = true;// - A string to encrypt.
+        } on MacMismatchException {
+          status =false;
+        }
+      }
+    }while(!status);
+
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -73,9 +115,29 @@ class Transactions {
       return result.error.errorMessage;
     }
   }
-  static Future<String>withdrawReward(String delegator, String validator)async {
+  static Future<String>withdrawReward(String delegator, String validator,BuildContext context)async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String seed= prefs.getString("mnemonic");
+    final cryptor = new PlatformStringCryptor();
+    String enc= prefs.getString("mnemonic");
+    var seed = "";
+    var salt = prefs.getString("salt");
+    bool status =true;
+    do{
+      String password = await _asyncInputDialog(context, status);
+      if(password =="cancel"){
+        return "cancel";
+      }else {
+        final String key = await cryptor.generateKeyFromPassword(password, salt);
+        try {
+          final String decrypted = await cryptor.decrypt(enc, key);
+          seed = decrypted;
+          status = true;// - A string to encrypt.
+        } on MacMismatchException {
+          status =false;
+        }
+      }
+    }while(!status);
+
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -101,10 +163,29 @@ class Transactions {
       return result.error.errorMessage;
     }
   }
-  static Future<String>undelegate(String delegator, String validator, String amount)async {
+  static Future<String>undelegate(String delegator, String validator, String amount,BuildContext context)async {
     int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String seed= prefs.getString("mnemonic");
+final cryptor = new PlatformStringCryptor();
+    String enc= prefs.getString("mnemonic");
+    var seed = "";
+    var salt = prefs.getString("salt");
+    bool status =true;
+    do{
+      String password = await _asyncInputDialog(context, status);
+      if(password =="cancel"){
+        return "cancel";
+      }else {
+        final String key = await cryptor.generateKeyFromPassword(password, salt);
+        try {
+          final String decrypted = await cryptor.decrypt(enc, key);
+          seed = decrypted;
+          status = true;// - A string to encrypt.
+        } on MacMismatchException {
+          status =false;
+        }
+      }
+    }while(!status);
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -134,10 +215,29 @@ class Transactions {
       return result.error.errorMessage;
     }
   }
-  static Future<String>redelegate(String srcValidator, String destValidator, String delegator,String amount)async {
+  static Future<String>redelegate(String srcValidator, String destValidator, String delegator,String amount,BuildContext context)async {
     int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String seed= prefs.getString("mnemonic");
+final cryptor = new PlatformStringCryptor();
+    String enc= prefs.getString("mnemonic");
+    var seed = "";
+    var salt = prefs.getString("salt");
+    bool status =true;
+    do{
+      String password = await _asyncInputDialog(context, status);
+      if(password =="cancel"){
+        return "cancel";
+      }else {
+        final String key = await cryptor.generateKeyFromPassword(password, salt);
+        try {
+          final String decrypted = await cryptor.decrypt(enc, key);
+          seed = decrypted;
+          status = true;// - A string to encrypt.
+        } on MacMismatchException {
+          status =false;
+        }
+      }
+    }while(!status);
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -168,10 +268,29 @@ class Transactions {
       return result.error.errorMessage;
     }
   }
-  static Future<String>newProposal(String description, String title, String stake)async {
+  static Future<String>newProposal(String description, String title, String stake,BuildContext context)async {
     int _stake = (1000000*double.parse(stake)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String seed= prefs.getString("mnemonic");
+final cryptor = new PlatformStringCryptor();
+    String enc= prefs.getString("mnemonic");
+    var seed = "";
+    var salt = prefs.getString("salt");
+    bool status =true;
+    do{
+      String password = await _asyncInputDialog(context, status);
+      if(password =="cancel"){
+        return "cancel";
+      }else {
+        final String key = await cryptor.generateKeyFromPassword(password, salt);
+        try {
+          final String decrypted = await cryptor.decrypt(enc, key);
+          seed = decrypted;
+          status = true;// - A string to encrypt.
+        } on MacMismatchException {
+          status =false;
+        }
+      }
+    }while(!status);
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -212,10 +331,29 @@ class Transactions {
       return result.error.errorMessage;
     }
   }
-  static Future<String>proposalDeposit(String id, String stake)async {
+  static Future<String>proposalDeposit(String id, String stake,BuildContext context)async {
     int _stake = (1000000*double.parse(stake)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String seed= prefs.getString("mnemonic");
+final cryptor = new PlatformStringCryptor();
+    String enc= prefs.getString("mnemonic");
+    var seed = "";
+    var salt = prefs.getString("salt");
+    bool status =true;
+    do{
+      String password = await _asyncInputDialog(context, status);
+      if(password =="cancel"){
+        return "cancel";
+      }else {
+        final String key = await cryptor.generateKeyFromPassword(password, salt);
+        try {
+          final String decrypted = await cryptor.decrypt(enc, key);
+          seed = decrypted;
+          status = true;// - A string to encrypt.
+        } on MacMismatchException {
+          status =false;
+        }
+      }
+    }while(!status);
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -250,9 +388,28 @@ class Transactions {
       return result.error.errorMessage;
     }
   }
-  static Future<String>vote(String id, String vote)async {
+  static Future<String>vote(String id, String vote,BuildContext context)async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String seed= prefs.getString("mnemonic");
+final cryptor = new PlatformStringCryptor();
+    String enc= prefs.getString("mnemonic");
+    var seed = "";
+    var salt = prefs.getString("salt");
+    bool status =true;
+    do{
+      String password = await _asyncInputDialog(context, status);
+      if(password =="cancel"){
+        return "cancel";
+      }else {
+        final String key = await cryptor.generateKeyFromPassword(password, salt);
+        try {
+          final String decrypted = await cryptor.decrypt(enc, key);
+          seed = decrypted;
+          status = true;// - A string to encrypt.
+        } on MacMismatchException {
+          status =false;
+        }
+      }
+    }while(!status);
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -281,5 +438,54 @@ class Transactions {
       print("Tx send error: ${result.error.errorMessage}");
       return result.error.errorMessage;
     }
+  }
+  static Future<String> _asyncInputDialog(BuildContext context, bool status) async {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        TextEditingController _password = TextEditingController();
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+          elevation: 1,
+          backgroundColor: nearlyWhite,
+          title: Text('Enter Password'),
+          content:  TextFormField(
+            keyboardType: TextInputType.number,
+            autovalidate: true,
+            obscureText: true,
+            validator: (val) => status
+                ? null
+                : 'Invalid Pasword.',
+            decoration: InputDecoration(
+              hintText: 'Enter Password',
+              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
+            ),
+            controller: _password,
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: Text("Cancel"),
+                onPressed: () async {
+                  Navigator.of(context).pop("cancel");
+                }
+            ),
+            FlatButton(
+                child: Text("Confirm"),
+                onPressed: () async {
+                  if(_password.text.length>1)
+                  {
+                    Navigator.of(context).pop(_password.text);
+                  }
+                  else{
+                    Toast.show("Invalid Password", context, duration: Toast.LENGTH_LONG);
+                  }
+                }),
+
+          ],
+        );
+      },
+    );
   }
 }

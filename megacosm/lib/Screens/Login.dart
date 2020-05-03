@@ -66,7 +66,6 @@ class _LoginState extends State<Login> {
                   keyboardType: TextInputType.text,
                   obscureText: true,
                   autovalidate: false,
-                  maxLines: null,
                   validator: (val) => (val.isEmpty||val.split(" ").length==24)
                       ? null
                       : 'Invalid Password',
@@ -100,6 +99,7 @@ class _LoginState extends State<Login> {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   await prefs.setString(mnemonic, encrypted);
                   await prefs.setString(known, encrypted2);
+                  await prefs.setString("salt",salt);
                   await prefs.setString(prefAddress,wallet.bech32Address);
                   Navigator.pushNamedAndRemoveUntil(context, Home.routeName, (r) => false);
                 },

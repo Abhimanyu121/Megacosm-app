@@ -144,7 +144,14 @@ class UndelegateConfirmationState extends State<UndelegateConfirmation>{
                   setState(() {
                     placingOrder =true;
                   });
-                  String tx =await Transactions.undelegate(delegatorAddress, args.address, args.amount);
+                  String tx =await Transactions.undelegate(delegatorAddress, args.address, args.amount, context);
+                  if(tx =="cancel"){
+                    setState(() {
+                      placingOrder = false;
+
+                    });
+                    return;
+                  }
                   Navigator.popAndPushNamed(
                     context,
                     WithdrawSuccess.routeName,
