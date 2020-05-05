@@ -189,7 +189,7 @@ class _$NetworkDao extends NetworkDao {
   }
 
   @override
-  Future<int> deletePersons(List<Network> network) {
+  Future<int> deleteNetworks(List<Network> network) {
     return _networkDeletionAdapter.deleteListAndReturnChangedRows(network);
   }
 }
