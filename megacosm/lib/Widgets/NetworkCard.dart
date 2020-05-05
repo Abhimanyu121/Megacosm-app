@@ -81,7 +81,7 @@ class NetworkCard extends StatelessWidget{
                             refresh();
                           },
 
-                          borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                          borderSide: BorderSide(color: Colors.green,style: BorderStyle.solid),
                         ),
                         OutlineButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -95,7 +95,7 @@ class NetworkCard extends StatelessWidget{
                             database.networkDao.deleteNetworks([nwrk]);
                             refresh();
                           },
-                          borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                          borderSide: BorderSide(color: Colors.red,style: BorderStyle.solid),
                         ),
                       ],
                     ),

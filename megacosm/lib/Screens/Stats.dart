@@ -4,14 +4,18 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 import 'package:http/http.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/BalanceWrapper.dart';
 import 'package:megacosm/Models/BondedNotBondedWrapper.dart';
 import 'package:megacosm/Models/ValidatorList.dart';
+import 'package:megacosm/Screens/RecoveryPhrase.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Utils/HexColor.dart';
+import 'package:megacosm/Utils/TransactionsWrapper.dart';
+import 'package:megacosm/Utils/TransactionsWrapper.dart';
 import 'package:megacosm/Widgets/CurvePainter.dart';
 import 'package:megacosm/Widgets/ValidatorCardStats.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -184,16 +188,71 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(10,20,10,0),
-                          child: OutlineButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                            child: SizedBox(width:MediaQuery.of(context).size.width*0.7,
-                                child: Center(child: Text("TRANSFER $denom",style: TextStyle(fontSize:20,color: Colors.white70, fontWeight: FontWeight.bold),))),
-                            onPressed: (){
-                              Navigator.pushNamed(context, SendTokens.routeName,);
-                            },
+                          padding: const EdgeInsets.fromLTRB(5,20,5,0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width* 0.35,
+                                child: OutlineButton(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children:<Widget>[Text("TRANSFER",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
+                                      Text("$denom",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
+                                    ] ),
+                                  ),
+                                  onPressed: (){
+                                    Navigator.pushNamed(context, SendTokens.routeName,);
+                                  },
 
-                            borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                                  borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width* 0.35,
+                                child: OutlineButton(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children:<Widget>[Text("SHOW",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
+                                          Text("MNEMONIC",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
+                                        ] ),
+                                  ),
+                                  onPressed: ()async {
+                                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                                    final cryptor = new PlatformStringCryptor();
+                                    String enc= prefs.getString("mnemonic");
+                                    var seed = "";
+                                    var salt = prefs.getString("salt");
+                                    bool status =true;
+                                    do{
+                                      String password = await Transactions.asyncInputDialog(context, status);
+                                      if(password =="cancel"){
+                                        //return "cancel";
+                                      }else {
+                                        final String key = await cryptor.generateKeyFromPassword(password, salt);
+                                        try {
+                                          final String decrypted = await cryptor.decrypt(enc, key);
+                                          seed = decrypted;
+                                          status = true;// - A string to encrypt.
+                                          Navigator.pushNamed(context, RecoveryPhrase.routeName, arguments: seed);
+                                        } on MacMismatchException {
+                                          status =false;
+                                        }
+                                      }
+                                    }while(!status);
+
+                                  },
+
+                                  borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

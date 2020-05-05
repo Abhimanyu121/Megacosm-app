@@ -81,10 +81,16 @@ class _LoginState extends State<Login> {
                 ),
               ),
               RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 onPressed: ()async{
+                  FocusScope.of(context).requestFocus(FocusNode());
                   var str =_mnemonic.text;
-                  if(str.split(" ").length>11&& _password.text.isNotEmpty){
-                    Toast.show("Invalid Phrase", context, duration: Toast.LENGTH_LONG);
+                  var ln =str.split(" ").length;
+                  print(ln);
+                  print(ln>=11);
+                  if(ln<12&& _password.text.isEmpty){
+                    print(str.split(" ").length);
+                    Toast.show("Invalid Phrase or Password", context, duration: Toast.LENGTH_LONG);
                     return;
                   }
                   setState(() {
@@ -109,7 +115,7 @@ class _LoginState extends State<Login> {
                   Navigator.pushNamedAndRemoveUntil(context, Home.routeName, (r) => false);
                 },
                 color: Colors.red,
-                child: Text("Continue",style: TextStyle(color: Colors.white),),
+                child: Text("Continue",style: TextStyle(color: Colors.black),),
               )
 
             ],

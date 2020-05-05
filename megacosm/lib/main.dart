@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:megacosm/Screens/RecoveryPhrase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Constants.dart';
 import 'Screens/ConfirmVote.dart';
@@ -102,7 +103,8 @@ class _MyAppState extends State<MyApp> {
         SendTokenTx.routeName:(context) => SendTokenTx(),
         SendTokenConfirm.routeName:(context) => SendTokenConfirm(),
         SendTokens.routeName:(context) => SendTokens(),
-        NewNetwork.routeName:(context) => NewNetwork()
+        NewNetwork.routeName:(context) => NewNetwork(),
+        RecoveryPhrase.routeName:(context) => RecoveryPhrase(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(

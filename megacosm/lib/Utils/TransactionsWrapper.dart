@@ -20,7 +20,7 @@ class Transactions {
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -79,7 +79,7 @@ class Transactions {
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -135,7 +135,7 @@ class Transactions {
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -188,7 +188,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -244,7 +244,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -301,7 +301,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -368,7 +368,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -428,7 +428,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -471,7 +471,7 @@ final cryptor = new PlatformStringCryptor();
       return result.error.errorMessage;
     }
   }
-  static Future<String> _asyncInputDialog(BuildContext context, bool status) async {
+  static Future<String> asyncInputDialog(BuildContext context, bool status) async {
     return showDialog<String>(
       context: context,
       barrierDismissible: false, // dialog is dismissible with a tap on the barrier

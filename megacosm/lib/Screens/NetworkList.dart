@@ -10,6 +10,10 @@ import 'package:megacosm/Widgets/NetworkCard.dart';
 import '../Constants.dart';
 
 class SwtichNetwork extends StatefulWidget{
+  final Function refetch;
+  Function refresh;
+
+  SwtichNetwork({Key key, this.refetch}) : super(key: key);
   @override
   _SwtichNetworkState createState() => _SwtichNetworkState();
 }
@@ -28,6 +32,7 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
   }
   @override
   void initState() {
+    widget.refresh = refresh;
     future = getNetwork();
   }
   @override
@@ -87,7 +92,7 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
                   itemBuilder: (BuildContext ctx, int index ){
 
                     return NetworkCard(
-                      refresh: refresh,
+                      refresh: widget.refetch,
                       nwrk: snapshot.data[index],
                     );
                   },
