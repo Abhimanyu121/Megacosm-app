@@ -28,5 +28,5 @@ abstract class NetworkDao {
   @insert
   Future<void> insertNetworkList(List<Network> network);
   @delete
-  Future<int> deletePersons(List<Network> network);
+  Future<int> deleteNetworks(List<Network> network);
 }
