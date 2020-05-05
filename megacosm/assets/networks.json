@@ -1,0 +1,14 @@
+{
+  "networks": [
+    {
+      "name": "bluzelle",
+      "url": "http://testnet.public.bluzelle.com:1317",
+      "denom": "ubnt"
+    },
+    {
+      "name": "bluzelle",
+      "url": "http://testnet.private.bluzelle.com:1317",
+      "denom": "ubnt"
+    }
+  ]
+}

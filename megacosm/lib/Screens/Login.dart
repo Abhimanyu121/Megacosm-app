@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_string_encryption/flutter_string_encryption.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
+import 'package:megacosm/DBUtils/NetworkModel.dart';
 import 'package:sacco/network_info.dart';
 import 'package:sacco/wallet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
-import '../Constants.dart';
 import '../Constants.dart';
 import 'Home.dart';
 
@@ -101,6 +105,7 @@ class _LoginState extends State<Login> {
                   await prefs.setString(known, encrypted2);
                   await prefs.setString("salt",salt);
                   await prefs.setString(prefAddress,wallet.bech32Address);
+                  await _setDb();
                   Navigator.pushNamedAndRemoveUntil(context, Home.routeName, (r) => false);
                 },
                 color: Colors.red,
@@ -112,5 +117,19 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+  _setDb()async {
+
+    var networks = await rootBundle.loadString('assets/networks.json');
+    var json  = jsonDecode(networks);
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var ls = json["networks"] as List;
+    var nwList = List<Network>();
+    for (int i =0;i< ls.length; i ++){
+      var nw = Network(i,ls[i]["name"],ls[i]["url"],ls[i]["denom"], i==0? true:false);
+      nwList.add(nw);
+    }
+    await database.networkDao.insertNetworkList(nwList);
+
   }
 }
