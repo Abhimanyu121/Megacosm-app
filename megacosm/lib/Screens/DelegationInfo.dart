@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/BalanceWrapper.dart';
 import 'package:megacosm/Models/CurrentDelegationWrapper.dart';
 import 'package:megacosm/Models/DelegationInfo.dart';
@@ -30,6 +31,7 @@ class DelegationInfoState extends State<DelegationInfo>{
   DelegationInfoModel args;
   String bal = "0";
   String stake = "0";
+  var denom;
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -39,6 +41,9 @@ class DelegationInfoState extends State<DelegationInfo>{
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
     print(json);
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    denom = (nw[0].denom).substring(1).toUpperCase();
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
     Response resp2 = await ApiWarpper.delegatedAmount(prefs.getString("address"),args.address);
     String body2 = utf8.decode(resp2.bodyBytes);
@@ -150,7 +155,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Staked Amount", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(stake)+ "BNT", style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(stake)+ " $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -161,7 +166,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Rewards", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(bal) +" BNT", style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(bal) +" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

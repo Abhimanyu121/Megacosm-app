@@ -2,12 +2,13 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
-import 'AboutBluzelle.dart';
+import 'NetworkList.dart';
 import 'Login.dart';
 import 'PoposalsScreen.dart';
 import 'Stats.dart';
@@ -25,6 +26,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   ValidatorListTab vList;
   ProposalListTab pList;
   TabController _controller;
+  SwtichNetwork swtichNetwork;
+
   void tabChange(int index){
 
     _controller.animateTo(index);
@@ -40,6 +43,30 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     stats = new Stats();
     vList = new ValidatorListTab();
     pList = new ProposalListTab();
+    swtichNetwork = new SwtichNetwork(refetch: refresh,);
+  }
+  refresh(){
+    try{
+      swtichNetwork.refresh();
+    }catch(e){
+
+    }
+    try{
+      vList.refresh();
+    }catch(e){
+
+    }
+    try{
+      pList.refresh();
+    }catch(e){
+
+    }
+    try{
+      stats.refresh();
+    }catch(e){
+
+    }
+
   }
   @override
   Widget build(BuildContext context) {
@@ -52,11 +79,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            HeaderTitle(first: currentIndex==0?"User":currentIndex==1?"Validator":currentIndex==2?"Proposal":"About", second: currentIndex==0?"Dashboard":currentIndex==1?"List":currentIndex==2?"List":"Bluzelle",),
+            HeaderTitle(first: currentIndex==0?"User":currentIndex==1?"Validator":currentIndex==2?"Proposal":"Network", second: currentIndex==0?"Dashboard":currentIndex==1?"List":currentIndex==2?"List":"List",),
             FlatButton(
               onPressed: ()async{
                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setString(mnemonic, null);
+                final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+                var ac= await database.networkDao.allNetworks();
+                await database.networkDao.deleteNetworks(ac);
+                await prefs.setString(mnemonic, null);
                 Navigator.popAndPushNamed(context, Login.routeName);
               },
               child: Row(
@@ -103,27 +133,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
               stats,
               vList,
               pList,
-              SwtichNetwork(),
+              swtichNetwork,
             ],
 
           ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: currentIndex ==3?
-      FloatingActionButton(
-        child: Icon(Icons.alternate_email),
-        backgroundColor: Colors.red,
-        onPressed: () async {
-          const url = 'mailto:smith@example.org';
-          if (await canLaunch(url)) {
-            await launch(url);
-          } else {
-            throw 'Could not launch $url';
-          }
-        },
-      ):
-      FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         child: Icon(Icons.refresh),
         backgroundColor: Colors.red,
         onPressed: () {
@@ -133,6 +150,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             vList.refresh();
           }else if(currentIndex==2){
             pList.refresh();
+          }
+          else if(currentIndex==3){
+            swtichNetwork.refresh();
           }
         },
       ),
@@ -151,7 +171,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.dashboard, color: Colors.black,), activeIcon: Icon(Icons.dashboard, color: Colors.black,), title: Text("Home", style: TextStyle(color: Colors.black),)),
           BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.account_balance, color: Colors.black,), activeIcon: Icon(Icons.account_balance, color: Colors.black,), title: Text("Validators", style: TextStyle(color: Colors.black),)),
           BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.menu, color: Colors.black,), activeIcon: Icon(Icons.menu, color: Colors.black,), title: Text("Proposals", style: TextStyle(color: Colors.black),)),
-          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.account_circle, color: Colors.black,), activeIcon: Icon(Icons.account_circle, color: Colors.black,), title: Text("About", style: TextStyle(color: Colors.black),))
+          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.device_hub, color: Colors.black,), activeIcon: Icon(Icons.device_hub, color: Colors.black,), title: Text("Networks", style: TextStyle(color: Colors.black),))
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

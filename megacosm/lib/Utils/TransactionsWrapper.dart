@@ -1,13 +1,17 @@
 import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 import 'package:megacosm/Constants.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:sacco/sacco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 class Transactions {
-  static var  networkInfo = NetworkInfo(bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
 
   static sendTokens(String addr, String amount, BuildContext context)async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
     int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final cryptor = new PlatformStringCryptor();
@@ -16,7 +20,7 @@ class Transactions {
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -38,12 +42,12 @@ class Transactions {
         "from_address": wallet.bech32Address,
         "to_address": addr,
         "amount": [
-          {"denom": "ubnt", "amount": _stake.toString()}
+          {"denom": nw[0].denom, "amount": _stake.toString()}
         ],
       },
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-    fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+    fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
     );
     print(stdTx);
 
@@ -63,6 +67,10 @@ class Transactions {
 
   }
   static Future<String> sendDelegation(String amount, String validator,BuildContext context)async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
     int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final cryptor = new PlatformStringCryptor();
@@ -71,7 +79,7 @@ class Transactions {
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -93,14 +101,14 @@ class Transactions {
       value: {
         "amount": {
           "amount": _stake.toString(),
-          "denom": "ubnt"
+          "denom": nw[0].denom
         },
         "delegator_address": wallet.bech32Address,
         "validator_address": validator
       },
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
     );
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
     final result = await TxSender.broadcastStdTx(
@@ -116,6 +124,10 @@ class Transactions {
     }
   }
   static Future<String>withdrawReward(String delegator, String validator,BuildContext context)async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
@@ -123,7 +135,7 @@ class Transactions {
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -148,7 +160,7 @@ class Transactions {
       }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
     );
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
     final result = await TxSender.broadcastStdTx(
@@ -164,6 +176,10 @@ class Transactions {
     }
   }
   static Future<String>undelegate(String delegator, String validator, String amount,BuildContext context)async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
     int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 final cryptor = new PlatformStringCryptor();
@@ -172,7 +188,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -193,14 +209,14 @@ final cryptor = new PlatformStringCryptor();
         value: {
           "amount": {
             "amount": _stake.toString(),
-            "denom": "ubnt"
+            "denom": nw[0].denom
           },
           "delegator_address": delegator,
           "validator_address": validator
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
     );
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
     final result = await TxSender.broadcastStdTx(
@@ -216,6 +232,10 @@ final cryptor = new PlatformStringCryptor();
     }
   }
   static Future<String>redelegate(String srcValidator, String destValidator, String delegator,String amount,BuildContext context)async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
     int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 final cryptor = new PlatformStringCryptor();
@@ -224,7 +244,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -245,7 +265,7 @@ final cryptor = new PlatformStringCryptor();
         value:{
           "amount": {
             "amount": _stake.toString(),
-            "denom": "ubnt"
+            "denom": nw[0].denom
           },
           "delegator_address": delegator,
           "validator_dst_address": destValidator,
@@ -253,7 +273,7 @@ final cryptor = new PlatformStringCryptor();
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")])
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
     );
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
     final result = await TxSender.broadcastStdTx(
@@ -269,6 +289,10 @@ final cryptor = new PlatformStringCryptor();
     }
   }
   static Future<String>newProposal(String description, String title, String stake,BuildContext context)async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
     int _stake = (1000000*double.parse(stake)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 final cryptor = new PlatformStringCryptor();
@@ -277,7 +301,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -306,14 +330,14 @@ final cryptor = new PlatformStringCryptor();
           "initial_deposit": [
             {
               "amount": _stake.toString(),
-              "denom": "ubnt"
+              "denom": nw[0].denom
             }
           ],
           "proposer": wallet.bech32Address
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")]),
+        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")]),
 
     );
 
@@ -332,6 +356,10 @@ final cryptor = new PlatformStringCryptor();
     }
   }
   static Future<String>proposalDeposit(String id, String stake,BuildContext context)async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
     int _stake = (1000000*double.parse(stake)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 final cryptor = new PlatformStringCryptor();
@@ -340,7 +368,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -362,7 +390,7 @@ final cryptor = new PlatformStringCryptor();
           "amount": [
             {
               "amount":_stake.toString() ,
-              "denom": "ubnt"
+              "denom": nw[0].denom
             }
           ],
           "depositor": wallet.bech32Address,
@@ -370,7 +398,7 @@ final cryptor = new PlatformStringCryptor();
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-      fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")]),
+      fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")]),
 
     );
 
@@ -389,6 +417,10 @@ final cryptor = new PlatformStringCryptor();
     }
   }
   static Future<String>vote(String id, String vote,BuildContext context)async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
@@ -396,7 +428,7 @@ final cryptor = new PlatformStringCryptor();
     var salt = prefs.getString("salt");
     bool status =true;
     do{
-      String password = await _asyncInputDialog(context, status);
+      String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
@@ -421,7 +453,7 @@ final cryptor = new PlatformStringCryptor();
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-      fee: StdFee(gas: "2000000", amount: [StdCoin(denom: "ubnt",amount: "20000000")]),
+      fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")]),
 
     );
 
@@ -439,7 +471,7 @@ final cryptor = new PlatformStringCryptor();
       return result.error.errorMessage;
     }
   }
-  static Future<String> _asyncInputDialog(BuildContext context, bool status) async {
+  static Future<String> asyncInputDialog(BuildContext context, bool status) async {
     return showDialog<String>(
       context: context,
       barrierDismissible: false, // dialog is dismissible with a tap on the barrier

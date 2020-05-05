@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/SendTokenModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Utils/TransactionsWrapper.dart';
@@ -19,11 +20,14 @@ class SendTokenConfirmsState extends State<SendTokenConfirm> {
   bool addr = false;
   SendTokenModel args;
 
-
+  var denom;
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var nw = await database.networkDao.findActiveNetwork();
+      denom = (nw[0].denom).substring(1).toUpperCase();
       args = ModalRoute
           .of(context)
           .settings
@@ -45,7 +49,7 @@ class SendTokenConfirmsState extends State<SendTokenConfirm> {
             backgroundColor: nearlyWhite,
             actionsIconTheme: IconThemeData(color: Colors.black),
             iconTheme: IconThemeData(color: Colors.black),
-            title: HeaderTitle(first: "Transfer", second: "BNT",)
+            title: HeaderTitle(first: "Transfer", second: " $denom",)
         ),
         body: placingOrder ? _loader() : ListView(
           cacheExtent: 100,
