@@ -2,6 +2,7 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -56,7 +57,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             FlatButton(
               onPressed: ()async{
                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setString(mnemonic, null);
+                final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+                var ac= await database.networkDao.allNetworks();
+                await database.networkDao.deleteNetworks(ac);
+                await prefs.setString(mnemonic, null);
                 Navigator.popAndPushNamed(context, Login.routeName);
               },
               child: Row(

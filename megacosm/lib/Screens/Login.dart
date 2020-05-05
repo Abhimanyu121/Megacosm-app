@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,7 +53,7 @@ class _LoginState extends State<Login> {
                   keyboardType: TextInputType.text,
                   autovalidate: true,
                   maxLines: null,
-                  validator: (val) => (val.isEmpty||val.split(" ").length==24)
+                  validator: (val) => (val.isEmpty||val.split(" ").length>=12)
                       ? null
                       : 'Invalid Mnemonic',
                   decoration: InputDecoration(
@@ -70,7 +70,7 @@ class _LoginState extends State<Login> {
                   keyboardType: TextInputType.text,
                   obscureText: true,
                   autovalidate: false,
-                  validator: (val) => (val.isEmpty||val.split(" ").length==24)
+                  validator: (val) => (val.isEmpty||val.split(" ").length>=24)
                       ? null
                       : 'Invalid Password',
                   decoration: InputDecoration(
@@ -83,7 +83,7 @@ class _LoginState extends State<Login> {
               RaisedButton(
                 onPressed: ()async{
                   var str =_mnemonic.text;
-                  if(str.split(" ").length !=24 ){
+                  if(str.split(" ").length>11&& _password.text.isNotEmpty){
                     Toast.show("Invalid Phrase", context, duration: Toast.LENGTH_LONG);
                     return;
                   }
@@ -101,11 +101,11 @@ class _LoginState extends State<Login> {
                   final mn = str.split(" ");
                   final wallet = Wallet.derive(mn,  networkInfo);
                   SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await _setDb();
                   await prefs.setString(mnemonic, encrypted);
                   await prefs.setString(known, encrypted2);
                   await prefs.setString("salt",salt);
                   await prefs.setString(prefAddress,wallet.bech32Address);
-                  await _setDb();
                   Navigator.pushNamedAndRemoveUntil(context, Home.routeName, (r) => false);
                 },
                 color: Colors.red,
@@ -115,6 +115,17 @@ class _LoginState extends State<Login> {
             ],
           ),
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: RaisedButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Text("Create New Wallet",style: TextStyle(color: Colors.black),),
+        color: Colors.red,
+        onPressed: (){
+          var mnemonic = bip39.generateMnemonic();
+          _mnemonic.text= mnemonic;
+          Toast.show("Please Copy this mnemonic before loggin in", context, duration: Toast.LENGTH_LONG);
+        },
       ),
     );
   }
