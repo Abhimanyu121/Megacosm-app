@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/RedelegationAmountModel.dart';
 import 'package:megacosm/Models/RedelegatorConfirmation.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
@@ -18,11 +19,15 @@ class RedelegationAmountState extends State<RedelegationAmount>{
   RedelegationAmountModel args;
   TextEditingController _amount = TextEditingController();
   bool fetching  = true;
+  var denom;
   @override
   void initState() {
-    Future.delayed(Duration.zero,() {
+    Future.delayed(Duration.zero,() async{
       args = ModalRoute.of(context).settings.arguments;
       print("amount:"+args.delegatorAddress);
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var nw = await database.networkDao.findActiveNetwork();
+      denom = (nw[0].denom).substring(1).toUpperCase();
       setState(() {
         fetching = false;
       });
@@ -100,7 +105,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Staked Amount ", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.totalAmount)+ "BNT", style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.totalAmount)+ "$denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

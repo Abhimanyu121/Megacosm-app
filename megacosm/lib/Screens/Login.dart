@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
     var ls = json["networks"] as List;
     var nwList = List<Network>();
     for (int i =0;i< ls.length; i ++){
-      var nw = Network(i,ls[i]["name"],ls[i]["url"],ls[i]["denom"], i==0? true:false);
+      var nw = Network(ls[i]["name"],ls[i]["url"],ls[i]["denom"], i==0? true:false);
       nwList.add(nw);
     }
     await database.networkDao.insertNetworkList(nwList);

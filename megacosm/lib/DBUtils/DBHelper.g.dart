@@ -81,7 +81,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Network` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `url` TEXT, `denom` TEXT, `active` INTEGER)');
+            'CREATE TABLE IF NOT EXISTS `Network` (`name` TEXT, `url` TEXT, `denom` TEXT, `active` INTEGER, PRIMARY KEY (`url`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -101,7 +101,6 @@ class _$NetworkDao extends NetworkDao {
             database,
             'Network',
             (Network item) => <String, dynamic>{
-                  'id': item.id,
                   'name': item.name,
                   'url': item.url,
                   'denom': item.denom,
@@ -111,9 +110,8 @@ class _$NetworkDao extends NetworkDao {
         _networkUpdateAdapter = UpdateAdapter(
             database,
             'Network',
-            ['id'],
+            ['url'],
             (Network item) => <String, dynamic>{
-                  'id': item.id,
                   'name': item.name,
                   'url': item.url,
                   'denom': item.denom,
@@ -123,9 +121,8 @@ class _$NetworkDao extends NetworkDao {
         _networkDeletionAdapter = DeletionAdapter(
             database,
             'Network',
-            ['id'],
+            ['url'],
             (Network item) => <String, dynamic>{
-                  'id': item.id,
                   'name': item.name,
                   'url': item.url,
                   'denom': item.denom,
@@ -140,7 +137,6 @@ class _$NetworkDao extends NetworkDao {
   final QueryAdapter _queryAdapter;
 
   static final _networkMapper = (Map<String, dynamic> row) => Network(
-      row['id'] as int,
       row['name'] as String,
       row['url'] as String,
       row['denom'] as String,
@@ -166,7 +162,7 @@ class _$NetworkDao extends NetworkDao {
 
   @override
   Future<List<Network>> findActiveNetwork() async {
-    return _queryAdapter.queryList('SELECT * FROM Network WHERE active = true',
+    return _queryAdapter.queryList('SELECT * FROM Network WHERE active = 1',
         mapper: _networkMapper);
   }
 

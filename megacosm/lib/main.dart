@@ -8,6 +8,7 @@ import 'Screens/ConfirmVote.dart';
 import 'Screens/DelegationInfo.dart';
 import 'Screens/Home.dart';
 import 'Screens/Login.dart';
+import 'Screens/NewNetwork.dart';
 import 'Screens/NewProposal.dart';
 import 'Screens/NewProposalConfirmation.dart';
 import 'Screens/NewProposalTx.dart';
@@ -101,6 +102,7 @@ class _MyAppState extends State<MyApp> {
         SendTokenTx.routeName:(context) => SendTokenTx(),
         SendTokenConfirm.routeName:(context) => SendTokenConfirm(),
         SendTokens.routeName:(context) => SendTokens(),
+        NewNetwork.routeName:(context) => NewNetwork()
       },
       title: 'Flutter Demo',
       theme: ThemeData(

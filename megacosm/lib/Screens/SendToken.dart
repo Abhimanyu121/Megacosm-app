@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/BalanceWrapper.dart';
 import 'package:megacosm/Models/HomeToNewStake.dart';
 import 'package:megacosm/Models/SendTokenModel.dart';
@@ -24,6 +25,7 @@ class SendTokensState extends State<SendTokens>{
   bool placingOrder = false;
   bool balance = false;
   String bal = "0";
+  var denom;
   TextEditingController _amount= new TextEditingController();
   TextEditingController _address= new TextEditingController();
   _getAddress() async {
@@ -35,6 +37,9 @@ class SendTokensState extends State<SendTokens>{
     Response resp = await ApiWarpper.getBalance(prefs.getString("address"));
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    denom = (nw[0].denom).substring(1).toUpperCase();
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
     setState(() {
       if(model.result.isEmpty){
@@ -60,7 +65,7 @@ class SendTokensState extends State<SendTokens>{
             backgroundColor: nearlyWhite,
             actionsIconTheme: IconThemeData(color:Colors.black),
             iconTheme: IconThemeData(color:Colors.black),
-            title: HeaderTitle(first: "Transfer", second: "BNT",)
+            title: HeaderTitle(first: "Transfer", second: "$denom",)
         ),
         body: placingOrder?_loader():ListView(
           cacheExtent: 100,
@@ -87,7 +92,7 @@ class SendTokensState extends State<SendTokens>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text("Your Balance: ", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(bal)+" BNT", style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(bal)+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
