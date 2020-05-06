@@ -13,6 +13,7 @@ class NewNetwork extends StatefulWidget{
 class NewNetworkState extends State<NewNetwork>{
   TextEditingController _denom = TextEditingController();
   TextEditingController _name = TextEditingController();
+  TextEditingController _nick = TextEditingController();
   TextEditingController _url = TextEditingController();
   bool fetching  = false;
 
@@ -36,6 +37,19 @@ class NewNetworkState extends State<NewNetwork>{
           child: ListView(
             cacheExtent: 100,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8,8,8,8),
+                child: TextFormField(
+                  controller: _nick,
+                  keyboardType: TextInputType.text,
+                  autovalidate: false,
+                  decoration: InputDecoration(
+                    hintText: "Network Nick Name",
+                    border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8,8,8,8),
                 child: TextFormField(
@@ -90,8 +104,12 @@ class NewNetworkState extends State<NewNetwork>{
                   ),
                   onPressed: ()async{
                     FocusScope.of(context).requestFocus(FocusNode());
+                    var url = _url.text;
+                    if(url.endsWith("/")){
+                      url = url.substring(0, url.length-2);
+                    }
                     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-                    await database.networkDao.insertNetwork(Network(_name.text,_url.text,_denom.text,false));
+                    await database.networkDao.insertNetwork(Network(_name.text,url,_denom.text,_nick.text,false));
 
                     Navigator.pop(context);
                   },

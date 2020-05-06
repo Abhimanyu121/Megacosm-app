@@ -1,10 +1,8 @@
 
-import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:megacosm/Models/SendTokenModel.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 
 import '../Constants.dart';
@@ -57,8 +55,8 @@ class RecoveryPhraseState extends State<RecoveryPhrase>{
                         Text("Phrase  ", style: TextStyle(color: Colors.black,)),
                         IconButton(
                           icon: Icon(Icons.content_copy),
-                          onPressed: (){
-                            ClipboardManager.copyToClipBoard(args);
+                          onPressed: ()async{
+                            await Clipboard.setData(ClipboardData(text: args));
                           },
                         )
                       ],

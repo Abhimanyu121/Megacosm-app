@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/ProposalDepositModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Utils/TransactionsWrapper.dart';
@@ -20,11 +21,14 @@ class ProposalDepositConfirmState extends State<ProposalDepositConfirm>{
   bool loading = true;
   ProposalDepositModel args;
   String bal = "0";
-
+  var denom ="";
   @override
   void initState() {
-    Future.delayed(Duration.zero,() {
+    Future.delayed(Duration.zero,() async{
       args = ModalRoute.of(context).settings.arguments;
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var nw = await database.networkDao.findActiveNetwork();
+      denom = (nw[0].denom).substring(1).toUpperCase();
       setState(() {
         loading =false;
       });
@@ -68,7 +72,7 @@ class ProposalDepositConfirmState extends State<ProposalDepositConfirm>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Deposit you are making: ", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.amount)+" BNT", style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.amount)+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

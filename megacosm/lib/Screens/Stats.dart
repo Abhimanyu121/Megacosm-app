@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 import 'package:http/http.dart';
@@ -15,10 +16,10 @@ import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Utils/HexColor.dart';
 import 'package:megacosm/Utils/TransactionsWrapper.dart';
-import 'package:megacosm/Utils/TransactionsWrapper.dart';
 import 'package:megacosm/Widgets/CurvePainter.dart';
 import 'package:megacosm/Widgets/ValidatorCardStats.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 import '../Constants.dart';
 import 'SendToken.dart';
 
@@ -33,7 +34,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   String bondedStake = "321";
   bool loading = false;
   bool error = false;
-  String denom;
+  String denom="";
   String address;
   ValidatorList valList;
   getInfo()async {
@@ -178,7 +179,21 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                          child: Text("Address: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                          child: Row(
+                            children: <Widget>[
+                              Text("Address: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                              SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                                onPressed: ()async{
+                                  Toast.show("Address Copied", context);
+                                  await Clipboard.setData(ClipboardData(text: address));
+                                },
+                                  icon: Icon(Icons.content_copy,
+                                    color: Colors.white70,
+                                  )
+
+                              ))
+                            ],
+                          ),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width*0.8,

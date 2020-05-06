@@ -6,7 +6,6 @@ import 'package:megacosm/Models/BalanceWrapper.dart';
 import 'package:megacosm/Models/NewProposalModel.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
-import 'package:megacosm/Utils/TransactionsWrapper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';

@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:megacosm/Models/NewProposalModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:toast/toast.dart';
 
 import '../Constants.dart';
 class NewProposalTx extends StatefulWidget{
@@ -100,7 +102,21 @@ class NewProposalTxState extends State<NewProposalTx>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Transaction Hash", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("Transaction Hash: ", style: TextStyle( fontSize: 17, color: Colors.black)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              Toast.show("Hash Copied", context);
+                              await Clipboard.setData(ClipboardData(text: args.tx));
+                            },
+                            icon: Icon(Icons.content_copy,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.tx, style: TextStyle(color: Colors.grey,))
                   ],
                 )
