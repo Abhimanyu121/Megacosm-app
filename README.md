@@ -1,6 +1,6 @@
 # Project Megacosm
 This Flutter based application aims to facilitate the delegation and governance process of any COSMOS based Blockchain network.<br>
-Find apk (here)[https://github.com/Abhimanyu121/Megacosm-app/releases].
+Find apk [here](https://github.com/Abhimanyu121/Megacosm-app/releases).
 ## Feature List
 ## App Side Features
 1. Mnemonic is stored in encrypted way and user password is not stored at all, so app is really secure.
