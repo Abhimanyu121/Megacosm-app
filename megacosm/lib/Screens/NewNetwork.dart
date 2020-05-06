@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/DBUtils/NetworkModel.dart';
+import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:toast/toast.dart';
 
 import '../Constants.dart';
 class NewNetwork extends StatefulWidget{
@@ -16,6 +18,11 @@ class NewNetworkState extends State<NewNetwork>{
   TextEditingController _nick = TextEditingController();
   TextEditingController _url = TextEditingController();
   bool fetching  = false;
+  RegExp regex = new RegExp(
+    r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+',
+    caseSensitive: false,
+    multiLine: false,
+  );
 
   @override
   void initState() {
@@ -42,7 +49,8 @@ class NewNetworkState extends State<NewNetwork>{
                 child: TextFormField(
                   controller: _nick,
                   keyboardType: TextInputType.text,
-                  autovalidate: false,
+                  autovalidate: true,
+                  validator: (val) => (val.isEmpty||val.length>=2)?null:"Invalid Nickname",
                   decoration: InputDecoration(
                     hintText: "Network Nick Name",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -55,7 +63,8 @@ class NewNetworkState extends State<NewNetwork>{
                 child: TextFormField(
                   controller: _name,
                   keyboardType: TextInputType.text,
-                  autovalidate: false,
+                  autovalidate: true,
+                  validator: (val) => (val.isEmpty||val.length>=4)?null:"Invalid Name",
                   decoration: InputDecoration(
                     hintText: "Network Name",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -68,7 +77,8 @@ class NewNetworkState extends State<NewNetwork>{
                 child: TextFormField(
                   controller: _url,
                   keyboardType: TextInputType.url,
-                  autovalidate: false,
+                  autovalidate: true,
+                  validator: (val) => (val.isEmpty||regex.firstMatch(val)!=null)?null:"Invalid URL",
                   maxLines: null,
                   decoration: InputDecoration(
                     hintText: "Network URL",
@@ -83,8 +93,8 @@ class NewNetworkState extends State<NewNetwork>{
                 child: TextFormField(
                   controller: _denom,
                   keyboardType: TextInputType.text,
-                  autovalidate: false,
-
+                  autovalidate: true,
+                  validator: (val) => (val.isEmpty||val.length>=4)?null:"Invalid Denom",
                   decoration: InputDecoration(
                     hintText: "Default Token",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -103,15 +113,44 @@ class NewNetworkState extends State<NewNetwork>{
                     borderRadius: BorderRadius.circular(24),
                   ),
                   onPressed: ()async{
+                    if(_denom.text.length<4&&_nick.text.isEmpty&&_url.text.length<4&&_name.text.length<4){
+                      Toast.show("Invalid Network Details", context);
+                      return;
+                    }
+
+                    var exp = regex.firstMatch(_url.text);
+                    if(exp==null){
+                      Toast.show("Invalid URL", context);
+                      return;
+                    }
+                    setState(() {
+                      fetching= true;
+                    });
                     FocusScope.of(context).requestFocus(FocusNode());
                     var url = _url.text;
                     if(url.endsWith("/")){
-                      url = url.substring(0, url.length-2);
+                      url = url.substring(0, url.length-1);
                     }
-                    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-                    await database.networkDao.insertNetwork(Network(_name.text,url,_denom.text,_nick.text,false));
+                    print(url);
+                    if(!url.startsWith("http")){
+                      url = "http://"+url;
+                    }
+                    print(url);
+                    if(await ApiWarpper.checkUrl(url)){
+                      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+                      await database.networkDao.insertNetwork(Network(_name.text,url,_denom.text,_nick.text,false));
 
-                    Navigator.pop(context);
+                      Navigator.pop(context);
+                      return;
+                    }
+                    else{
+                      setState(() {
+                        fetching =false;
+                      });
+
+                      Toast.show("Invalid URL", context);
+                    }
+
                   },
                   padding: EdgeInsets.all(12),
                   color: appTheme,

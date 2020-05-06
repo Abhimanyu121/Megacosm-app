@@ -31,7 +31,7 @@ class DelegationInfoState extends State<DelegationInfo>{
   DelegationInfoModel args;
   String bal = "0";
   String stake = "0";
-  var denom;
+  var denom = "";
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {

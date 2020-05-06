@@ -31,8 +31,9 @@ class NetworkCard extends StatelessWidget{
                   isThreeLine: true,
                   subtitle: Padding(
                     padding: const EdgeInsets.fromLTRB(0,10,0,0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceEvenly,
+                      direction: Axis.horizontal,
                       children: <Widget>[
                         nwrk.active?OutlineButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -92,6 +93,11 @@ class NetworkCard extends StatelessWidget{
                               return;
                             }
                             final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+                            var nw = await database.networkDao.allNetworks();
+                            if(nw.length ==1){
+                              Toast.show("Can not delete last network.", context);
+                              return;
+                            }
                             database.networkDao.deleteNetworks([nwrk]);
                             refresh();
                           },

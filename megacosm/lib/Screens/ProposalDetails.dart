@@ -327,7 +327,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                              ConfirmVote.routeName,
                              arguments: VoteModel(
                                  model: args,
-                                 vote : "NowithVeto"
+                                 vote : "NoWithVeto"
                              )
                          );
                        },

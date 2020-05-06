@@ -19,7 +19,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
   RedelegationAmountModel args;
   TextEditingController _amount = TextEditingController();
   bool fetching  = true;
-  var denom;
+  var denom="";
   @override
   void initState() {
     Future.delayed(Duration.zero,() async{

@@ -66,6 +66,23 @@ class ApiWarpper{
     var resp = await http.get(url);
     return resp;
   }
+  static Future<bool> checkUrl(String url)async{
+    var _url = url+"/node_info";
 
+    try{
+      var resp = await http.get(_url);
+      print(resp.body);
+      if(resp.statusCode==200){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    catch(e){
+      return false;
+    }
+
+  }
 
 }

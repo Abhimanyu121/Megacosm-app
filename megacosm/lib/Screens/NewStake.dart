@@ -25,7 +25,7 @@ class NewStakeState extends State<NewStake>{
   bool placingOrder = false;
   bool balance = false;
   String bal = "0";
-  String denom;
+  String denom="";
   TextEditingController _amount= new TextEditingController();
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

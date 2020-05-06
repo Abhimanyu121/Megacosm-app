@@ -122,7 +122,7 @@ class SendTokensState extends State<SendTokens>{
                     ? null
                     : 'Please enter a valid amount',
                 decoration: InputDecoration(
-                  hintText: "Amount to Trnasfer",
+                  hintText: "Amount to Transfer",
                   border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                   contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                 ),

@@ -20,7 +20,7 @@ class SendTokenConfirmsState extends State<SendTokenConfirm> {
   bool addr = false;
   SendTokenModel args;
 
-  var denom;
+  var denom="";
 
   @override
   void initState() {
