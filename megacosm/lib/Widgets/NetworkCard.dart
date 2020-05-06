@@ -26,8 +26,8 @@ class NetworkCard extends StatelessWidget{
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
-                  leading: _circle(nwrk.name.substring(0,1), context,nwrk.active) ,
-                  title: Text(nwrk.name),
+                  leading: _circle(nwrk.nick.substring(0,1), context,nwrk.active) ,
+                  title: Text(nwrk.nick),
                   isThreeLine: true,
                   subtitle: Padding(
                     padding: const EdgeInsets.fromLTRB(0,10,0,0),
@@ -47,8 +47,8 @@ class NetworkCard extends StatelessWidget{
                           onPressed: ()async{
                             final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
                             var active =await  database.networkDao.findActiveNetwork();
-                            var newActive = Network(nwrk.name,nwrk.url,nwrk.denom,true);
-                            var changedActive = Network(active[0].name,active[0].url,active[0].denom,false);
+                            var newActive = Network(nwrk.name,nwrk.url,nwrk.denom,nwrk.nick,true);
+                            var changedActive = Network(active[0].name,active[0].url,active[0].denom,active[0].nick,false);
                             var ls = [newActive,changedActive];
                             var  networkInfo = NetworkInfo(bech32Hrp: newActive.name, lcdUrl: newActive.url, defaultTokenDenom: newActive.denom);
 

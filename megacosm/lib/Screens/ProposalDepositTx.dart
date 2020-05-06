@@ -1,11 +1,13 @@
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/ProposalDepositModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:toast/toast.dart';
 
 import '../Constants.dart';
 class ProposalDepositTx extends StatefulWidget{
@@ -18,10 +20,13 @@ class ProposalDepositTxState extends State<ProposalDepositTx>{
   bool loading = true;
   ProposalDepositModel args;
   String bal = "0";
-
+  var denom ="";
   @override
   void initState() {
-    Future.delayed(Duration.zero,() {
+    Future.delayed(Duration.zero,() async{
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var nw = await database.networkDao.findActiveNetwork();
+      denom = (nw[0].denom).substring(1).toUpperCase();
       args = ModalRoute.of(context).settings.arguments;
       setState(() {
         loading =false;
@@ -85,7 +90,7 @@ class ProposalDepositTxState extends State<ProposalDepositTx>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Deposit you Made: ", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.amount)+" BNT", style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.amount)+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -95,7 +100,21 @@ class ProposalDepositTxState extends State<ProposalDepositTx>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Transaction Hash: ", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("Transaction Hash: ", style: TextStyle( fontSize: 17, color: Colors.black)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              Toast.show("Hash Copied", context);
+                              await Clipboard.setData(ClipboardData(text: args.tx));
+                            },
+                            icon: Icon(Icons.content_copy,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.tx, style: TextStyle(color: Colors.grey,))
                   ],
                 )

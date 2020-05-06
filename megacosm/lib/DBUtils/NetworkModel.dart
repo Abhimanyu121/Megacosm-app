@@ -7,8 +7,8 @@ class Network {
   final String url;
   final String denom;
   final bool active;
-
-  Network( this.name, this.url, this.denom, this.active);
+  final String nick;
+  Network( this.name, this.url, this.denom, this.nick,this.active);
 }
 
 @dao

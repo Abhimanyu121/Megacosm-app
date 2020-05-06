@@ -96,18 +96,20 @@ class _LoginState extends State<Login> {
                   setState(() {
                     loading =true;
                   });
+                  await _setDb();
                   final cryptor = new PlatformStringCryptor();
                   final password = _password.text;
                   final String salt = await cryptor.generateSalt();
                   final String key = await cryptor.generateKeyFromPassword(password, salt);
-                  var  networkInfo = NetworkInfo( bech32Hrp: "bluzelle", lcdUrl: "http://testnet.public.bluzelle.com:1317", defaultTokenDenom: "ubnt");
+                  final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+                  var nw = await database.networkDao.findActiveNetwork();
+                  var  networkInfo = NetworkInfo( bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
                   final String encrypted = await cryptor.encrypt(str, key);
                   final String encrypted2 = await cryptor.encrypt(yo, key);
 
                   final mn = str.split(" ");
                   final wallet = Wallet.derive(mn,  networkInfo);
                   SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await _setDb();
                   await prefs.setString(mnemonic, encrypted);
                   await prefs.setString(known, encrypted2);
                   await prefs.setString("salt",salt);
@@ -123,7 +125,7 @@ class _LoginState extends State<Login> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: RaisedButton(
+      floatingActionButton: !loading? RaisedButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Text("Create New Wallet",style: TextStyle(color: Colors.black),),
         color: Colors.red,
@@ -132,21 +134,30 @@ class _LoginState extends State<Login> {
           _mnemonic.text= mnemonic;
           Toast.show("Please Copy this mnemonic before loggin in", context, duration: Toast.LENGTH_LONG);
         },
+      ):SizedBox(
+        height: 0,
+        width: 0,
       ),
     );
   }
   _setDb()async {
-
-    var networks = await rootBundle.loadString('assets/networks.json');
-    var json  = jsonDecode(networks);
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var ls = json["networks"] as List;
-    var nwList = List<Network>();
-    for (int i =0;i< ls.length; i ++){
-      var nw = Network(ls[i]["name"],ls[i]["url"],ls[i]["denom"], i==0? true:false);
-      nwList.add(nw);
+    try{
+      var networks = await rootBundle.loadString('assets/networks.json');
+      var json  = jsonDecode(networks);
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var ac= await database.networkDao.allNetworks();
+      await database.networkDao.deleteNetworks(ac);
+      var ls = json["networks"] as List;
+      var nwList = List<Network>();
+      for (int i =0;i< ls.length; i ++){
+        var nw = Network(ls[i]["name"],ls[i]["url"],ls[i]["denom"],ls[i]["nick"], i==0? true:false);
+        nwList.add(nw);
+      }
+      await database.networkDao.insertNetworkList(nwList);
+    }catch(e){
+      print(e.toString());
     }
-    await database.networkDao.insertNetworkList(nwList);
+
 
   }
 }

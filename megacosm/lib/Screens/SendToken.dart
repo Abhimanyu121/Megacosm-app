@@ -25,7 +25,7 @@ class SendTokensState extends State<SendTokens>{
   bool placingOrder = false;
   bool balance = false;
   String bal = "0";
-  var denom;
+  var denom="";
   TextEditingController _amount= new TextEditingController();
   TextEditingController _address= new TextEditingController();
   _getAddress() async {
@@ -104,7 +104,7 @@ class SendTokensState extends State<SendTokens>{
                 autovalidate: true,
                 validator: (val) => (val!=""?val.length ==47:true)
                     ? null
-                    : 'Please enter a valid amount',
+                    : 'Please enter a valid Address',
                 decoration: InputDecoration(
                   hintText: "Address of receiver ",
                   border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),

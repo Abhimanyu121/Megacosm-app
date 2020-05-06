@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/BalanceWrapper.dart';
 import 'package:megacosm/Models/ConfirmToTransactionNewStake.dart';
 import 'package:megacosm/Models/NewStakeToConfirm.dart';
@@ -25,11 +26,15 @@ class NewStakeConfirmationState extends State<NewStakeConfirmation>{
   bool placingOrder = false;
   bool balance = false;
   String bal = "0";
+  String denom="";
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    denom = (nw[0].denom).substring(1).toUpperCase();
     Response resp = await ApiWarpper.getBalance(prefs.getString("address"));
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
