@@ -69,10 +69,10 @@ class _LoginState extends State<Login> {
                   controller: _password,
                   keyboardType: TextInputType.text,
                   obscureText: true,
-                  autovalidate: false,
-                  validator: (val) => (val.isEmpty||val.split(" ").length>=24)
+                  autovalidate: true,
+                  validator: (val) => (val.isEmpty||val.length>=5)
                       ? null
-                      : 'Invalid Password',
+                      : 'Password Should be atleast 5 Characters',
                   decoration: InputDecoration(
                     hintText: "Enter Your Password",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
                   var ln =str.split(" ").length;
                   print(ln);
                   print(ln>=11);
-                  if(ln<12&& _password.text.isEmpty){
+                  if(ln<12&& _password.text.length>5){
                     print(str.split(" ").length);
                     Toast.show("Invalid Phrase or Password", context, duration: Toast.LENGTH_LONG);
                     return;
