@@ -8,24 +8,20 @@ import 'package:toast/toast.dart';
 class Transactions {
 
   static sendTokens(String addr, String amount, BuildContext context)async {
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw =await database.networkDao.findActiveNetwork();
-    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
-
-    int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
-    var seed = "";
     var salt = prefs.getString("salt");
+    final cryptor = new PlatformStringCryptor();
     bool status =true;
+    var seed = "";
+
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
-        final String key = await cryptor.generateKeyFromPassword(password, salt);
         try {
+          final String key = await cryptor.generateKeyFromPassword(password, salt);
           final String decrypted = await cryptor.decrypt(enc, key);
           seed = decrypted;
           status = true;// - A string to encrypt.
@@ -34,6 +30,13 @@ class Transactions {
         }
       }
     }while(!status);
+
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
+    int _stake = (1000000*double.parse(amount)).toInt();
+   
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -67,24 +70,20 @@ class Transactions {
 
   }
   static Future<String> sendDelegation(String amount, String validator,BuildContext context)async {
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw =await database.networkDao.findActiveNetwork();
-    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
-
-    int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
-    var seed = "";
     var salt = prefs.getString("salt");
+    final cryptor = new PlatformStringCryptor();
     bool status =true;
+    var seed = "";
+
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
-        final String key = await cryptor.generateKeyFromPassword(password, salt);
         try {
+          final String key = await cryptor.generateKeyFromPassword(password, salt);
           final String decrypted = await cryptor.decrypt(enc, key);
           seed = decrypted;
           status = true;// - A string to encrypt.
@@ -93,6 +92,12 @@ class Transactions {
         }
       }
     }while(!status);
+
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
+    int _stake = (1000000*double.parse(amount)).toInt();
 
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
@@ -124,23 +129,20 @@ class Transactions {
     }
   }
   static Future<String>withdrawReward(String delegator, String validator,BuildContext context)async {
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw =await database.networkDao.findActiveNetwork();
-    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
-    var seed = "";
     var salt = prefs.getString("salt");
+    final cryptor = new PlatformStringCryptor();
     bool status =true;
+    var seed = "";
+
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
-        final String key = await cryptor.generateKeyFromPassword(password, salt);
         try {
+          final String key = await cryptor.generateKeyFromPassword(password, salt);
           final String decrypted = await cryptor.decrypt(enc, key);
           seed = decrypted;
           status = true;// - A string to encrypt.
@@ -150,9 +152,14 @@ class Transactions {
       }
     }while(!status);
 
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
+   // int _stake = (1000000*double.parse(amount)).toInt();
+
     final mnemonic = seed.split(" ");
-    final wallet = Wallet.derive(mnemonic,  networkInfo);
-    final message = StdMsg(
+    final wallet = Wallet.derive(mnemonic,  networkInfo);final message = StdMsg(
       type: "cosmos-sdk/MsgWithdrawDelegationReward",
       value: {
         "delegator_address": wallet.bech32Address,
@@ -176,24 +183,20 @@ class Transactions {
     }
   }
   static Future<String>undelegate(String delegator, String validator, String amount,BuildContext context)async {
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw =await database.networkDao.findActiveNetwork();
-    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
-
-    int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
-    var seed = "";
     var salt = prefs.getString("salt");
+    final cryptor = new PlatformStringCryptor();
     bool status =true;
+    var seed = "";
+
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
-        final String key = await cryptor.generateKeyFromPassword(password, salt);
         try {
+          final String key = await cryptor.generateKeyFromPassword(password, salt);
           final String decrypted = await cryptor.decrypt(enc, key);
           seed = decrypted;
           status = true;// - A string to encrypt.
@@ -202,6 +205,13 @@ final cryptor = new PlatformStringCryptor();
         }
       }
     }while(!status);
+
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
+    int _stake = (1000000*double.parse(amount)).toInt();
+
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -232,24 +242,20 @@ final cryptor = new PlatformStringCryptor();
     }
   }
   static Future<String>redelegate(String srcValidator, String destValidator, String delegator,String amount,BuildContext context)async {
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw =await database.networkDao.findActiveNetwork();
-    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
-
-    int _stake = (1000000*double.parse(amount)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
-    var seed = "";
     var salt = prefs.getString("salt");
+    final cryptor = new PlatformStringCryptor();
     bool status =true;
+    var seed = "";
+
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
-        final String key = await cryptor.generateKeyFromPassword(password, salt);
         try {
+          final String key = await cryptor.generateKeyFromPassword(password, salt);
           final String decrypted = await cryptor.decrypt(enc, key);
           seed = decrypted;
           status = true;// - A string to encrypt.
@@ -258,6 +264,13 @@ final cryptor = new PlatformStringCryptor();
         }
       }
     }while(!status);
+
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
+    int _stake = (1000000*double.parse(amount)).toInt();
+
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -289,24 +302,20 @@ final cryptor = new PlatformStringCryptor();
     }
   }
   static Future<String>newProposal(String description, String title, String stake,BuildContext context)async {
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw =await database.networkDao.findActiveNetwork();
-    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
-
-    int _stake = (1000000*double.parse(stake)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
-    var seed = "";
     var salt = prefs.getString("salt");
+    final cryptor = new PlatformStringCryptor();
     bool status =true;
+    var seed = "";
+
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
-        final String key = await cryptor.generateKeyFromPassword(password, salt);
         try {
+          final String key = await cryptor.generateKeyFromPassword(password, salt);
           final String decrypted = await cryptor.decrypt(enc, key);
           seed = decrypted;
           status = true;// - A string to encrypt.
@@ -315,6 +324,13 @@ final cryptor = new PlatformStringCryptor();
         }
       }
     }while(!status);
+
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
+    int _stake = (1000000*double.parse(stake)).toInt();
+
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -356,24 +372,20 @@ final cryptor = new PlatformStringCryptor();
     }
   }
   static Future<String>proposalDeposit(String id, String stake,BuildContext context)async {
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw =await database.networkDao.findActiveNetwork();
-    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
-
-    int _stake = (1000000*double.parse(stake)).toInt();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
-    var seed = "";
     var salt = prefs.getString("salt");
+    final cryptor = new PlatformStringCryptor();
     bool status =true;
+    var seed = "";
+
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
-        final String key = await cryptor.generateKeyFromPassword(password, salt);
         try {
+          final String key = await cryptor.generateKeyFromPassword(password, salt);
           final String decrypted = await cryptor.decrypt(enc, key);
           seed = decrypted;
           status = true;// - A string to encrypt.
@@ -382,6 +394,13 @@ final cryptor = new PlatformStringCryptor();
         }
       }
     }while(!status);
+
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
+    int _stake = (1000000*double.parse(stake)).toInt();
+
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(
@@ -417,23 +436,20 @@ final cryptor = new PlatformStringCryptor();
     }
   }
   static Future<String>vote(String id, String vote,BuildContext context)async {
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw =await database.networkDao.findActiveNetwork();
-    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
-final cryptor = new PlatformStringCryptor();
     String enc= prefs.getString("mnemonic");
-    var seed = "";
     var salt = prefs.getString("salt");
+    final cryptor = new PlatformStringCryptor();
     bool status =true;
+    var seed = "";
+
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
         return "cancel";
       }else {
-        final String key = await cryptor.generateKeyFromPassword(password, salt);
         try {
+          final String key = await cryptor.generateKeyFromPassword(password, salt);
           final String decrypted = await cryptor.decrypt(enc, key);
           seed = decrypted;
           status = true;// - A string to encrypt.
@@ -442,6 +458,13 @@ final cryptor = new PlatformStringCryptor();
         }
       }
     }while(!status);
+
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw =await database.networkDao.findActiveNetwork();
+    var  networkInfo = NetworkInfo(bech32Hrp: nw[0].name, lcdUrl: nw[0].url, defaultTokenDenom: nw[0].denom);
+
+   // int _stake = (1000000*double.parse(amount)).toInt();
+
     final mnemonic = seed.split(" ");
     final wallet = Wallet.derive(mnemonic,  networkInfo);
     final message = StdMsg(

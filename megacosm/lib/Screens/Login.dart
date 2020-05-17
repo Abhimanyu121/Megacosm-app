@@ -29,6 +29,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final bool showFab = MediaQuery.of(context).viewInsets.bottom==0.0;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: nearlyWhite,
@@ -124,7 +126,7 @@ class _LoginState extends State<Login> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: !loading? RaisedButton(
+      floatingActionButton: !loading? showFab?RaisedButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Text("Create New Wallet",style: TextStyle(color: Colors.black),),
         color: Colors.red,
@@ -134,6 +136,9 @@ class _LoginState extends State<Login> {
           await Clipboard.setData(ClipboardData(text: mnemonic));
           Toast.show("Mnemonic Copied", context, duration: Toast.LENGTH_LONG);
         },
+      ):SizedBox(
+        height: 0,
+        width: 0,
       ):SizedBox(
         height: 0,
         width: 0,
