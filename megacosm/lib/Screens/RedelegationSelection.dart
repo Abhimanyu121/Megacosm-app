@@ -60,7 +60,7 @@ class RedelegationSelectionState extends State<RedelegationSelection>{
               ),
             ),
             FutureBuilder(
-              future: ApiWarpper.getValidatorList(),
+              future: ApiWrapper.getValidatorList(),
               builder: (context, snapshot){
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Padding(
@@ -95,7 +95,7 @@ class RedelegationSelectionState extends State<RedelegationSelection>{
                   return Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      cacheExtent: 100,
+                      cacheExtent: 1000,
                       itemCount: model.result.length,
                       itemBuilder: (BuildContext ctx, int index ){
                         if(model.result[index].operator_address==args.srcAddress){

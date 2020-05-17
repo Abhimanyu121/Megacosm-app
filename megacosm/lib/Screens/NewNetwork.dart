@@ -136,7 +136,7 @@ class NewNetworkState extends State<NewNetwork>{
                       url = "http://"+url;
                     }
                     print(url);
-                    if(await ApiWarpper.checkUrl(url)){
+                    if(await ApiWrapper.checkUrl(url)){
                       final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
                       await database.networkDao.insertNetwork(Network(_name.text,url,_denom.text,_nick.text,false));
 

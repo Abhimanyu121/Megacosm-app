@@ -1,14 +1,17 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/RedelegationAmountModel.dart';
 import 'package:megacosm/Models/RedelegatorConfirmation.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
+import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:http/http.dart'as http;
 import '../Constants.dart';
 import 'RedlegationConfirmation.dart';
 class RedelegationAmount extends StatefulWidget{
@@ -21,6 +24,21 @@ class RedelegationAmountState extends State<RedelegationAmount>{
   TextEditingController _amount = TextEditingController();
   bool fetching  = true;
   var denom="";
+  var url ="";
+  bool image = false;
+  _getPicture()async {
+    var id = args.identity;
+    var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
+    var js = jsonDecode(resp.body);
+    if(js["them"]==null){
+      return;
+    }
+    var url = js["them"][0]["pictures"]["primary"]["url"];
+    setState(() {
+      this.url= url;
+      image = true;
+    });
+  }
   @override
   void initState() {
     Future.delayed(Duration.zero,() async{
@@ -29,6 +47,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
       final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
       var nw = await database.networkDao.findActiveNetwork();
       denom = (nw[0].denom).substring(1).toUpperCase();
+      _getPicture();
       setState(() {
         fetching = false;
       });
@@ -57,14 +76,20 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Relegation", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),),
+                    child: Text("New", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0,8,8,8,),
-                    child: Text("Amount", style: TextStyle(color: appTheme, fontWeight: FontWeight.bold, fontSize: 20),),
+                    child: Text("Validator", style: TextStyle(color: appTheme, fontWeight: FontWeight.bold, fontSize: 20),),
                   )
                 ],
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                image?_circleImg(url, context):_circle(args.destName.substring(0,1).toUpperCase(), context)
+              ],
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
@@ -260,7 +285,34 @@ class RedelegationAmountState extends State<RedelegationAmount>{
         )
     );
   }
-
+  _circle(String str, BuildContext ctx){
+    return Container(
+      width: MediaQuery.of(ctx).size.width *0.32,
+      height: 150,
+      child: Center(
+        child: Text(str,style: TextStyle(fontSize: 30),),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
+  _circleImg(String url, BuildContext ctx){
+    return Container(
+      // width: MediaQuery.of(ctx).size.width *0.12,
+      height: 200,
+      child: Center(
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.network(url)),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
   _loader(){
     return Center(
       child: SpinKitCubeGrid(

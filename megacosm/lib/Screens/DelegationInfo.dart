@@ -38,7 +38,7 @@ class DelegationInfoState extends State<DelegationInfo>{
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
-    Response resp = await ApiWarpper.delegationInfo(prefs.getString("address"),args.address);
+    Response resp = await ApiWrapper.delegationInfo(prefs.getString("address"),args.address);
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
     print(json);
@@ -46,7 +46,7 @@ class DelegationInfoState extends State<DelegationInfo>{
     var nw = await database.networkDao.findActiveNetwork();
     denom = (nw[0].denom).substring(1).toUpperCase();
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
-    Response resp2 = await ApiWarpper.delegatedAmount(prefs.getString("address"),args.address);
+    Response resp2 = await ApiWrapper.delegatedAmount(prefs.getString("address"),args.address);
     String body2 = utf8.decode(resp2.bodyBytes);
     final json2 = jsonDecode(body2);
     print(json2);

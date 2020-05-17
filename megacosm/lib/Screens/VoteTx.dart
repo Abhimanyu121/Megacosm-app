@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:megacosm/Models/VoteModel.dart';
+import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
 class VoteTx extends StatefulWidget{
@@ -104,6 +106,20 @@ class VoteTxState extends State<VoteTx>{
                               await Clipboard.setData(ClipboardData(text: args.tx));
                             },
                             icon: Icon(Icons.content_copy,
+                              color: Colors.black,
+                            )
+
+                        )),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.explorerLinkBuilder(args.tx);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
                               color: Colors.black,
                             )
 

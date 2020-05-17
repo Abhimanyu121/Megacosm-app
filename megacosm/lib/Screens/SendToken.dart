@@ -35,7 +35,7 @@ class SendTokensState extends State<SendTokens>{
       delegatorAddress = prefs.getString("address");
     });
     print(delegatorAddress);
-    Response resp = await ApiWarpper.getBalance(prefs.getString("address"));
+    Response resp = await ApiWrapper.getBalance(prefs.getString("address"));
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();

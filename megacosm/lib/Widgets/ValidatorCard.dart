@@ -1,11 +1,14 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:megacosm/Models/HomeToNewStake.dart';
 import 'package:megacosm/Screens/NewStake.dart';
 import 'package:megacosm/Utils/ColorRandminator.dart';
-
-class ValidatorCard extends StatelessWidget{
+import 'package:http/http.dart'as http;
+class ValidatorCard extends StatefulWidget{
   final String name;
   final String commission;
   final String address;
@@ -14,9 +17,35 @@ class ValidatorCard extends StatelessWidget{
   final String security_contract;
   final String details;
   ValidatorCard({this.commission, this.address, this.name,this.website,this.identity, this.details, this.security_contract});
+
+  @override
+  _ValidatorCardState createState() => _ValidatorCardState();
+}
+
+class _ValidatorCardState extends State<ValidatorCard> {
+  bool loading =true;
+  String url;
+  _getPicture()async {
+    var id = widget.identity;
+    var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
+    var js = jsonDecode(resp.body);
+    if(js["them"]==null){
+      return;
+    }
+    var url = js["them"][0]["pictures"]["primary"]["url"];
+    setState(() {
+      this.url= url;
+      loading = false;
+    });
+  }
+  @override
+  void initState() {
+    _getPicture();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    var intCom = double.parse(commission);
+    var intCom = double.parse(widget.commission);
     var str = intCom.toStringAsFixed(5);
     return Center(
       child: FlatButton(
@@ -25,13 +54,13 @@ class ValidatorCard extends StatelessWidget{
             context,
             NewStake.routeName,
             arguments: HomeToNewStake(
-              name: name,
-              address: address,
+              name: widget.name,
+              address: widget.address,
               commission: str,
-              identity: identity,
-              website: website,
-              security_contract: security_contract,
-              details: details
+              identity: widget.identity,
+              website: widget.website,
+              security_contract: widget.security_contract,
+              details: widget.details
             ),
           );
         },
@@ -44,8 +73,8 @@ class ValidatorCard extends StatelessWidget{
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    leading: _circle(name.substring(0,1), context) ,
-                    title: Text(name),
+                    leading: loading?_circle(widget.name.substring(0,1), context):_circleImg(url, context) ,
+                    title: Text(widget.name),
                     subtitle: Text("Commission : $str"),
                     isThreeLine: false,
                   ),
@@ -64,6 +93,7 @@ class ValidatorCard extends StatelessWidget{
       ),
     );
   }
+
   _circle(String str, BuildContext ctx){
     return Container(
       width: MediaQuery.of(ctx).size.width *0.12,
@@ -77,4 +107,20 @@ class ValidatorCard extends StatelessWidget{
       ),
     );
   }
+  _circleImg(String url, BuildContext ctx){
+    return Container(
+      width: MediaQuery.of(ctx).size.width *0.12,
+      height: 100,
+      child: Center(
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.network(url)),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
 }
+//https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=90CD37EB27E242B9&fields=pictures

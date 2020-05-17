@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
@@ -10,6 +11,8 @@ import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
 class TransactionNewStake extends StatefulWidget{
@@ -31,7 +34,7 @@ class TransactionNewStakeState extends State<TransactionNewStake> {
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
-    Response resp = await ApiWarpper.getBalance(
+    Response resp = await ApiWrapper.getBalance(
         prefs.getString("address"));
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
@@ -162,8 +165,36 @@ class TransactionNewStakeState extends State<TransactionNewStake> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Transaction Hash",
-                        style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("Transaction Hash",
+                            style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              Toast.show("Hash Copied", context);
+                              await Clipboard.setData(ClipboardData(text: args.tx));
+                            },
+                            icon: Icon(Icons.content_copy,
+                              color: Colors.black,
+                            )
+
+                        )),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.explorerLinkBuilder(args.tx);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        )),
+                      ],
+                    ),
                     Text(args.tx, style: TextStyle(color: Colors.grey,))
                   ],
                 )

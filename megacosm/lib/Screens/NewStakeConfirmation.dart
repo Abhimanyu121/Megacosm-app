@@ -35,7 +35,7 @@ class NewStakeConfirmationState extends State<NewStakeConfirmation>{
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
     denom = (nw[0].denom).substring(1).toUpperCase();
-    Response resp = await ApiWarpper.getBalance(prefs.getString("address"));
+    Response resp = await ApiWrapper.getBalance(prefs.getString("address"));
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
     BalanceWrapper model = new BalanceWrapper.fromJson(json);

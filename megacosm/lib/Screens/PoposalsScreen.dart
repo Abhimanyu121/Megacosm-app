@@ -24,10 +24,10 @@ class ProposalListState extends State<ProposalListTab> with
    super.initState();
    widget.refresh =(){
      setState(() {
-       _loadingData = ApiWarpper.proposalList();
+       _loadingData = ApiWrapper.proposalList();
      });
    };
-   _loadingData = ApiWarpper.proposalList();
+   _loadingData = ApiWrapper.proposalList();
 
 
   }

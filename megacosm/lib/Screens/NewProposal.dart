@@ -26,7 +26,7 @@ class NewProposalState extends State<NewProposal>{
   _getBalance()async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String address = prefs.getString("address");
-    Response balModel = await ApiWarpper.getBalance(address);
+    Response balModel = await ApiWrapper.getBalance(address);
     String body1 = utf8.decode(balModel.bodyBytes);
     final json1 = jsonDecode(body1);
     BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);

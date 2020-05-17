@@ -10,11 +10,12 @@ import 'package:megacosm/Models/HomeToNewStake.dart';
 import 'package:megacosm/Models/NewStakeToConfirm.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
+import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:http/http.dart'as http;
 import '../Constants.dart';
 import 'NewStakeConfirmation.dart';
 class NewStake extends StatefulWidget{
@@ -24,39 +25,60 @@ class NewStake extends StatefulWidget{
 }
 class NewStakeState extends State<NewStake>{
   String delegatorAddress="";
-  bool placingOrder = false;
+  bool placingOrder = true;
   bool balance = false;
   String bal = "0";
+  String url="";
   String denom="";
-  TextEditingController _amount= new TextEditingController();
+  bool image= false;
+  HomeToNewStake args;
+      TextEditingController _amount= new TextEditingController();
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
-    Response resp = await ApiWarpper.getBalance(prefs.getString("address"));
+    Response resp = await ApiWrapper.getBalance(prefs.getString("address"));
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
     denom = (nw[0].denom).substring(1).toUpperCase();
+    await _getPicture();
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
     setState(() {
       if(model.result.isEmpty){
         bal ="0";
+        placingOrder =false;
       }
       else{
         bal = BalOperations.toBNT(model.result[0].amount);
+        placingOrder = false;
       }
+    });
+  }
+  _getPicture()async {
+    var id = args.identity;
+    var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
+    var js = jsonDecode(resp.body);
+    if(js["them"]==null){
+      return;
+    }
+    var url = js["them"][0]["pictures"]["primary"]["url"];
+    setState(() {
+      this.url= url;
+      image = true;
     });
   }
   @override
   void initState() {
+    Future.delayed(Duration.zero,() {
+      args = ModalRoute.of(context).settings.arguments;
+    });
     _getAddress();
   }
   @override
   Widget build(BuildContext context) {
-    final HomeToNewStake args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         backgroundColor: nearlyWhite,
         appBar: AppBar(
@@ -85,6 +107,12 @@ class NewStakeState extends State<NewStake>{
                 ],
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                image?_circleImg(url, context):_circle(args.name.substring(0,1).toUpperCase(), context)
+              ],
+            ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
               child: Column(
@@ -96,6 +124,7 @@ class NewStakeState extends State<NewStake>{
                 ],
               )
             ),
+
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
@@ -254,7 +283,34 @@ class NewStakeState extends State<NewStake>{
         )
     );
   }
-
+  _circle(String str, BuildContext ctx){
+    return Container(
+      width: MediaQuery.of(ctx).size.width *0.32,
+      height: 150,
+      child: Center(
+        child: Text(str,style: TextStyle(fontSize: 30),),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
+  _circleImg(String url, BuildContext ctx){
+    return Container(
+     // width: MediaQuery.of(ctx).size.width *0.12,
+      height: 150,
+      child: Center(
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.network(url)),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
   _loader(){
     return Center(
       child: SpinKitCubeGrid(

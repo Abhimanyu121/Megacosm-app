@@ -5,9 +5,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/WithdrawSuccessModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
+import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Constants.dart';
 class WithdrawSuccess extends StatefulWidget{
   static const routeName = '/withdrawSuccess';
@@ -154,7 +156,21 @@ class WithdrawSuccessState extends State<WithdrawSuccess>{
                               color: Colors.black,
                             )
 
-                        ))
+                        )),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.explorerLinkBuilder(args.tx);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        )),
                       ],
                     ),
                     Text(args.tx, style: TextStyle(color: Colors.grey,))

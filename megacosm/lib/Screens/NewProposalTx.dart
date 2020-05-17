@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:megacosm/Models/NewProposalModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
+import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
 class NewProposalTx extends StatefulWidget{
@@ -114,9 +116,24 @@ class NewProposalTxState extends State<NewProposalTx>{
                               color: Colors.black,
                             )
 
-                        ))
+                        )),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.explorerLinkBuilder(args.tx);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        )),
                       ],
                     ),
+
                     Text(args.tx, style: TextStyle(color: Colors.grey,))
                   ],
                 )

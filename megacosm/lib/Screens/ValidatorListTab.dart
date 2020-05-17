@@ -18,11 +18,11 @@ class ValidatorListState extends State<ValidatorListTab> with
   var _loadList;
   @override
   void initState() {
-    _loadList = ApiWarpper.getValidatorList();
+    _loadList = ApiWrapper.getValidatorList();
     super.initState();
     widget.refresh =(){
       setState(() {
-        _loadList = ApiWarpper.getValidatorList();
+        _loadList = ApiWrapper.getValidatorList();
       });
     };
   }
@@ -70,7 +70,7 @@ class ValidatorListState extends State<ValidatorListTab> with
               ValidatorList model = new ValidatorList.fromJson(json);
               return Expanded(
                 child: ListView.builder(
-                  cacheExtent: 100,
+                  cacheExtent: 1000,
                   itemCount: model.result.length,
                   itemBuilder: (BuildContext ctx, int index ){
 

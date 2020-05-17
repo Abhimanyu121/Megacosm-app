@@ -26,10 +26,12 @@ import 'SendToken.dart';
 
 class Stats extends StatefulWidget{
   Function refresh;
+  Function toTop;
   @override
   StatsState createState() => StatsState();
 }
 class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
+  ScrollController controller = ScrollController();
   String balance = "123";
   String unbondedStake = "123";
   String bondedStake = "321";
@@ -56,17 +58,17 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
     denom = (nw[0].denom).substring(1).toUpperCase();
-    Response pools = await ApiWarpper.getPool();
+    Response pools = await ApiWrapper.getPool();
     String body = utf8.decode(pools.bodyBytes);
     final json = jsonDecode(body);
     BondedNotBondedWrapper model = new BondedNotBondedWrapper.fromJson(json);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String address = prefs.getString("address");
     print(address);
-    Response balModel = await ApiWarpper.getBalance(address);
+    Response balModel = await ApiWrapper.getBalance(address);
     String body1 = utf8.decode(balModel.bodyBytes);
     final json1 = jsonDecode(body1);
-    Response delegations = await ApiWarpper.getDelegations(address);
+    Response delegations = await ApiWrapper.getDelegations(address);
     String delBody = utf8.decode(delegations.bodyBytes);
     final delJson = jsonDecode(delBody);
     BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
@@ -114,6 +116,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
         });
       }
     };
+    widget.toTop=scrollToTop;
     super.initState();
   }
   @override
@@ -124,6 +127,8 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     ):loading==true?Center(
       child: SpinKitCubeGrid(size:50, color: appTheme),
     ):ListView(
+      controller: controller,
+      cacheExtent: 1000,
       children: <Widget>[
         Card(
           elevation: 0,
@@ -408,11 +413,12 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
           ),
         ):SizedBox(height: 0,),
         ListView.builder(
+          cacheExtent: 1000,
             itemCount: valList.result.length,
             shrinkWrap: true,
             physics: ClampingScrollPhysics(),
             itemBuilder: (BuildContext context, int index){
-              return ValidatorCardStats(address: valList.result[index].operator_address,name: valList.result[index].description.moniker,commission: valList.result[0].commission.commission_rates.max_rate,);
+              return ValidatorCardStats(address: valList.result[index].operator_address,name: valList.result[index].description.moniker,commission: valList.result[index].commission.commission_rates.max_rate,identity: valList.result[index].description.identity,);
             }
         )
       ],
@@ -456,5 +462,9 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       },
     );
   }
-
+  scrollToTop(){
+    controller.animateTo(0.0,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),);
+  }
 }

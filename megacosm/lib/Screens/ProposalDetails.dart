@@ -34,7 +34,7 @@ class ProposalInfoState extends State<ProposalInfo>{
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
-    Response resp = await ApiWarpper.getBalance(delegatorAddress);
+    Response resp = await ApiWrapper.getBalance(delegatorAddress);
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
     print(json);
@@ -121,7 +121,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                 )
             ):SizedBox(height: 0,),
             args.proposal_status == "VotingPeriod"?FutureBuilder(
-              future : ApiWarpper.castedVote(args.id, delegatorAddress),
+              future : ApiWrapper.castedVote(args.id, delegatorAddress),
               builder: (BuildContext context, snapshot){
                 try{
                   if(snapshot.error==null){

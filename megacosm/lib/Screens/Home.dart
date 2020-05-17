@@ -31,6 +31,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   void tabChange(int index){
 
     _controller.animateTo(index);
+    if (index ==0){
+      stats.toTop();
+    }
   }
   @override
   void initState() {

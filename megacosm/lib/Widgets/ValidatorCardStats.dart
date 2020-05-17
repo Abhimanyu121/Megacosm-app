@@ -1,17 +1,49 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:megacosm/Models/DelegationInfo.dart';
 import 'package:megacosm/Screens/DelegationInfo.dart';
 import 'package:megacosm/Utils/ColorRandminator.dart';
-
-class ValidatorCardStats extends StatelessWidget{
+import 'package:http/http.dart'as http;
+class ValidatorCardStats extends StatefulWidget{
   final String name;
   final String commission;
   final String address;
-  ValidatorCardStats({this.commission, this.address, this.name});
+  final String identity;
+  ValidatorCardStats({this.commission, this.address, this.name, this.identity});
+
+  @override
+  _ValidatorCardStatsState createState() => _ValidatorCardStatsState();
+}
+
+class _ValidatorCardStatsState extends State<ValidatorCardStats> {
+  bool loading = true;
+  String url;
+
+  _getPicture()async {
+    var id = widget.identity;
+    var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
+    var js = jsonDecode(resp.body);
+    if(js["them"]==null){
+      return;
+    }
+    var url = js["them"][0]["pictures"]["primary"]["url"];
+    setState(() {
+      this.url= url;
+      loading = false;
+    });
+  }
+  @override
+  void initState() {
+    _getPicture();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    var commission = double.parse(widget.commission);
+    String str = commission.toStringAsFixed(5);
     return Center(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(5.0,5,5,5),
@@ -21,9 +53,9 @@ class ValidatorCardStats extends StatelessWidget{
               context,
               DelegationInfo.routeName,
               arguments: DelegationInfoModel(
-                  name: name,
-                  address: address,
-                  commission: commission
+                  name: widget.name,
+                  address: widget.address,
+                  commission: str
               ),
             );
           },
@@ -35,10 +67,10 @@ class ValidatorCardStats extends StatelessWidget{
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListTile(
-                      leading: _circle(name.substring(0,1), context) ,
-                      title: Text(name),
-                      subtitle: Text(address),
-                      isThreeLine: true,
+                      leading: loading?_circle(widget.name.substring(0,1), context):_circleImg(url, context) ,
+                      title: Text(widget.name),
+                      subtitle: Text("Commission: $str"),
+                      isThreeLine: false,
                     ),
                   ),
                   SizedBox(
@@ -55,12 +87,27 @@ class ValidatorCardStats extends StatelessWidget{
       ),
     );
   }
+
   _circle(String str, BuildContext ctx){
     return Container(
       width: MediaQuery.of(ctx).size.width *0.12,
       height: 100,
       child: Center(
         child: Text(str),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
+  _circleImg(String url, BuildContext ctx){
+    return Container(
+      width: MediaQuery.of(ctx).size.width *0.12,
+      height: 100,
+      child: Center(child: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: Image.network(url)),
       ),
       decoration: BoxDecoration(
           color: ColorRandominator.getColor() ,

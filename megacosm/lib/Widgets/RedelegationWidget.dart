@@ -1,12 +1,14 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:megacosm/Models/RedelegationAmountModel.dart';
 import 'package:megacosm/Models/RelegationSelection.dart';
 import 'package:megacosm/Screens/RedelegationAmount.dart';
 import 'package:megacosm/Utils/ColorRandminator.dart';
-
-class RedelegationCard extends StatelessWidget{
+import 'package:http/http.dart'as http;
+class RedelegationCard extends StatefulWidget{
   final String name;
   final String commission;
   final String address;
@@ -18,10 +20,36 @@ class RedelegationCard extends StatelessWidget{
   RedelegationCard({this.commission, this.address, this.name, this.srcInfo, this.identity, this.website, this.security_contract, this.details});
 
   @override
+  _RedelegationCardState createState() => _RedelegationCardState();
+}
+
+class _RedelegationCardState extends State<RedelegationCard> {
+  bool loading = true;
+  String url;
+
+  _getPicture()async {
+    var id = widget.identity;
+    var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
+    var js = jsonDecode(resp.body);
+    if(js["them"]==null){
+      return;
+    }
+    var url = js["them"][0]["pictures"]["primary"]["url"];
+    setState(() {
+      this.url= url;
+      loading = false;
+    });
+  }
+  @override
+  void initState() {
+    _getPicture();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-    var intCom = double.parse(commission);
+    var intCom = double.parse(widget.commission);
     var str = intCom.toStringAsFixed(5);
-    print("widget:"+srcInfo.delegatorAddress);
+    print("widget:"+widget.srcInfo.delegatorAddress);
     return Center(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(5.0,5,5,5),
@@ -31,17 +59,17 @@ class RedelegationCard extends StatelessWidget{
               context,
               RedelegationAmount.routeName,
               arguments: RedelegationAmountModel(
-                  srcAddress: srcInfo.srcAddress,
-                  srcName: srcInfo.name,
-                  delegatorAddress: srcInfo.delegatorAddress,
+                  srcAddress: widget.srcInfo.srcAddress,
+                  srcName: widget.srcInfo.name,
+                  delegatorAddress: widget.srcInfo.delegatorAddress,
                   desCommission: str,
-                  destAddress: address,
-                  destName: name,
-                  identity: identity,
-                  website: website,
-                  security_contract: security_contract,
-                  details: details,
-                  totalAmount: srcInfo.amount
+                  destAddress: widget.address,
+                  destName: widget.name,
+                  identity: widget.identity,
+                  website: widget.website,
+                  security_contract: widget.security_contract,
+                  details: widget.details,
+                  totalAmount: widget.srcInfo.amount
               ),
             );
           },
@@ -52,8 +80,8 @@ class RedelegationCard extends StatelessWidget{
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
-                  leading: _circle(name.substring(0,1), context) ,
-                  title: Text(name),
+                  leading: loading?_circle(widget.name.substring(0,1), context):_circleImg(url, context) ,
+                  title: Text(widget.name),
                   subtitle: Text("Commission : $str"),
                   isThreeLine: false,
                 ),
@@ -64,12 +92,28 @@ class RedelegationCard extends StatelessWidget{
       ),
     );
   }
+
   _circle(String str, BuildContext ctx){
     return Container(
       width: MediaQuery.of(ctx).size.width *0.12,
       height: 100,
       child: Center(
         child: Text(str),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
+  _circleImg(String url, BuildContext ctx){
+    return Container(
+      width: MediaQuery.of(ctx).size.width *0.12,
+      height: 100,
+      child: Center(
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.network(url)),
       ),
       decoration: BoxDecoration(
           color: ColorRandominator.getColor() ,

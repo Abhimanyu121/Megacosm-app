@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:megacosm/DBUtils/DBHelper.dart';
 
-class ApiWarpper{
+class ApiWrapper{
   static Future<http.Response> getValidatorList() async {
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
@@ -65,6 +65,10 @@ class ApiWarpper{
     var url = baseUrl+"/gov/proposals/$id/votes/$address";
     var resp = await http.get(url);
     return resp;
+  }
+  static String explorerLinkBuilder(String hash)  {
+    String url= "http://bigdipper.testnet.public.bluzelle.com:3000/transactions/$hash";
+    return url;
   }
   static Future<bool> checkUrl(String url)async{
     var _url = url+"/node_info";
