@@ -169,7 +169,7 @@ class NewStakeConfirmationState extends State<NewStakeConfirmation>{
                     return;
                   }
                   print(tx);
-                  Navigator.pushNamed(
+                  Navigator.popAndPushNamed(
                     context,
                     TransactionNewStake.routeName,
                     arguments: ConfirmToTranscation(

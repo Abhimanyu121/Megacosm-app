@@ -205,7 +205,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                           width: MediaQuery.of(context).size.width*0.8,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Expanded(child: Text(address, textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white))),
+                            child: Text(address, textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
                           ),
                         ),
                         Padding(
