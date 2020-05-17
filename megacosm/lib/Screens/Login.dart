@@ -45,7 +45,7 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              //Image.asset("assets/logoblue.png"),
+              Image.asset("assets/logoblue.png"),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8,8,8,8),
                 child: TextFormField(
@@ -129,10 +129,11 @@ class _LoginState extends State<Login> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Text("Create New Wallet",style: TextStyle(color: Colors.black),),
         color: Colors.red,
-        onPressed: (){
+        onPressed: ()async {
           var mnemonic = bip39.generateMnemonic();
           _mnemonic.text= mnemonic;
-          Toast.show("Please Copy this mnemonic before loggin in", context, duration: Toast.LENGTH_LONG);
+          await Clipboard.setData(ClipboardData(text: mnemonic));
+          Toast.show("Mnemonic Copied", context, duration: Toast.LENGTH_LONG);
         },
       ):SizedBox(
         height: 0,

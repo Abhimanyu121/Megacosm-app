@@ -155,13 +155,13 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                         padding: const EdgeInsets.fromLTRB(16,5,5,4),
                         child: Text("Account",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
                       ),
-//                      Padding(
-//                        padding: const EdgeInsets.fromLTRB(16,5,5,4),
-//                        child: SizedBox(
-//                            height: MediaQuery.of(context).size.height*0.05,
-//                            width: MediaQuery.of(context).size.width*0.2,
-//                            child: Image.asset("logo.png"))
-//                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16,5,5,4),
+                        child: SizedBox(
+                            height: MediaQuery.of(context).size.height*0.05,
+                            width: MediaQuery.of(context).size.width*0.2,
+                            child: Image.asset("logo.png"))
+                      ),
                     ],
                   ),
                   Padding(
