@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/ToWithdrawConfirmation.dart';
 import 'package:megacosm/Models/WithdrawSuccessModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
@@ -22,8 +23,13 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
   bool placingOrder = true;
   bool addr = false;
   ToWithdrawConfirmation args;
+  var denom="";
+  var str="";
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    denom = (nw[0].denom).substring(1).toUpperCase();
     setState(() {
       delegatorAddress = prefs.getString("address");
       addr =true;
@@ -34,6 +40,8 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
   void initState() {
     Future.delayed(Duration.zero,() {
       args = ModalRoute.of(context).settings.arguments;
+      var intCom = double.parse(args.commission);
+      str = intCom.toStringAsFixed(5);
       _getAddress();
       setState(() {
         placingOrder= false;
@@ -43,7 +51,6 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         backgroundColor: nearlyWhite,
         appBar: AppBar(
@@ -112,7 +119,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Commission: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.commission, style: TextStyle(color: Colors.grey,))
+                    Text(str, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -123,7 +130,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Amount", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.amount), style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.amount) +" " +denom, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -158,7 +165,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
                         arguments: WithdrawSuccessModel(
                             name: args.name,
                             address: args.address,
-                            commission: args.commission,
+                            commission: str,
                             amount: args.amount,
                             tx: tx
                         ),

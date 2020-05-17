@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
@@ -102,10 +103,33 @@ class SendTokensState extends State<SendTokens>{
                 controller: _address,
                 keyboardType: TextInputType.text,
                 autovalidate: true,
+
                 validator: (val) => (val!=""?val.length ==47:true)
                     ? null
                     : 'Please enter a valid Address',
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.camera_alt),
+                    onPressed: ()async{
+                      String qrResult = await BarcodeScanner.scan();
+                      RegExp reg = RegExp(r'^bluzelle(?:.*)');
+                      print(qrResult);
+                      if(reg.hasMatch(qrResult)){
+                        if(qrResult.length==47){
+                          _address.text=qrResult;
+                        }
+                        else{
+                          print("1");
+                          Toast.show("Invalid QR", context);
+                        }
+                      }
+                      else{
+                        print("2");
+                        Toast.show("Invalid QR", context);
+                      }
+
+                    },
+                  ),
                   hintText: "Address of receiver ",
                   border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                   contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),

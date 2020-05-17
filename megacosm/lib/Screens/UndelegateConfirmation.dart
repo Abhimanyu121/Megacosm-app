@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/ToWithdrawConfirmation.dart';
 import 'package:megacosm/Models/WithdrawSuccessModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
@@ -21,8 +22,12 @@ class UndelegateConfirmationState extends State<UndelegateConfirmation>{
   String delegatorAddress="";
   bool placingOrder = true;
   bool addr = false;
+  var denom ="";
   ToWithdrawConfirmation args;
   _getAddress() async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    denom = (nw[0].denom).substring(1).toUpperCase();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       delegatorAddress = prefs.getString("address");
@@ -123,7 +128,7 @@ class UndelegateConfirmationState extends State<UndelegateConfirmation>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Amount", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.amount), style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.amount)+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

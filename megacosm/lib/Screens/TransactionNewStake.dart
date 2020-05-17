@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/BalanceWrapper.dart';
 import 'package:megacosm/Models/ConfirmToTransactionNewStake.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
@@ -21,9 +22,12 @@ class TransactionNewStakeState extends State<TransactionNewStake> {
   bool placingOrder = false;
   bool balance = false;
   String bal = "0";
-
+  var denom ="";
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    denom = (nw[0].denom).substring(1).toUpperCase();
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
@@ -148,7 +152,7 @@ class TransactionNewStakeState extends State<TransactionNewStake> {
                   children: <Widget>[
                     Text("Staked Amount",
                         style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.amount), style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.amount)+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

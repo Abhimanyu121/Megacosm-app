@@ -78,6 +78,10 @@ class ValidatorListState extends State<ValidatorListTab> with
                       commission: model.result[index].commission.commission_rates.rate,
                       name: model.result[index].description.moniker,
                       address: model.result[index].operator_address,
+                      details: model.result[index].description.details,
+                      website: model.result[index].description.website,
+                      security_contract: model.result[index].description.security_contact,
+                      identity: model.result[index].description.identity,
                     );
                   },
                 ),

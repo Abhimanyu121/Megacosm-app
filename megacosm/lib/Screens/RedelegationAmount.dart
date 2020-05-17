@@ -7,6 +7,7 @@ import 'package:megacosm/Models/RedelegatorConfirmation.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
 import 'RedlegationConfirmation.dart';
@@ -98,6 +99,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   ],
                 )
             ),
+
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
@@ -105,7 +107,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Staked Amount ", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.totalAmount)+ "$denom", style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.totalAmount)+ " $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -137,6 +139,68 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
+                    Text("Validator details: ", style: TextStyle(color: Colors.black,)),
+                    Text(args.details.isEmpty?"Not Available":args.details, style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Validator Identity: ", style: TextStyle(color: Colors.black,)),
+                    Text(args.identity.isEmpty?"Not Available":args.identity, style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Security Contract: ", style: TextStyle(color: Colors.black,)),
+                    Text(args.security_contract.isEmpty?"Not Available":args.security_contract, style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text("Validator Website: ", style: TextStyle( fontSize: 17, color: Colors.black)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = args.website;
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
+                    Text(args.website.isEmpty?"Not Available":args.website, style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
                     Text("New Commission: ", style: TextStyle(color: Colors.black,)),
                     Text(args.desCommission, style: TextStyle(color: Colors.grey,))
                   ],
@@ -153,7 +217,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                     ? null
                     : 'Please enter a valid amount',
                 decoration: InputDecoration(
-                  hintText: "Amount to Withdraw",
+                  hintText: "Amount to Redelegate",
                   border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                   contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                 ),

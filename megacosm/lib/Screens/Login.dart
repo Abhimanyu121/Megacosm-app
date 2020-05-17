@@ -41,9 +41,8 @@ class _LoginState extends State<Login> {
       ):Center(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20,0, 20, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            shrinkWrap: true,
             children: <Widget>[
               Image.asset("assets/logoblue.png"),
               Padding(

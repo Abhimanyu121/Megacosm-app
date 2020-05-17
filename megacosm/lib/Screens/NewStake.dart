@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
@@ -12,6 +13,7 @@ import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
 import 'NewStakeConfirmation.dart';
@@ -74,7 +76,7 @@ class NewStakeState extends State<NewStake>{
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Delegation", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),),
+                    child: Text("Validator ", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0,8,8,8,),
@@ -113,6 +115,68 @@ class NewStakeState extends State<NewStake>{
                   children: <Widget>[
                     Text("Validator address: ", style: TextStyle(color: Colors.black,)),
                     Text(args.address, style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Validator details: ", style: TextStyle(color: Colors.black,)),
+                    Text(args.details.isEmpty?"Not Available":args.details, style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Validator Identity: ", style: TextStyle(color: Colors.black,)),
+                    Text(args.identity.isEmpty?"Not Available":args.identity, style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Security Contract: ", style: TextStyle(color: Colors.black,)),
+                    Text(args.security_contract.isEmpty?"Not Available":args.security_contract, style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text("Validator Website: ", style: TextStyle( fontSize: 17, color: Colors.black)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = args.website;
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
+                    Text(args.website.isEmpty?"Not Available":args.website, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

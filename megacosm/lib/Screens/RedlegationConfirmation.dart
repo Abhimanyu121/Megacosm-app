@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/RedelegationTxModel.dart';
 import 'package:megacosm/Models/RedelegatorConfirmation.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
@@ -18,11 +19,14 @@ class RedelegationConfirmation extends StatefulWidget{
 class RedelegationConfirmationState extends State<RedelegationConfirmation>{
   bool placingOrder = true;
   RedelegationConfirmationModel args;
-
+  var denom = "";
   @override
   void initState() {
-    Future.delayed(Duration.zero,() {
+    Future.delayed(Duration.zero,() async {
       args = ModalRoute.of(context).settings.arguments;
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var nw = await database.networkDao.findActiveNetwork();
+      denom = (nw[0].denom).substring(1).toUpperCase();
       setState(() {
         placingOrder = false;
       });
@@ -122,7 +126,7 @@ class RedelegationConfirmationState extends State<RedelegationConfirmation>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Total Stake:", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.totalAmount), style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.totalAmount)+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -133,7 +137,7 @@ class RedelegationConfirmationState extends State<RedelegationConfirmation>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Stake to Redelegate: ", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.newAmount), style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.newAmount)+ " $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

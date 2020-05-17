@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/SendTokenModel.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
@@ -18,11 +19,14 @@ class SendTokenTxState extends State<SendTokenTx>{
   bool loading = true;
   SendTokenModel args;
   String bal = "0";
-
+  String denom ="";
   @override
   void initState() {
-    Future.delayed(Duration.zero,() {
+    Future.delayed(Duration.zero,() async {
       args = ModalRoute.of(context).settings.arguments;
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var nw = await database.networkDao.findActiveNetwork();
+      denom = (nw[0].denom).substring(1).toUpperCase();
       setState(() {
         loading =false;
       });
@@ -93,7 +97,7 @@ class SendTokenTxState extends State<SendTokenTx>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Amount: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.amount, style: TextStyle(color: Colors.grey,))
+                    Text(args.amount+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

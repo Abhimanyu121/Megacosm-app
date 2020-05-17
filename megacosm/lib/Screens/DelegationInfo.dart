@@ -32,6 +32,7 @@ class DelegationInfoState extends State<DelegationInfo>{
   String bal = "0";
   String stake = "0";
   var denom = "";
+  var str="";
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -66,6 +67,8 @@ class DelegationInfoState extends State<DelegationInfo>{
   void initState() {
     Future.delayed(Duration.zero,() {
       args = ModalRoute.of(context).settings.arguments;
+      var intCom = double.parse(args.commission);
+      str = intCom.toStringAsFixed(5);
       _getAddress();
       setState(() {
         placingOrder= false;
@@ -144,7 +147,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Commission: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.commission, style: TextStyle(color: Colors.grey,))
+                    Text(str, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -193,7 +196,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                         arguments: ToWithdrawConfirmation(
                             name: args.name,
                             address: args.address,
-                            commission: args.commission,
+                            commission: str,
                             amount: bal
                         ),
                       );
@@ -224,7 +227,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                         arguments: ToWithdrawConfirmation(
                             name: args.name,
                             address: args.address,
-                            commission: args.commission,
+                            commission: str,
                             amount: stake
                         ),
                       );

@@ -329,8 +329,8 @@ final cryptor = new PlatformStringCryptor();
           },
           "initial_deposit": [
             {
-              "amount": _stake.toString(),
-              "denom": nw[0].denom
+              "amount": _stake.toString().trim(),
+              "denom": nw[0].denom.trim()
             }
           ],
           "proposer": wallet.bech32Address

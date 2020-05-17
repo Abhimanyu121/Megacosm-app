@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/WithdrawSuccessModel.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
@@ -18,8 +19,12 @@ class WithdrawSuccessState extends State<WithdrawSuccess>{
   bool placingOrder = true;
   bool addr = false;
   WithdrawSuccessModel args;
+  var denom ="";
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    denom = (nw[0].denom).substring(1).toUpperCase();
     setState(() {
       delegatorAddress = prefs.getString("address");
       addr =true;
@@ -127,7 +132,7 @@ class WithdrawSuccessState extends State<WithdrawSuccess>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Amount", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.amount), style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.amount)+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

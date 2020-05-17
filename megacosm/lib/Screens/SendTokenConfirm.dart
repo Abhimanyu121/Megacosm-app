@@ -107,7 +107,7 @@ class SendTokenConfirmsState extends State<SendTokenConfirm> {
                   children: <Widget>[
                     Text("Your Balance",
                         style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.balance), style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.balance)+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -119,7 +119,7 @@ class SendTokenConfirmsState extends State<SendTokenConfirm> {
                   children: <Widget>[
                     Text(
                         "Amount to Transfer: ", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(args.amount), style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(args.amount)+ " $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),

@@ -9,9 +9,15 @@ class ValidatorCard extends StatelessWidget{
   final String name;
   final String commission;
   final String address;
-  ValidatorCard({this.commission, this.address, this.name});
+  final String identity;
+  final String website;
+  final String security_contract;
+  final String details;
+  ValidatorCard({this.commission, this.address, this.name,this.website,this.identity, this.details, this.security_contract});
   @override
   Widget build(BuildContext context) {
+    var intCom = double.parse(commission);
+    var str = intCom.toStringAsFixed(5);
     return Center(
       child: FlatButton(
         onPressed: (){
@@ -21,7 +27,11 @@ class ValidatorCard extends StatelessWidget{
             arguments: HomeToNewStake(
               name: name,
               address: address,
-              commission: commission
+              commission: str,
+              identity: identity,
+              website: website,
+              security_contract: security_contract,
+              details: details
             ),
           );
         },
@@ -36,8 +46,8 @@ class ValidatorCard extends StatelessWidget{
                   child: ListTile(
                     leading: _circle(name.substring(0,1), context) ,
                     title: Text(name),
-                    subtitle: Text("Commission : $commission"),
-                    isThreeLine: true,
+                    subtitle: Text("Commission : $str"),
+                    isThreeLine: false,
                   ),
 
                 ),

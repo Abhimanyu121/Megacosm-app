@@ -32,7 +32,11 @@ class NewProposalState extends State<NewProposal>{
     BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
     setState(() {
       fetching = false;
-      balance = BalOperations.toBNT(balanceWrapper.result[0].amount);
+      try{balance = BalOperations.toBNT(balanceWrapper.result[0].amount);}
+      catch(e){
+        balance ="0.0";
+      }
+
     });
   }
   @override
@@ -90,7 +94,7 @@ class NewProposalState extends State<NewProposal>{
                   controller: _amount,
                   keyboardType: TextInputType.number,
                   autovalidate: true,
-                  validator: (val) => (val!=""?double.parse(val)<=double.parse(balance):true)
+                  validator: (val) => (val!=""?(double.parse(val)<=double.parse(balance)&&double.parse(val)!=0):true)
                       ? null
                       : 'Invalid amount',
                   decoration: InputDecoration(
@@ -109,7 +113,7 @@ class NewProposalState extends State<NewProposal>{
                   ),
                   onPressed: (){
                     FocusScope.of(context).requestFocus(FocusNode());
-                    if((double.parse(_amount.text)>double.parse(balance)||balance=="")&& _title.text.isNotEmpty&& _description.text.isNotEmpty){
+                    if((double.parse(_amount.text)>double.parse(balance)||balance==""||balance =="0.0")&& _title.text.isNotEmpty&& _description.text.isNotEmpty){
                       Toast.show("Invalid Input", context,);
                       return;
                     }

@@ -18,6 +18,7 @@ import 'package:megacosm/Utils/HexColor.dart';
 import 'package:megacosm/Utils/TransactionsWrapper.dart';
 import 'package:megacosm/Widgets/CurvePainter.dart';
 import 'package:megacosm/Widgets/ValidatorCardStats.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import '../Constants.dart';
@@ -149,7 +150,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16,5,5,4),
@@ -199,7 +200,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                           width: MediaQuery.of(context).size.width*0.8,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text(address, overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                            child: Expanded(child: Text(address, textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white))),
                           ),
                         ),
                         Padding(
@@ -235,39 +236,58 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                                     child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children:<Widget>[Text("SHOW",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
-                                          Text("MNEMONIC",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
+                                          Text("QR",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
                                         ] ),
                                   ),
-                                  onPressed: ()async {
-                                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                                    final cryptor = new PlatformStringCryptor();
-                                    String enc= prefs.getString("mnemonic");
-                                    var seed = "";
-                                    var salt = prefs.getString("salt");
-                                    bool status =true;
-                                    do{
-                                      String password = await Transactions.asyncInputDialog(context, status);
-                                      if(password =="cancel"){
-                                        //return "cancel";
-                                      }else {
-                                        final String key = await cryptor.generateKeyFromPassword(password, salt);
-                                        try {
-                                          final String decrypted = await cryptor.decrypt(enc, key);
-                                          seed = decrypted;
-                                          status = true;// - A string to encrypt.
-                                          Navigator.pushNamed(context, RecoveryPhrase.routeName, arguments: seed);
-                                        } on MacMismatchException {
-                                          status =false;
-                                        }
-                                      }
-                                    }while(!status);
-
+                                  onPressed: (){
+                                    asyncInputDialog(context);
                                   },
 
                                   borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
                                 ),
                               ),
+
                             ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 6),
+                          child: OutlineButton(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width*0.81,
+                                  height: MediaQuery.of(context).size.width*0.1,
+                                  child: Center(child: Text("SHOW MNEMONIC",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),))),
+                            ),
+                            onPressed: ()async {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              final cryptor = new PlatformStringCryptor();
+                              String enc= prefs.getString("mnemonic");
+                              var seed = "";
+                              var salt = prefs.getString("salt");
+                              bool status =true;
+                              do{
+                                String password = await Transactions.asyncInputDialog(context, status);
+                                if(password =="cancel"){
+                                  //return "cancel";
+                                }else {
+                                  final String key = await cryptor.generateKeyFromPassword(password, salt);
+                                  try {
+                                    final String decrypted = await cryptor.decrypt(enc, key);
+                                    seed = decrypted;
+                                    status = true;// - A string to encrypt.
+                                    Navigator.pushNamed(context, RecoveryPhrase.routeName, arguments: seed);
+                                  } on MacMismatchException {
+                                    status =false;
+                                  }
+                                }
+                              }while(!status);
+
+                            },
+
+                            borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
                           ),
                         ),
                       ],
@@ -401,5 +421,40 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
 
   @override
   bool get wantKeepAlive => true;
+  Future<String> asyncInputDialog(BuildContext context) async {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        TextEditingController _password = TextEditingController();
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+          elevation: 1,
+          backgroundColor: nearlyWhite,
+          title: Text('Scan to recieve $denom'),
+          content:  Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height:MediaQuery.of(context).size.height*0.3,width: MediaQuery.of(context).size.width*0.5,child:QrImage(
+                data: address,
+                version: QrVersions.auto,
+                size: 200.0,
+              ),),
+            ],
+          ) ,
+          actions: <Widget>[
+            FlatButton(
+                child: Text("Cancel"),
+                onPressed: () async {
+                  Navigator.of(context).pop("Close");
+                }
+            ),
+
+
+          ],
+        );
+      },
+    );
+  }
 
 }
