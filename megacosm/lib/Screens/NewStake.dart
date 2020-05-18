@@ -31,10 +31,12 @@ class NewStakeState extends State<NewStake>{
   String url="";
   String denom="";
   bool image= false;
+  double gas =0.0;
   HomeToNewStake args;
       TextEditingController _amount= new TextEditingController();
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    gas = double.parse(prefs.getString("gas"));
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
@@ -235,7 +237,7 @@ class NewStakeState extends State<NewStake>{
               padding: const EdgeInsets.fromLTRB(8,8,8,8),
               child: TextFormField(
                 controller: _amount,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 autovalidate: true,
                 validator: (val) => (val!=""?double.parse(val)<double.parse(bal):true)
                     ? null
@@ -258,7 +260,11 @@ class NewStakeState extends State<NewStake>{
                   borderRadius: BorderRadius.circular(24),
                 ),
                 onPressed: (){
-                  if(_amount.text==0.toString()){
+                  if(_amount.text.isEmpty){
+                    Toast.show("Invalid amount",context, duration: Toast.LENGTH_LONG);
+                    return;
+                  }
+                  if(_amount.text==0.toString()||double.parse(_amount.text)>double.parse(bal)-gas){
                     Toast.show("Invalid amount",context, duration: Toast.LENGTH_LONG);
                     return;
                   }

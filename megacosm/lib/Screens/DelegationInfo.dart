@@ -11,6 +11,7 @@ import 'package:megacosm/Models/RelegationSelection.dart';
 import 'package:megacosm/Models/ToWithdrawConfirmation.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
+import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -19,6 +20,7 @@ import '../Constants.dart';
 import 'RedelegationSelection.dart';
 import 'SetUndelegationAmount.dart';
 import 'WithdrawConfirmation.dart';
+import 'package:http/http.dart' as http;
 class DelegationInfo extends StatefulWidget{
   static const routeName = '/delegationInfo';
   @override
@@ -33,8 +35,14 @@ class DelegationInfoState extends State<DelegationInfo>{
   String stake = "0";
   var denom = "";
   var str="";
+  var url ="";
+  var image= false;
+  var identity ="";
+  var gas =0.0;
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    gas = double.parse(prefs.getString("gas"));
+
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
@@ -107,6 +115,12 @@ class DelegationInfoState extends State<DelegationInfo>{
                 ],
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                image?_circleImg(url, context):_circle(args.name.substring(0,1).toUpperCase(), context)
+              ],
+            ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
@@ -175,8 +189,9 @@ class DelegationInfoState extends State<DelegationInfo>{
             ),
 
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Wrap(
+              direction: Axis.horizontal,
+              alignment: WrapAlignment.spaceEvenly,
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
@@ -189,7 +204,9 @@ class DelegationInfoState extends State<DelegationInfo>{
                         Toast.show("Please wait",context, duration: Toast.LENGTH_LONG);
                         return;
                       }
-
+                      if(double.parse(bal)<gas){
+                        Toast.show("Insufficent Balance",context);
+                      }
                       await Navigator.pushNamed(
                         context,
                         WithdrawConfirmation.routeName,
@@ -219,6 +236,9 @@ class DelegationInfoState extends State<DelegationInfo>{
                       if(!balance){
                         Toast.show("Please wait",context, duration: Toast.LENGTH_LONG);
                         return;
+                      }
+                      if(double.parse(bal)<gas){
+                        Toast.show("Insufficent Balance",context);
                       }
 
                       await Navigator.pushNamed(
@@ -251,7 +271,9 @@ class DelegationInfoState extends State<DelegationInfo>{
                         Toast.show("Please wait",context, duration: Toast.LENGTH_LONG);
                         return;
                       }
-
+                      if(double.parse(bal)<gas){
+                        Toast.show("Insufficent Balance",context);
+                      }
                       await Navigator.pushNamed(
                         context,
                         RedelegationSelection.routeName,
@@ -277,7 +299,47 @@ class DelegationInfoState extends State<DelegationInfo>{
         )
     );
   }
-
+  _circle(String str, BuildContext ctx){
+    return Container(
+      width: MediaQuery.of(ctx).size.width *0.32,
+      height: 150,
+      child: Center(
+        child: Text(str,style: TextStyle(fontSize: 30),),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
+  _circleImg(String url, BuildContext ctx){
+    return Container(
+      // width: MediaQuery.of(ctx).size.width *0.12,
+      height: 150,
+      child: Center(
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.network(url)),
+      ),
+      decoration: BoxDecoration(
+          color: ColorRandominator.getColor() ,
+          shape: BoxShape.circle
+      ),
+    );
+  }
+  _getPicture()async {
+    var id = args.identity;
+    var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
+    var js = jsonDecode(resp.body);
+    if(js["them"]==null){
+      return;
+    }
+    var url = js["them"][0]["pictures"]["primary"]["url"];
+    setState(() {
+      this.url= url;
+      image = true;
+    });
+  }
   _loader(){
     return Center(
       child: SpinKitCubeGrid(

@@ -55,7 +55,8 @@ class _ValidatorCardStatsState extends State<ValidatorCardStats> {
               arguments: DelegationInfoModel(
                   name: widget.name,
                   address: widget.address,
-                  commission: str
+                  commission: str,
+                  identity: widget.identity
               ),
             );
           },

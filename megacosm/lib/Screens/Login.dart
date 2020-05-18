@@ -115,6 +115,7 @@ class _LoginState extends State<Login> {
                   await prefs.setString(known, encrypted2);
                   await prefs.setString("salt",salt);
                   await prefs.setString(prefAddress,wallet.bech32Address);
+                  await prefs.setString("gas","2");
                   Navigator.pushNamedAndRemoveUntil(context, Home.routeName, (r) => false);
                 },
                 color: Colors.red,

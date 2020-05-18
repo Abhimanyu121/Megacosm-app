@@ -11,6 +11,9 @@ class Transactions {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String enc= prefs.getString("mnemonic");
     var salt = prefs.getString("salt");
+    var gas = prefs.getString("gas");
+    var price = double.parse(gas);
+    var fee = (price*100000).toInt();
     final cryptor = new PlatformStringCryptor();
     bool status =true;
     var seed = "";
@@ -50,7 +53,7 @@ class Transactions {
       },
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-    fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
+    fee: StdFee(gas: fee.toString(), amount: [StdCoin(denom: nw[0].denom,amount: (fee*10).toString())])
     );
     print(stdTx);
 
@@ -76,7 +79,9 @@ class Transactions {
     final cryptor = new PlatformStringCryptor();
     bool status =true;
     var seed = "";
-
+    var gas = prefs.getString("gas");
+    var price = double.parse(gas);
+    var fee = (price*100000).toInt();
     do{
       String password = await asyncInputDialog(context, status);
       if(password =="cancel"){
@@ -113,7 +118,7 @@ class Transactions {
       },
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
+        fee: StdFee(gas: fee.toString(), amount: [StdCoin(denom: nw[0].denom,amount: (fee*10).toString())])
     );
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
     final result = await TxSender.broadcastStdTx(
@@ -135,6 +140,9 @@ class Transactions {
     final cryptor = new PlatformStringCryptor();
     bool status =true;
     var seed = "";
+    var gas = prefs.getString("gas");
+    var price = double.parse(gas);
+    var fee = (price*100000).toInt();
 
     do{
       String password = await asyncInputDialog(context, status);
@@ -167,7 +175,7 @@ class Transactions {
       }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
+        fee: StdFee(gas: fee.toString(), amount: [StdCoin(denom: nw[0].denom,amount: (fee*10).toString())])
     );
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
     final result = await TxSender.broadcastStdTx(
@@ -189,6 +197,9 @@ class Transactions {
     final cryptor = new PlatformStringCryptor();
     bool status =true;
     var seed = "";
+    var gas = prefs.getString("gas");
+    var price = double.parse(gas);
+    var fee = (price*100000).toInt();
 
     do{
       String password = await asyncInputDialog(context, status);
@@ -226,7 +237,7 @@ class Transactions {
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
+        fee: StdFee(gas: fee.toString(), amount: [StdCoin(denom: nw[0].denom,amount: (fee*10).toString())])
     );
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
     final result = await TxSender.broadcastStdTx(
@@ -248,6 +259,9 @@ class Transactions {
     final cryptor = new PlatformStringCryptor();
     bool status =true;
     var seed = "";
+    var gas = prefs.getString("gas");
+    var price = double.parse(gas);
+    var fee = (price*100000).toInt();
 
     do{
       String password = await asyncInputDialog(context, status);
@@ -286,7 +300,7 @@ class Transactions {
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")])
+        fee: StdFee(gas: fee.toString(), amount: [StdCoin(denom: nw[0].denom,amount: (fee*10).toString())])
     );
     final signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
     final result = await TxSender.broadcastStdTx(
@@ -308,6 +322,9 @@ class Transactions {
     final cryptor = new PlatformStringCryptor();
     bool status =true;
     var seed = "";
+    var gas = prefs.getString("gas");
+    var price = double.parse(gas);
+    var fee = (price*100000).toInt();
 
     do{
       String password = await asyncInputDialog(context, status);
@@ -353,7 +370,7 @@ class Transactions {
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-        fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")]),
+        fee: StdFee(gas: fee.toString(), amount: [StdCoin(denom: nw[0].denom,amount: (fee*10).toString())]),
 
     );
 
@@ -378,6 +395,9 @@ class Transactions {
     final cryptor = new PlatformStringCryptor();
     bool status =true;
     var seed = "";
+    var gas = prefs.getString("gas");
+    var price = double.parse(gas);
+    var fee = (price*100000).toInt();
 
     do{
       String password = await asyncInputDialog(context, status);
@@ -417,7 +437,7 @@ class Transactions {
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-      fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")]),
+      fee: StdFee(gas: fee.toString(), amount: [StdCoin(denom: nw[0].denom,amount: (fee*10).toString())]),
 
     );
 
@@ -442,6 +462,9 @@ class Transactions {
     final cryptor = new PlatformStringCryptor();
     bool status =true;
     var seed = "";
+    var gas = prefs.getString("gas");
+    var price = double.parse(gas);
+    var fee = (price*100000).toInt();
 
     do{
       String password = await asyncInputDialog(context, status);
@@ -476,7 +499,7 @@ class Transactions {
         }
     );
     final stdTx = TxBuilder.buildStdTx(stdMsgs: [message],
-      fee: StdFee(gas: "2000000", amount: [StdCoin(denom: nw[0].denom,amount: "20000000")]),
+      fee: StdFee(gas: fee.toString(), amount: [StdCoin(denom: nw[0].denom,amount: (fee*10).toString())]),
 
     );
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:megacosm/Models/RelegationSelection.dart';
+import 'package:megacosm/Models/Validator.dart';
 import 'package:megacosm/Models/ValidatorList.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
@@ -92,26 +93,28 @@ class RedelegationSelectionState extends State<RedelegationSelection>{
                   String body = utf8.decode(snapshot.data.bodyBytes);
                   final json = jsonDecode(body);
                   ValidatorList model = new ValidatorList.fromJson(json);
+                  var ls = model.result;
+                  ls.sort(mySortComparison);
                   return Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
                       cacheExtent: 1000,
-                      itemCount: model.result.length,
+                      itemCount: ls.length,
                       itemBuilder: (BuildContext ctx, int index ){
-                        if(model.result[index].operator_address==args.srcAddress){
+                        if(ls[index].operator_address==args.srcAddress){
                           return SizedBox(
                             height: 0,
                           );
                         }
                         return RedelegationCard(
-                          commission: model.result[index].commission.commission_rates.rate,
-                          name: model.result[index].description.moniker,
-                          address: model.result[index].operator_address,
+                          commission: ls[index].commission.commission_rates.rate,
+                          name: ls[index].description.moniker,
+                          address: ls[index].operator_address,
                           srcInfo: args,
-                          details: model.result[index].description.details,
-                          website: model.result[index].description.website,
-                          security_contract: model.result[index].description.security_contact,
-                          identity: model.result[index].description.identity,
+                          details: ls[index].description.details,
+                          website: ls[index].description.website,
+                          security_contract: ls[index].description.security_contact,
+                          identity: ls[index].description.identity,
                         );
                       },
                     ),
@@ -123,4 +126,16 @@ class RedelegationSelectionState extends State<RedelegationSelection>{
         )
     );
   }
+  int mySortComparison(Validator a, Validator b) {
+    final propertyA = double.parse(a.delegator_shares);
+    final propertyB = double.parse(b.delegator_shares);
+    if (propertyA < propertyB) {
+      return -1;
+    } else if (propertyA > propertyB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
 }

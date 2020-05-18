@@ -132,7 +132,7 @@ class SetUndelegationAmountState extends State<SetUndelegationAmount>{
               padding: const EdgeInsets.fromLTRB(8,8,8,8),
               child: TextFormField(
                 controller: _amount,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 autovalidate: true,
                 validator: (val) => (val!=""?double.parse(val)<double.parse(args.amount):true)
                     ? null

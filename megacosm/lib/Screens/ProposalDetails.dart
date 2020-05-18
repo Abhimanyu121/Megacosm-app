@@ -13,6 +13,7 @@ import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
 import '../Constants.dart';
 import 'ConfirmVote.dart';
@@ -29,9 +30,10 @@ class ProposalInfoState extends State<ProposalInfo>{
   bool loading = true;
   Proposal args;
   String bal = "0";
+  var gas = 0.0;
   _getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
+    gas = double.parse(prefs.getString("gas"));    setState(() {
       delegatorAddress = prefs.getString("address");
     });
     Response resp = await ApiWrapper.getBalance(delegatorAddress);
@@ -192,7 +194,7 @@ class ProposalInfoState extends State<ProposalInfo>{
                       padding: const EdgeInsets.fromLTRB(8,8,8,8),
                       child: TextFormField(
                         controller: _amount,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                         autovalidate: true,
                         validator: (val) => (val!=""?double.parse(val)<double.parse(bal):true)
                             ? null
@@ -213,6 +215,9 @@ class ProposalInfoState extends State<ProposalInfo>{
                               borderRadius: BorderRadius.circular(24),
                             ),
                             onPressed: (){
+                              if(double.parse(bal)<gas){
+                                Toast.show("Insufficent Balance",context);
+                              }
                               Navigator.of(context).popAndPushNamed(
                                 ProposalDepositConfirm.routeName,
                                 arguments: ProposalDepositModel(
@@ -254,6 +259,9 @@ class ProposalInfoState extends State<ProposalInfo>{
                         borderRadius: BorderRadius.circular(24),
                       ),
                       onPressed: (){
+                        if(double.parse(bal)<gas){
+                          Toast.show("Insufficent Balance",context);
+                        }
                         Navigator.of(context).popAndPushNamed(
                             ConfirmVote.routeName,
                             arguments: VoteModel(
@@ -274,6 +282,9 @@ class ProposalInfoState extends State<ProposalInfo>{
                         borderRadius: BorderRadius.circular(24),
                       ),
                       onPressed: (){
+                        if(double.parse(bal)<gas){
+                          Toast.show("Insufficent Balance",context);
+                        }
                         Navigator.of(context).popAndPushNamed(
                             ConfirmVote.routeName,
                             arguments: VoteModel(
@@ -303,6 +314,9 @@ class ProposalInfoState extends State<ProposalInfo>{
                          borderRadius: BorderRadius.circular(24),
                        ),
                        onPressed: (){
+                         if(double.parse(bal)<gas){
+                           Toast.show("Insufficent Balance",context);
+                         }
                          Navigator.of(context).popAndPushNamed(
                              ConfirmVote.routeName,
                              arguments: VoteModel(
@@ -323,6 +337,9 @@ class ProposalInfoState extends State<ProposalInfo>{
                          borderRadius: BorderRadius.circular(24),
                        ),
                        onPressed: (){
+                         if(double.parse(bal)<gas){
+                           Toast.show("Insufficent Balance",context);
+                         }
                          Navigator.of(context).popAndPushNamed(
                              ConfirmVote.routeName,
                              arguments: VoteModel(

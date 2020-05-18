@@ -236,7 +236,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
               padding: const EdgeInsets.fromLTRB(8,8,8,8),
               child: TextFormField(
                 controller: _amount,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 autovalidate: true,
                 validator: (val) => (val!=""?double.parse(val)<=double.parse(args.totalAmount):true)
                     ? null

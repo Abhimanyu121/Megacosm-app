@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:megacosm/Models/Validator.dart';
 import 'package:megacosm/Models/ValidatorList.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Widgets/ValidatorCard.dart';
@@ -68,6 +69,8 @@ class ValidatorListState extends State<ValidatorListTab> with
               String body = utf8.decode(snapshot.data.bodyBytes);
               final json = jsonDecode(body);
               ValidatorList model = new ValidatorList.fromJson(json);
+              var ls = model.result;
+              ls.sort(mySortComparison);
               return Expanded(
                 child: ListView.builder(
                   cacheExtent: 1000,
@@ -75,13 +78,13 @@ class ValidatorListState extends State<ValidatorListTab> with
                   itemBuilder: (BuildContext ctx, int index ){
 
                     return ValidatorCard(
-                      commission: model.result[index].commission.commission_rates.rate,
-                      name: model.result[index].description.moniker,
-                      address: model.result[index].operator_address,
-                      details: model.result[index].description.details,
-                      website: model.result[index].description.website,
-                      security_contract: model.result[index].description.security_contact,
-                      identity: model.result[index].description.identity,
+                      commission: ls[index].commission.commission_rates.rate,
+                      name: ls[index].description.moniker,
+                      address: ls[index].operator_address,
+                      details: ls[index].description.details,
+                      website: ls[index].description.website,
+                      security_contract: ls[index].description.security_contact,
+                      identity: ls[index].description.identity,
                     );
                   },
                 ),
@@ -91,6 +94,17 @@ class ValidatorListState extends State<ValidatorListTab> with
         )
       ],
     );
+  }
+  int mySortComparison(Validator a, Validator b) {
+    final propertyA = double.parse(a.delegator_shares);
+    final propertyB = double.parse(b.delegator_shares);
+    if (propertyA < propertyB) {
+      return -1;
+    } else if (propertyA > propertyB) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   @override

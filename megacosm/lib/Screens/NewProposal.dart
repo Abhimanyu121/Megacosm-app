@@ -22,10 +22,11 @@ class NewProposalState extends State<NewProposal>{
   TextEditingController _title = TextEditingController();
   TextEditingController _description = TextEditingController();
   bool fetching  = true;
+  var gas = 0.0;
   String balance = "";
   _getBalance()async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String address = prefs.getString("address");
+    gas = double.parse(prefs.getString("gas"));    String address = prefs.getString("address");
     Response balModel = await ApiWrapper.getBalance(address);
     String body1 = utf8.decode(balModel.bodyBytes);
     final json1 = jsonDecode(body1);
@@ -117,7 +118,9 @@ class NewProposalState extends State<NewProposal>{
                       Toast.show("Invalid Input", context,);
                       return;
                     }
-
+                    if(double.parse(balance)<gas){
+                      Toast.show("Insufficent Balance",context);
+                    }
                     Navigator.pushNamed(
                       context,
                       NewProposalConfirmation.routeName,

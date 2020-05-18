@@ -103,7 +103,7 @@ class SendTokensState extends State<SendTokens>{
                 controller: _address,
                 keyboardType: TextInputType.text,
                 autovalidate: true,
-
+                maxLines: null,
                 validator: (val) => (val!=""?val.length ==47:true)
                     ? null
                     : 'Please enter a valid Address',
@@ -140,7 +140,7 @@ class SendTokensState extends State<SendTokens>{
               padding: const EdgeInsets.fromLTRB(20,10,20,10),
               child: TextFormField(
                 controller: _amount,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 autovalidate: true,
                 validator: (val) => (val!=""?double.parse(val)<double.parse(bal):true)
                     ? null

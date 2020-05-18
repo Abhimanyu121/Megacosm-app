@@ -10,6 +10,7 @@ import 'package:http/http.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/BalanceWrapper.dart';
 import 'package:megacosm/Models/BondedNotBondedWrapper.dart';
+import 'package:megacosm/Models/Validator.dart';
 import 'package:megacosm/Models/ValidatorList.dart';
 import 'package:megacosm/Screens/RecoveryPhrase.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
@@ -73,6 +74,8 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     final delJson = jsonDecode(delBody);
     BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
     valList = ValidatorList.fromJson(delJson);
+    var ls = valList.result;
+    ls.sort(mySortComparison);
     bondedStake = BalOperations.toBNT(model.result.bonded_tokens);
     unbondedStake = BalOperations.toBNT(model.result.not_bonded_tokens);
     if(balanceWrapper.result.isEmpty){
@@ -462,6 +465,18 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       },
     );
   }
+  int mySortComparison(Validator a, Validator b) {
+    final propertyA = double.parse(a.delegator_shares);
+    final propertyB = double.parse(b.delegator_shares);
+    if (propertyA < propertyB) {
+      return -1;
+    } else if (propertyA > propertyB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
   scrollToTop(){
     controller.animateTo(0.0,
       curve: Curves.easeOut,

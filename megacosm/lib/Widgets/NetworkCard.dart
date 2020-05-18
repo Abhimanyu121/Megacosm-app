@@ -103,6 +103,31 @@ class NetworkCard extends StatelessWidget{
                           },
                           borderSide: BorderSide(color: Colors.red,style: BorderStyle.solid),
                         ),
+                        nwrk.active?OutlineButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                          child: Center(child: Text("GAS FEE")),
+                          onPressed: ()async {
+                            var denom ="";
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            var currentFee = prefs.getString("gas");
+                            final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+                            var nw = await database.networkDao.findActiveNetwork();
+                            denom = (nw[0].denom).substring(1).toUpperCase();
+                            var newFee=await _feeDialog(context, currentFee, denom);
+                            if(newFee == "cancel"){
+                              return;
+                            }
+                            else{
+                              prefs.setString("gas",newFee);
+                            }
+
+                          },
+
+                          borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                        ):SizedBox(
+                          height: 0,
+                          width: 0,
+                        )
                       ],
                     ),
                   ),
@@ -134,7 +159,7 @@ class NetworkCard extends StatelessWidget{
       ),
     );
   }
-   Future<String> _asyncInputDialog(BuildContext context, bool status) async {
+  static Future<String> _asyncInputDialog(BuildContext context, bool status) async {
     return showDialog<String>(
       context: context,
       barrierDismissible: false, // dialog is dismissible with a tap on the barrier
@@ -175,6 +200,75 @@ class NetworkCard extends StatelessWidget{
                   }
                   else{
                     Toast.show("Invalid Password", context, duration: Toast.LENGTH_LONG);
+                  }
+                }),
+
+          ],
+        );
+      },
+    );
+  }
+  static Future<String> _feeDialog(BuildContext context, String fee, String denom) async {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        TextEditingController _fee = TextEditingController();
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+          elevation: 1,
+          backgroundColor: nearlyWhite,
+          title: Text('Change Transaction Fee'),
+          content:  SizedBox(
+            width: MediaQuery.of(context).size.width*0.6,
+            height: 130,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*0.5,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical:10.0),
+                    child: Text("Current Fee: $fee $denom"),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*0.5,
+                  child: TextFormField(
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    autovalidate: true,
+                    obscureText: false,
+                    validator: (val) => (val.isEmpty||double.parse(val)>=2.0)
+                        ? null
+                        : 'Fee should be greater than 2.0 $denom.',
+                    decoration: InputDecoration(
+                      hintText: 'New Fee',
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
+                    ),
+                    controller: _fee,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: Text("Cancel"),
+                onPressed: () async {
+                  Navigator.of(context).pop("cancel");
+                }
+            ),
+            FlatButton(
+                child: Text("Confirm"),
+                onPressed: () async {
+                  if(_fee.text.isNotEmpty&&double.parse(_fee.text)>=2.0)
+                  {
+                    Navigator.of(context).pop(_fee.text);
+                  }
+                  else{
+                    Toast.show("Invalid Fee", context, duration: Toast.LENGTH_LONG);
                   }
                 }),
 
