@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:megacosm/Models/RedelegationAmountModel.dart';
 import 'package:megacosm/Models/RelegationSelection.dart';
 import 'package:megacosm/Screens/RedelegationAmount.dart';
+import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:http/http.dart'as http;
 class RedelegationCard extends StatefulWidget{
@@ -16,8 +17,9 @@ class RedelegationCard extends StatefulWidget{
   final String website;
   final String security_contract;
   final String details;
+  final String shares;
   final RedelegationSelectionModel srcInfo;
-  RedelegationCard({this.commission, this.address, this.name, this.srcInfo, this.identity, this.website, this.security_contract, this.details});
+  RedelegationCard({this.commission, this.address, this.name, this.srcInfo, this.identity, this.website, this.security_contract, this.details, this.shares});
 
   @override
   _RedelegationCardState createState() => _RedelegationCardState();
@@ -47,6 +49,7 @@ class _RedelegationCardState extends State<RedelegationCard> {
   }
   @override
   Widget build(BuildContext context) {
+    var stake = BalOperations.toBNT( widget.shares);
     var intCom = double.parse(widget.commission);
     var str = intCom.toStringAsFixed(5);
     print("widget:"+widget.srcInfo.delegatorAddress);
@@ -82,8 +85,8 @@ class _RedelegationCardState extends State<RedelegationCard> {
                 child: ListTile(
                   leading: loading?_circle(widget.name.substring(0,1), context):_circleImg(url, context) ,
                   title: Text(widget.name),
-                  subtitle: Text("Commission : $str"),
-                  isThreeLine: false,
+                  subtitle: Text("Commission : $str\nStakes: $stake"),
+                  isThreeLine: true,
                 ),
               ),
             ),

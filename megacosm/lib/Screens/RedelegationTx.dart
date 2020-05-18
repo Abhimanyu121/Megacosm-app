@@ -56,11 +56,11 @@ class RedelegationTxState extends State<RedelegationTx>{
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Transaction ", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),),
+                    child: Text("Transaction ", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0,8,8,8,),
-                    child: Text("Details", style: TextStyle(color: appTheme, fontWeight: FontWeight.bold, fontSize: 20),),
+                    child: Text("Details", style: TextStyle(color: appTheme, fontWeight: FontWeight.bold, fontSize: 18),),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 8, 8, 8,),

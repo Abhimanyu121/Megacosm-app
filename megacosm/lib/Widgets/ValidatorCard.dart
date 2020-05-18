@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:megacosm/Models/HomeToNewStake.dart';
 import 'package:megacosm/Screens/NewStake.dart';
+import 'package:megacosm/Utils/AmountOps.dart';
 import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:http/http.dart'as http;
 class ValidatorCard extends StatefulWidget{
@@ -16,7 +17,8 @@ class ValidatorCard extends StatefulWidget{
   final String website;
   final String security_contract;
   final String details;
-  ValidatorCard({this.commission, this.address, this.name,this.website,this.identity, this.details, this.security_contract});
+  final String stake;
+  ValidatorCard({this.commission, this.address, this.name,this.website,this.identity, this.details, this.security_contract, this.stake});
 
   @override
   _ValidatorCardState createState() => _ValidatorCardState();
@@ -38,6 +40,7 @@ class _ValidatorCardState extends State<ValidatorCard> {
       loading = false;
     });
   }
+
   @override
   void initState() {
     _getPicture();
@@ -45,6 +48,7 @@ class _ValidatorCardState extends State<ValidatorCard> {
   }
   @override
   Widget build(BuildContext context) {
+    var stake = BalOperations.toBNT( widget.stake);
     var intCom = double.parse(widget.commission);
     var str = intCom.toStringAsFixed(5);
     return Center(
@@ -75,8 +79,8 @@ class _ValidatorCardState extends State<ValidatorCard> {
                   child: ListTile(
                     leading: loading?_circle(widget.name.substring(0,1), context):_circleImg(url, context) ,
                     title: Text(widget.name),
-                    subtitle: Text("Commission : $str"),
-                    isThreeLine: false,
+                    subtitle: Text("Commission : $str\nStakes: $stake BNT"),
+                    isThreeLine: true,
                   ),
 
                 ),

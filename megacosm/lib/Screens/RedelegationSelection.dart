@@ -115,6 +115,7 @@ class RedelegationSelectionState extends State<RedelegationSelection>{
                           website: ls[index].description.website,
                           security_contract: ls[index].description.security_contact,
                           identity: ls[index].description.identity,
+                          shares: ls[index].delegator_shares
                         );
                       },
                     ),
@@ -130,9 +131,9 @@ class RedelegationSelectionState extends State<RedelegationSelection>{
     final propertyA = double.parse(a.delegator_shares);
     final propertyB = double.parse(b.delegator_shares);
     if (propertyA < propertyB) {
-      return -1;
-    } else if (propertyA > propertyB) {
       return 1;
+    } else if (propertyA > propertyB) {
+      return -1;
     } else {
       return 0;
     }

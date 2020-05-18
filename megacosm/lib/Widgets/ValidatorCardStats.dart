@@ -3,10 +3,15 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:megacosm/Models/CurrentDelegationWrapper.dart';
 import 'package:megacosm/Models/DelegationInfo.dart';
 import 'package:megacosm/Screens/DelegationInfo.dart';
+import 'package:megacosm/Utils/AmountOps.dart';
+import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:http/http.dart'as http;
+import 'package:shared_preferences/shared_preferences.dart';
 class ValidatorCardStats extends StatefulWidget{
   final String name;
   final String commission;
@@ -21,7 +26,7 @@ class ValidatorCardStats extends StatefulWidget{
 class _ValidatorCardStatsState extends State<ValidatorCardStats> {
   bool loading = true;
   String url;
-
+  String stake="";
   _getPicture()async {
     var id = widget.identity;
     var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
@@ -35,8 +40,21 @@ class _ValidatorCardStatsState extends State<ValidatorCardStats> {
       loading = false;
     });
   }
+  _stake()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Response resp2 = await ApiWrapper.delegatedAmount(prefs.getString("address"),widget.address);
+    String body2 = utf8.decode(resp2.bodyBytes);
+    final json2 = jsonDecode(body2);
+    CurrentDelegationWrapper model2 = new CurrentDelegationWrapper.fromJson(json2);
+    var amt = BalOperations.toBNT( model2.result.balance.amount.toString());
+    setState(() {
+      stake = "Staked Amount: $amt BNT";
+    });
+
+  }
   @override
   void initState() {
+    _stake();
     _getPicture();
     super.initState();
   }
@@ -70,8 +88,8 @@ class _ValidatorCardStatsState extends State<ValidatorCardStats> {
                     child: ListTile(
                       leading: loading?_circle(widget.name.substring(0,1), context):_circleImg(url, context) ,
                       title: Text(widget.name),
-                      subtitle: Text("Commission: $str"),
-                      isThreeLine: false,
+                      subtitle: Text("Commission: $str\n$stake"),
+                      isThreeLine: true,
                     ),
                   ),
                   SizedBox(

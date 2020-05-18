@@ -469,9 +469,9 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     final propertyA = double.parse(a.delegator_shares);
     final propertyB = double.parse(b.delegator_shares);
     if (propertyA < propertyB) {
-      return -1;
-    } else if (propertyA > propertyB) {
       return 1;
+    } else if (propertyA > propertyB) {
+      return -1;
     } else {
       return 0;
     }

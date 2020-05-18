@@ -85,6 +85,7 @@ class ValidatorListState extends State<ValidatorListTab> with
                       website: ls[index].description.website,
                       security_contract: ls[index].description.security_contact,
                       identity: ls[index].description.identity,
+                      stake: ls[index].delegator_shares,
                     );
                   },
                 ),
@@ -99,9 +100,9 @@ class ValidatorListState extends State<ValidatorListTab> with
     final propertyA = double.parse(a.delegator_shares);
     final propertyB = double.parse(b.delegator_shares);
     if (propertyA < propertyB) {
-      return -1;
-    } else if (propertyA > propertyB) {
       return 1;
+    } else if (propertyA > propertyB) {
+      return -1;
     } else {
       return 0;
     }
