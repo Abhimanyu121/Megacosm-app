@@ -241,14 +241,14 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               SizedBox(
-                                width: MediaQuery.of(context).size.width* 0.35,
+                                width: MediaQuery.of(context).size.width* 0.34,
                                 child: OutlineButton(
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.center,
-                                        children:<Widget>[Text("TRANSFER",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
+                                        children:<Widget>[Text("SEND",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
                                       Text("$denom",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
                                     ] ),
                                   ),
@@ -260,7 +260,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                                 ),
                               ),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width* 0.35,
+                                width: MediaQuery.of(context).size.width* 0.34,
                                 child: OutlineButton(
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                                   child: Padding(
@@ -373,28 +373,31 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                         direction: Axis.horizontal,
                         alignment: WrapAlignment.spaceBetween,
                         children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                                child: Text("Bonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0,0,8,15),
-                                child: Text(BalOperations.seperator(bondedStake)+" $denom", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                              ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width*0.4,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                                  child: Text("Bonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0,0,8,15),
+                                  child: Text(BalOperations.seperator(bondedStake)+" $denom", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                                ),
 
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                                child: Text("Unbonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                                child: Text(BalOperations.seperator(unbondedStake) +" $denom", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                                  child: Text("Unbonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                                  child: Text(BalOperations.seperator(unbondedStake) +" $denom", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                                ),
+                              ],
+                            ),
                           ),
 
                           CustomPaint(
