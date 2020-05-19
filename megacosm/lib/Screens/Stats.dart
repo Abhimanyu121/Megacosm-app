@@ -136,7 +136,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   Widget build(BuildContext context) {
     super.build(context);
     return error?Center(
-      child: Text("Something went wrong :("),
+      child: Text("Something went wrong :(\nCheck your internet and your network settings"),
     ):loading==true?Center(
       child: SpinKitCubeGrid(size:50, color: appTheme),
     ):ListView(
