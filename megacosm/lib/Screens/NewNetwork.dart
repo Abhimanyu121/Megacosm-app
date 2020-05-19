@@ -52,7 +52,9 @@ class NewNetworkState extends State<NewNetwork>{
                   autovalidate: true,
                   validator: (val) => (val.isEmpty||val.length>=2)?null:"Invalid Nickname",
                   decoration: InputDecoration(
-                    hintText: "Network Nick Name",
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: "Network Nickname",
+                    hintText: "Bluzelle-Public",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                     contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                   ),
@@ -66,7 +68,9 @@ class NewNetworkState extends State<NewNetwork>{
                   autovalidate: true,
                   validator: (val) => (val.isEmpty||val.length>=4)?null:"Invalid Name",
                   decoration: InputDecoration(
-                    hintText: "Network Name",
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: "Network Name",
+                    hintText: "bluzelle",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                     contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                   ),
@@ -81,7 +85,9 @@ class NewNetworkState extends State<NewNetwork>{
                   validator: (val) => (val.isEmpty||regex.firstMatch(val)!=null)?null:"Invalid URL",
                   maxLines: null,
                   decoration: InputDecoration(
-                    hintText: "Network URL",
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: "Network URL",
+                    hintText: "http://testnet.public.bluzelle.com:1317/",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                     contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                   ),
@@ -96,7 +102,9 @@ class NewNetworkState extends State<NewNetwork>{
                   autovalidate: true,
                   validator: (val) => (val.isEmpty||val.length>=4)?null:"Invalid Denom",
                   decoration: InputDecoration(
-                    hintText: "Default Token",
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: "Default Token",
+                    hintText: "UBNT",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                     contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                   ),
