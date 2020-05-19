@@ -112,7 +112,7 @@ class VoteTxState extends State<VoteTx>{
                         )),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.explorerLinkBuilder(args.tx);
+                              String url = await ApiWrapper.explorerLinkBuilder(args.tx);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

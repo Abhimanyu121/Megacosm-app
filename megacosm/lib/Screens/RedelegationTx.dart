@@ -91,7 +91,7 @@ class RedelegationTxState extends State<RedelegationTx>{
                         Text("Old Validator Address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expValidatorLinkBuilder(args.srcAddress);
+                              String url = await ApiWrapper.expValidatorLinkBuilder(args.srcAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -131,7 +131,7 @@ class RedelegationTxState extends State<RedelegationTx>{
                         Text("New Validator address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expValidatorLinkBuilder(args.destAddress);
+                              String url = await ApiWrapper.expValidatorLinkBuilder(args.destAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -203,7 +203,7 @@ class RedelegationTxState extends State<RedelegationTx>{
                         )),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.explorerLinkBuilder(args.tx);
+                              String url = await ApiWrapper.explorerLinkBuilder(args.tx);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

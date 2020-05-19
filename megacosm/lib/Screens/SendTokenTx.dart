@@ -81,7 +81,7 @@ class SendTokenTxState extends State<SendTokenTx>{
                         Text("From  ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expAccountLinkBuilder(args.sAddress);
+                              String url = await ApiWrapper.expAccountLinkBuilder(args.sAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -110,7 +110,7 @@ class SendTokenTxState extends State<SendTokenTx>{
                         Text("To: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expAccountLinkBuilder(args.dAddress);
+                              String url = await ApiWrapper.expAccountLinkBuilder(args.dAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -160,7 +160,7 @@ class SendTokenTxState extends State<SendTokenTx>{
                         )),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.explorerLinkBuilder(args.tx);
+                              String url = await ApiWrapper.explorerLinkBuilder(args.tx);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

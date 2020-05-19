@@ -90,7 +90,7 @@ class UndelegateConfirmationState extends State<UndelegateConfirmation>{
                         Text("Delegator Address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expAccountLinkBuilder(delegatorAddress);
+                              String url = await ApiWrapper.expAccountLinkBuilder(delegatorAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -130,7 +130,7 @@ class UndelegateConfirmationState extends State<UndelegateConfirmation>{
                         Text("Validator address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expValidatorLinkBuilder(args.address);
+                              String url = await ApiWrapper.expValidatorLinkBuilder(args.address);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

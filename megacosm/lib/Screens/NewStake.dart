@@ -168,7 +168,7 @@ class NewStakeState extends State<NewStake>{
                         Text("Validator address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expValidatorLinkBuilder(args.address);
+                              String url = await ApiWrapper.expValidatorLinkBuilder(args.address);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

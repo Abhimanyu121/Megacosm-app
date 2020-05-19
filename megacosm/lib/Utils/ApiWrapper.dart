@@ -66,16 +66,61 @@ class ApiWrapper{
     var resp = await http.get(url);
     return resp;
   }
-  static String explorerLinkBuilder(String hash)  {
-    String url= "http://bigdipper.testnet.public.bluzelle.com:3000/transactions/$hash";
+  static Future<String> explorerLinkBuilder(String hash) async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    String baseUrl = nw[0].url;
+    var start = 0;
+
+    while (start < baseUrl.length) {
+      if(baseUrl[start]+baseUrl[start+1]=="//"){
+        baseUrl=baseUrl.substring(0,start+1)+"explorer."+baseUrl.substring((start+2));
+      }
+      else if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
+        baseUrl=baseUrl.substring(0,start+4)+":3000";
+        break;
+      }
+     start++;
+    }
+    String url= "$baseUrl/transactions/$hash";
     return url;
   }
-  static String expValidatorLinkBuilder(String hash)  {
-    String url= "http://bigdipper.testnet.public.bluzelle.com:3000/validator/$hash";
+  static Future<String> expValidatorLinkBuilder(String hash) async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    String baseUrl = nw[0].url;
+    var start = 0;
+
+    while (start < baseUrl.length) {
+      if(baseUrl[start]+baseUrl[start+1]=="//"){
+        baseUrl=baseUrl.substring(0,start+1)+"explorer."+baseUrl.substring((start+2));
+      }
+      else if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
+        baseUrl=baseUrl.substring(0,start+4)+":3000";
+        break;
+      }
+      start++;
+    }
+    String url= "$baseUrl/validator/$hash";
     return url;
   }
-  static String expAccountLinkBuilder(String hash)  {
-    String url= "http://bigdipper.testnet.public.bluzelle.com:3000/account/$hash";
+  static Future<String> expAccountLinkBuilder(String hash) async {
+    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    var nw = await database.networkDao.findActiveNetwork();
+    String baseUrl = nw[0].url;
+    var start = 0;
+
+    while (start < baseUrl.length) {
+      if(baseUrl[start]+baseUrl[start+1]=="//"){
+        baseUrl=baseUrl.substring(0,start+1)+"explorer."+baseUrl.substring((start+2));
+      }
+      else if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
+        baseUrl=baseUrl.substring(0,start+4)+":3000";
+        break;
+      }
+      start++;
+    }
+    String url= "$baseUrl/account/$hash";
     return url;
   }
   static Future<bool> checkUrl(String url)async{

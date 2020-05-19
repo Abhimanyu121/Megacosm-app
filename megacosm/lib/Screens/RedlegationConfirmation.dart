@@ -78,7 +78,7 @@ class RedelegationConfirmationState extends State<RedelegationConfirmation>{
                         Text("Delegator Address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expAccountLinkBuilder(args.delegatorAddress);
+                              String url = await ApiWrapper.expAccountLinkBuilder(args.delegatorAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -129,7 +129,7 @@ class RedelegationConfirmationState extends State<RedelegationConfirmation>{
                         Text("New Validator address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expAccountLinkBuilder(args.destAddress);
+                              String url = await ApiWrapper.expAccountLinkBuilder(args.destAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

@@ -47,47 +47,56 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       error =false;
       loading = true;
     });
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-    }
-    else {
+    try{
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.mobile) {
+      } else if (connectivityResult == ConnectivityResult.wifi) {
+      }
+      else {
+        setState(() {
+          error =true;
+        });
+        return ;
+      }
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var nw = await database.networkDao.findActiveNetwork();
+      denom = (nw[0].denom).substring(1).toUpperCase();
+      Response pools = await ApiWrapper.getPool();
+      String body = utf8.decode(pools.bodyBytes);
+      final json = jsonDecode(body);
+      BondedNotBondedWrapper model = new BondedNotBondedWrapper.fromJson(json);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String address = prefs.getString("address");
+      print(address);
+      Response balModel = await ApiWrapper.getBalance(address);
+      String body1 = utf8.decode(balModel.bodyBytes);
+      final json1 = jsonDecode(body1);
+      Response delegations = await ApiWrapper.getDelegations(address);
+      String delBody = utf8.decode(delegations.bodyBytes);
+      final delJson = jsonDecode(delBody);
+      BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
+      valList = ValidatorList.fromJson(delJson);
+      var ls = valList.result;
+      ls.sort(mySortComparison);
+      bondedStake = BalOperations.toBNT(model.result.bonded_tokens);
+      unbondedStake = BalOperations.toBNT(model.result.not_bonded_tokens);
+      if(balanceWrapper.result.isEmpty){
+        balance = "0.0";
+      }else {
+        balance = BalOperations.toBNT(balanceWrapper.result[0].amount);
+      }
       setState(() {
-        error =true;
+        loading = false;
+        this.address = address;
       });
-      return ;
+    }catch(e){
+      setState(() {
+        print(e.toString());
+        error = true;
+        loading = false;
+      });
     }
-    final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    var nw = await database.networkDao.findActiveNetwork();
-    denom = (nw[0].denom).substring(1).toUpperCase();
-    Response pools = await ApiWrapper.getPool();
-    String body = utf8.decode(pools.bodyBytes);
-    final json = jsonDecode(body);
-    BondedNotBondedWrapper model = new BondedNotBondedWrapper.fromJson(json);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String address = prefs.getString("address");
-    print(address);
-    Response balModel = await ApiWrapper.getBalance(address);
-    String body1 = utf8.decode(balModel.bodyBytes);
-    final json1 = jsonDecode(body1);
-    Response delegations = await ApiWrapper.getDelegations(address);
-    String delBody = utf8.decode(delegations.bodyBytes);
-    final delJson = jsonDecode(delBody);
-    BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
-    valList = ValidatorList.fromJson(delJson);
-    var ls = valList.result;
-    ls.sort(mySortComparison);
-    bondedStake = BalOperations.toBNT(model.result.bonded_tokens);
-    unbondedStake = BalOperations.toBNT(model.result.not_bonded_tokens);
-    if(balanceWrapper.result.isEmpty){
-      balance = "0.0";
-    }else {
-      balance = BalOperations.toBNT(balanceWrapper.result[0].amount);
-    }
-    setState(() {
-      loading = false;
-      this.address = address;
-    });
+
   }
   _curveAngle(){
     double bstake= double.parse(bondedStake);
@@ -204,7 +213,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                               )),
                               SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                                   onPressed: ()async{
-                                    String url = ApiWrapper.expAccountLinkBuilder(address);
+                                    String url = await ApiWrapper.expAccountLinkBuilder(address);
                                     if (await canLaunch(url)) {
                                       await launch(url);
                                     } else {
@@ -360,8 +369,9 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                     width: MediaQuery.of(context).size.width*0.83,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        alignment: WrapAlignment.spaceBetween,
                         children: <Widget>[
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,

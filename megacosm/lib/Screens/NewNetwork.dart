@@ -26,6 +26,8 @@ class NewNetworkState extends State<NewNetwork>{
 
   @override
   void initState() {
+    _name.text= "bluzelle";
+    _denom.text = "ubnt";
   }
   @override
   Widget build(BuildContext context) {
@@ -112,7 +114,7 @@ class NewNetworkState extends State<NewNetwork>{
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Please make sure you enter correct details or app will act abnoramlly"),
+                child: Text("Please make sure you enter correct details or app will act abnoramlly, leave network name and denom as it is if you dont know what you are doing."),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),

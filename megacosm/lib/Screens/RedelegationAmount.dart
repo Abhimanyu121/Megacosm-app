@@ -103,7 +103,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                         Text("Delegator Address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expAccountLinkBuilder(args.delegatorAddress);
+                              String url = await ApiWrapper.expAccountLinkBuilder(args.delegatorAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -143,7 +143,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                         Text("Validator address: ", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expValidatorLinkBuilder(args.srcAddress);
+                              String url = await ApiWrapper.expValidatorLinkBuilder(args.srcAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
@@ -195,7 +195,7 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                         Text("New Validator Address", style: TextStyle(color: Colors.black,)),
                         SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
                             onPressed: ()async{
-                              String url = ApiWrapper.expValidatorLinkBuilder(args.destAddress);
+                              String url = await ApiWrapper.expValidatorLinkBuilder(args.destAddress);
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

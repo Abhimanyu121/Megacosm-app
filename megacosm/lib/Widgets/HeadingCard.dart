@@ -11,16 +11,15 @@ class HeaderTitle extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0,5,0,0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      padding: const EdgeInsets.fromLTRB(0,0,0,0),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        direction: Axis.horizontal,
+//        mainAxisAlignment: MainAxisAlignment.start,
+//        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(first, style: TextStyle(fontSize: 25,color: Colors.black, fontWeight: FontWeight.bold),),
-          SizedBox(
-            width: MediaQuery.of(context).size.width*0.02,
-          ),
-          Text(second, style: TextStyle(fontSize: 25,color: secondAppTheme, fontWeight: FontWeight.bold),),
+          Text(" $second", style: TextStyle(fontSize: 25,color: secondAppTheme, fontWeight: FontWeight.bold),),
         ],
       ),
     );

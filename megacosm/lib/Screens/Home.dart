@@ -165,10 +165,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         hasInk: true ,//new, gives a cute ink effect
         inkColor: white ,//optional, uses theme color if not specified
         items: <BubbleBottomBarItem>[
-          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.dashboard, color: Colors.black,), activeIcon: Icon(Icons.dashboard, color: Colors.black,), title: Text("Home", style: TextStyle(color: Colors.black),)),
-          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.account_balance, color: Colors.black,), activeIcon: Icon(Icons.account_balance, color: Colors.black,), title: Text("Validators", style: TextStyle(color: Colors.black),)),
-          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.menu, color: Colors.black,), activeIcon: Icon(Icons.menu, color: Colors.black,), title: Text("Proposals", style: TextStyle(color: Colors.black),)),
-          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.device_hub, color: Colors.black,), activeIcon: Icon(Icons.device_hub, color: Colors.black,), title: Text("Networks", style: TextStyle(color: Colors.black),))
+          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.dashboard, color: Colors.black,), activeIcon: Icon(Icons.dashboard, color: Colors.black,), title: Text("Home", style: TextStyle(color: Colors.black), overflow: TextOverflow.fade,)),
+          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.account_balance, color: Colors.black,), activeIcon: Icon(Icons.account_balance, color: Colors.black,), title: Text("Validators", style: TextStyle(color: Colors.black),overflow: TextOverflow.fade, softWrap: true,)),
+          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.menu, color: Colors.black,), activeIcon: Icon(Icons.menu, color: Colors.black,), title: Text("Proposals", style: TextStyle(color: Colors.black),overflow: TextOverflow.fade, )),
+          BubbleBottomBarItem(backgroundColor: activeTabColor, icon: Icon(Icons.device_hub, color: Colors.black,), activeIcon: Icon(Icons.device_hub, color: Colors.black,), title: Text("Networks", style: TextStyle(color: Colors.black),overflow: TextOverflow.fade, softWrap: true,))
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
