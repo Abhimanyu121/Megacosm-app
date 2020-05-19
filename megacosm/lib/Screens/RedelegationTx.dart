@@ -72,22 +72,40 @@ class RedelegationTxState extends State<RedelegationTx>{
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Old Delegator Address: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.delegatorAddress, style: TextStyle(color: Colors.grey,))
+                    Text("Old Validator Name: ", style: TextStyle(color: Colors.black,)),
+                    Text(args.srcName, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Old Validator Name: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.srcName, style: TextStyle(color: Colors.grey,))
+                    Row(
+                      children: <Widget>[
+                        Text("Old Validator Address: ", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expValidatorLinkBuilder(args.srcAddress);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
+                    Text(args.srcAddress, style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -108,7 +126,25 @@ class RedelegationTxState extends State<RedelegationTx>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("New Validator address: ", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("New Validator address: ", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expValidatorLinkBuilder(args.destAddress);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.destAddress, style: TextStyle(color: Colors.grey,))
                   ],
                 )
@@ -130,7 +166,7 @@ class RedelegationTxState extends State<RedelegationTx>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Prevviously Delegated Amount", style: TextStyle(color: Colors.black,)),
+                    Text("Previously Delegated Amount", style: TextStyle(color: Colors.black,)),
                     Text(args.totalAmount+" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )

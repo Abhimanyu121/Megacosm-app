@@ -48,7 +48,7 @@ class _ValidatorCardState extends State<ValidatorCard> {
   }
   @override
   Widget build(BuildContext context) {
-    var stake = BalOperations.toBNT( widget.stake);
+    var stake = BalOperations.seperator(BalOperations.toBNT( widget.stake));
     var intCom = double.parse(widget.commission);
     var str = intCom.toStringAsFixed(5);
     return Center(

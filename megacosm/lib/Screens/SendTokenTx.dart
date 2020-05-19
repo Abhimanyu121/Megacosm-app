@@ -76,7 +76,25 @@ class SendTokenTxState extends State<SendTokenTx>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("From  ", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("From  ", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expAccountLinkBuilder(args.sAddress);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.sAddress, style: TextStyle(color: Colors.grey,))
                   ],
                 )
@@ -87,7 +105,25 @@ class SendTokenTxState extends State<SendTokenTx>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("To: ", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("To: ", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expAccountLinkBuilder(args.dAddress);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.dAddress, style: TextStyle(color: Colors.grey,))
                   ],
                 )

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
+import 'AboutBluzelle.dart';
 import 'NetworkList.dart';
 import 'Login.dart';
 import 'PoposalsScreen.dart';
@@ -82,8 +83,16 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            IconButton(
+              tooltip: "About Bluzelle",
+              icon: Image.asset('ico.png',color: Colors.black87,),
+              onPressed: (){
+                Navigator.pushNamed(context, AboutBluzelle.routeName);
+              },
+            ),
             HeaderTitle(first: currentIndex==0?"User":currentIndex==1?"Validator":currentIndex==2?"Proposal":"Network", second: currentIndex==0?"Dashboard":currentIndex==1?"List":currentIndex==2?"List":"List",),
-            FlatButton(
+
+            IconButton(
               onPressed: ()async{
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
@@ -92,29 +101,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 await prefs.setString(mnemonic, null);
                 Navigator.popAndPushNamed(context, Login.routeName);
               },
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Icon(
-                      Icons.power_settings_new,
-                      color: Colors.black87,
-                      size: 18,
-                    ),
-                  ),
-                  Text(
-                    "Logout",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 18,
-                      letterSpacing: -0.2,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ],
+              tooltip: "Logout",
+              icon: Icon(
+                Icons.power_settings_new,
+                color: Colors.black87,
+                size: 18,
               ),
             ),
+
           ],
         ),
       ),

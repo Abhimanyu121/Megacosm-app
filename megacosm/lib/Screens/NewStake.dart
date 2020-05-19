@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/BalanceWrapper.dart';
+import 'package:megacosm/Models/CurrentDelegationWrapper.dart';
 import 'package:megacosm/Models/HomeToNewStake.dart';
 import 'package:megacosm/Models/NewStakeToConfirm.dart';
 import 'package:megacosm/Utils/ApiWrapper.dart';
@@ -32,6 +33,8 @@ class NewStakeState extends State<NewStake>{
   String denom="";
   bool image= false;
   double gas =0.0;
+  String stake = "0.0";
+  bool _stake = false;
   HomeToNewStake args;
       TextEditingController _amount= new TextEditingController();
   _getAddress() async {
@@ -48,6 +51,22 @@ class NewStakeState extends State<NewStake>{
     denom = (nw[0].denom).substring(1).toUpperCase();
     await _getPicture();
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
+    Response resp2 = await ApiWrapper.delegatedAmount(prefs.getString("address"),args.address);
+    String body2 = utf8.decode(resp2.bodyBytes);
+    final json2 = jsonDecode(body2);
+    print(json2);
+    try{
+      CurrentDelegationWrapper model2 = new CurrentDelegationWrapper.fromJson(json2);
+      _stake =true;
+      stake = BalOperations.toBNT( model2.result.balance.amount.toString());
+    }
+    catch(e){
+
+    }
+
+
+
+
     setState(() {
       if(model.result.isEmpty){
         bal ="0";
@@ -144,7 +163,25 @@ class NewStakeState extends State<NewStake>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Validator address: ", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("Validator address: ", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expValidatorLinkBuilder(args.address);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.address, style: TextStyle(color: Colors.grey,))
                   ],
                 )
@@ -233,6 +270,17 @@ class NewStakeState extends State<NewStake>{
                   ],
                 )
             ),
+            _stake?Padding(
+                padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Already Staked Amount", style: TextStyle(color: Colors.black,)),
+                    Text(BalOperations.seperator(stake) +" $denom", style: TextStyle(color: Colors.grey,))
+                  ],
+                )
+            ):SizedBox(height: 0,width: 0,),
             Padding(
               padding: const EdgeInsets.fromLTRB(8,8,8,8),
               child: TextFormField(

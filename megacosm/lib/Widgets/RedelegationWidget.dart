@@ -49,7 +49,7 @@ class _RedelegationCardState extends State<RedelegationCard> {
   }
   @override
   Widget build(BuildContext context) {
-    var stake = BalOperations.toBNT( widget.shares);
+    var stake = BalOperations.seperator(BalOperations.toBNT( widget.shares));
     var intCom = double.parse(widget.commission);
     var str = intCom.toStringAsFixed(5);
     print("widget:"+widget.srcInfo.delegatorAddress);

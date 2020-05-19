@@ -70,6 +70,14 @@ class ApiWrapper{
     String url= "http://bigdipper.testnet.public.bluzelle.com:3000/transactions/$hash";
     return url;
   }
+  static String expValidatorLinkBuilder(String hash)  {
+    String url= "http://bigdipper.testnet.public.bluzelle.com:3000/validator/$hash";
+    return url;
+  }
+  static String expAccountLinkBuilder(String hash)  {
+    String url= "http://bigdipper.testnet.public.bluzelle.com:3000/account/$hash";
+    return url;
+  }
   static Future<bool> checkUrl(String url)async{
     var _url = url+"/node_info";
 

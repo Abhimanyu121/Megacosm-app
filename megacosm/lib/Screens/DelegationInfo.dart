@@ -15,6 +15,7 @@ import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
 import 'RedelegationSelection.dart';
@@ -52,6 +53,7 @@ class DelegationInfoState extends State<DelegationInfo>{
     print(json);
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
+    _getPicture();
     denom = (nw[0].denom).substring(1).toUpperCase();
     BalanceWrapper model = new BalanceWrapper.fromJson(json);
     Response resp2 = await ApiWrapper.delegatedAmount(prefs.getString("address"),args.address);
@@ -127,7 +129,25 @@ class DelegationInfoState extends State<DelegationInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Delegator Address: ", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("Delegator Address: ", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expAccountLinkBuilder(delegatorAddress);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(delegatorAddress, style: TextStyle(color: Colors.grey,))
                   ],
                 )
@@ -143,16 +163,39 @@ class DelegationInfoState extends State<DelegationInfo>{
                   ],
                 )
             ),
-            Padding(
-                padding: const EdgeInsets.fromLTRB(30,8,8,8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text("Validator address: ", style: TextStyle(color: Colors.black,)),
-                    Text(args.address, style: TextStyle(color: Colors.grey,))
-                  ],
-                )
+            Row(
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Text("Validator address: ", style: TextStyle(color: Colors.black,)),
+                            SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                                onPressed: ()async{
+                                  String url = ApiWrapper.expValidatorLinkBuilder(args.address);
+                                  if (await canLaunch(url)) {
+                                    await launch(url);
+                                  } else {
+                                    Toast.show("Invalid URL", context);
+                                  }
+                                },
+                                icon: Icon(Icons.open_in_new,
+                                  color: Colors.black,
+                                )
+
+                            ))
+                          ],
+                        ),
+                        Text(args.address, style: TextStyle(color: Colors.grey,))
+                      ],
+                    )
+                ),
+
+              ],
             ),
             Padding(
                 padding: const EdgeInsets.fromLTRB(30,8,8,8),

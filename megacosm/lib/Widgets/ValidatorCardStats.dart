@@ -46,7 +46,7 @@ class _ValidatorCardStatsState extends State<ValidatorCardStats> {
     String body2 = utf8.decode(resp2.bodyBytes);
     final json2 = jsonDecode(body2);
     CurrentDelegationWrapper model2 = new CurrentDelegationWrapper.fromJson(json2);
-    var amt = BalOperations.toBNT( model2.result.balance.amount.toString());
+    var amt = BalOperations.seperator(BalOperations.toBNT( model2.result.balance.amount.toString()));
     setState(() {
       stake = "Staked Amount: $amt BNT";
     });

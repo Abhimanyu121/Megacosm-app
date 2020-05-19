@@ -7,6 +7,7 @@ import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/Models/RedelegationAmountModel.dart';
 import 'package:megacosm/Models/RedelegatorConfirmation.dart';
 import 'package:megacosm/Utils/AmountOps.dart';
+import 'package:megacosm/Utils/ApiWrapper.dart';
 import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
@@ -97,7 +98,25 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Delegator Address: ", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("Delegator Address: ", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expAccountLinkBuilder(args.delegatorAddress);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.delegatorAddress, style: TextStyle(color: Colors.grey,))
                   ],
                 )
@@ -119,7 +138,25 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Validator address: ", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("Validator address: ", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expValidatorLinkBuilder(args.srcAddress);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.srcAddress, style: TextStyle(color: Colors.grey,))
                   ],
                 )
@@ -153,7 +190,25 @@ class RedelegationAmountState extends State<RedelegationAmount>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("New Validator Address", style: TextStyle(color: Colors.black,)),
+                    Row(
+                      children: <Widget>[
+                        Text("New Validator Address", style: TextStyle(color: Colors.black,)),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                            onPressed: ()async{
+                              String url = ApiWrapper.expValidatorLinkBuilder(args.destAddress);
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                Toast.show("Invalid URL", context);
+                              }
+                            },
+                            icon: Icon(Icons.open_in_new,
+                              color: Colors.black,
+                            )
+
+                        ))
+                      ],
+                    ),
                     Text(args.destAddress, style: TextStyle(color: Colors.grey,))
                   ],
                 )
