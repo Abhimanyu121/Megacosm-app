@@ -32,11 +32,12 @@ class DelegationInfoState extends State<DelegationInfo>{
   bool placingOrder = true;
   bool balance = false;
   DelegationInfoModel args;
-  String bal = "0";
+  String reward = "0";
   String stake = "0";
   var denom = "";
   var str="";
   var url ="";
+  var bal = "0.0";
   var image= false;
   var identity ="";
   var gas =0.0;
@@ -47,6 +48,7 @@ class DelegationInfoState extends State<DelegationInfo>{
     setState(() {
       delegatorAddress = prefs.getString("address");
     });
+
     Response resp = await ApiWrapper.delegationInfo(prefs.getString("address"),args.address);
     String body = utf8.decode(resp.bodyBytes);
     final json = jsonDecode(body);
@@ -61,13 +63,19 @@ class DelegationInfoState extends State<DelegationInfo>{
     final json2 = jsonDecode(body2);
     print(json2);
     CurrentDelegationWrapper model2 = new CurrentDelegationWrapper.fromJson(json2);
+    Response balModel = await ApiWrapper.getBalance(prefs.getString("address"));
+    String body1 = utf8.decode(balModel.bodyBytes);
+    final json1 = jsonDecode(body1);
+    BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
     setState(() {
       balance = true;
       if(model.result.isEmpty){
-        bal = "0.0";
+        reward = "0.0";
+
       }
       else{
-        bal = BalOperations.toBNT(model.result[0].amount);
+        reward = BalOperations.toBNT(model.result[0].amount);
+        bal = BalOperations.toBNT(balanceWrapper.result[0].amount);
       }
 
       stake = BalOperations.toBNT( model2.result.balance.amount.toString());
@@ -221,7 +229,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text("Rewards", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.seperator(bal) +" $denom", style: TextStyle(color: Colors.grey,))
+                    Text(BalOperations.seperator(reward) +" $denom", style: TextStyle(color: Colors.grey,))
                   ],
                 )
             ),
@@ -244,6 +252,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                       }
                       if(double.parse(bal)<gas){
                         Toast.show("Insufficent Balance",context);
+                        return;
                       }
                       await Navigator.pushNamed(
                         context,
@@ -252,7 +261,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                             name: args.name,
                             address: args.address,
                             commission: str,
-                            amount: bal
+                            amount: reward
                         ),
                       );
                       setState(() {
@@ -276,7 +285,10 @@ class DelegationInfoState extends State<DelegationInfo>{
                         return;
                       }
                       if(double.parse(bal)<gas){
+                        print(gas);
+                        print(double.parse(bal));
                         Toast.show("Insufficent Balance",context);
+                        return;
                       }
 
                       await Navigator.pushNamed(
@@ -311,6 +323,7 @@ class DelegationInfoState extends State<DelegationInfo>{
                       }
                       if(double.parse(bal)<gas){
                         Toast.show("Insufficent Balance",context);
+                        return;
                       }
                       await Navigator.pushNamed(
                         context,
