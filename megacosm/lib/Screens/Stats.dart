@@ -547,6 +547,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       }else {
         balance = BalOperations.toBNT(balanceWrapper.result[0].amount);
       }
+
       setState(() {
         loading = false;
         this.address = address;
@@ -562,7 +563,9 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   }
   infiniteLoop(){
     new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
-      _refresh();
+      if(mounted){
+        _refresh();
+      }
     }));
 
   }

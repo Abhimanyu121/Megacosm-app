@@ -111,7 +111,9 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
   infiniteLoop(){
 
     new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
-      future = getNetwork();
+      if(mounted){
+        future = getNetwork();
+      }
     }));
 
 
