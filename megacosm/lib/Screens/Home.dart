@@ -2,10 +2,13 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
+import 'package:megacosm/Utils/TransactionsWrapper.dart';
 import 'package:megacosm/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:toast/toast.dart';
 
 import '../Constants.dart';
 import 'AboutBluzelle.dart';
@@ -94,12 +97,41 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
             IconButton(
               onPressed: ()async{
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-                var ac= await database.networkDao.allNetworks();
-                await database.networkDao.deleteNetworks(ac);
-                await prefs.setString(mnemonic, null);
-                Navigator.popAndPushNamed(context, Login.routeName);
+                String str = await asyncInputDialog(context);
+                if(str=="logout"){
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  final cryptor = new PlatformStringCryptor();
+                  String enc= prefs.getString("mnemonic");
+                  var seed = "";
+                  var salt = prefs.getString("salt");
+                  bool status =true;
+                  do{
+                    String password = await Transactions.asyncInputDialog(context, status);
+                    if(password =="cancel"){
+                      //return "cancel";
+                    }else {
+                      final String key = await cryptor.generateKeyFromPassword(password, salt);
+                      try {
+                        final String decrypted = await cryptor.decrypt(enc, key);
+                        seed = decrypted;
+                        status = true;// - A string to encrypt.
+                        await Clipboard.setData(ClipboardData(text: seed));
+                        Toast.show("Mnemonic Copied", context, duration: Toast.LENGTH_LONG);
+                        final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+                        var ac= await database.networkDao.allNetworks();
+                        await database.networkDao.deleteNetworks(ac);
+                        await prefs.setString(mnemonic, null);
+                        Navigator.popAndPushNamed(context, Login.routeName);
+                      } on MacMismatchException {
+                        status =false;
+                      }
+                    }
+                  }while(!status);
+
+                }else{
+                  return;
+                }
+
               },
               tooltip: "Logout",
               icon: Icon(
@@ -173,7 +205,36 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+  static Future<String> asyncInputDialog(BuildContext context) async {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        TextEditingController _password = TextEditingController();
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+          elevation: 1,
+          backgroundColor: nearlyWhite,
+          title: Text('Are you sure?'),
+          content:  Text("After you logout you will need to enter your mnemonic againg to get access to this account. Mnemonic will be copied on logout, please store it securely.",style: TextStyle(color: Colors.red),),
+          actions: <Widget>[
+            FlatButton(
+                child: Text("Cancel"),
+                onPressed: () async {
+                  Navigator.of(context).pop("cancel");
+                }
+            ),
+            FlatButton(
+                child: Text("Logout"),
+                onPressed: () async {
+                  Navigator.of(context).pop("logout");
+                }),
 
+          ],
+        );
+      },
+    );
+  }
 
 
 }
