@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -20,6 +22,7 @@ class SwtichNetwork extends StatefulWidget{
 
 class _SwtichNetworkState extends State<SwtichNetwork> {
   Future future;
+  bool loaded = false;
   Future<List<Network>>getNetwork()async{
     final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     List<Network> nw = await database.networkDao.allNetworks();
@@ -34,6 +37,7 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
   void initState() {
     widget.refresh = refresh;
     future = getNetwork();
+    infiniteLoop();
   }
   @override
   Widget build(BuildContext context) {
@@ -57,7 +61,7 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
         FutureBuilder(
           future: future,
           builder: (context, snapshot){
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.connectionState == ConnectionState.waiting&&loaded ==false) {
               return Padding(
                 padding: EdgeInsets.only(top: 16, bottom: 16),
                 child: Column(
@@ -103,5 +107,14 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
         ),
       ],
     );
+  }
+  infiniteLoop(){
+
+    new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
+      future = getNetwork();
+    }));
+
+
+
   }
 }

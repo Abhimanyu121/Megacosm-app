@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -17,7 +18,7 @@ class ProposalListTab extends StatefulWidget {
 
 class ProposalListState extends State<ProposalListTab> with
     AutomaticKeepAliveClientMixin {
-
+    bool loaded= false;
     var _loadingData;
  @override
  void initState() {
@@ -28,7 +29,7 @@ class ProposalListState extends State<ProposalListTab> with
      });
    };
    _loadingData = ApiWrapper.proposalList();
-
+   infiniteLoop();
 
   }
   @override
@@ -36,7 +37,7 @@ class ProposalListState extends State<ProposalListTab> with
     return FutureBuilder(
       future: _loadingData,
       builder: (context, snapshot){
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting&& loaded == false) {
           return Padding(
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: Column(
@@ -63,6 +64,7 @@ class ProposalListState extends State<ProposalListTab> with
                 ],
               ));
         }else {
+          loaded = true;
           String body = utf8.decode(snapshot.data.bodyBytes);
           final json = jsonDecode(body);
           ProposalListModel model = new ProposalListModel.fromJson(json);
@@ -109,7 +111,14 @@ class ProposalListState extends State<ProposalListTab> with
       },
     );
   }
+    infiniteLoop(){
 
+        new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
+          _loadingData = ApiWrapper.proposalList();
+        }));
+
+
+    }
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive =>true;

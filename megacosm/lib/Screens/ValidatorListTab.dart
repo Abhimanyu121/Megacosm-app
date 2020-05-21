@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class ValidatorListTab extends StatefulWidget {
 class ValidatorListState extends State<ValidatorListTab> with
     AutomaticKeepAliveClientMixin{
   var _loadList;
+  bool loaded = false;
   @override
   void initState() {
     _loadList = ApiWrapper.getValidatorList();
@@ -26,6 +28,7 @@ class ValidatorListState extends State<ValidatorListTab> with
         _loadList = ApiWrapper.getValidatorList();
       });
     };
+    infiniteLoop();
   }
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class ValidatorListState extends State<ValidatorListTab> with
         FutureBuilder(
           future: _loadList,
           builder: (context, snapshot){
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.connectionState == ConnectionState.waiting&& loaded == false) {
               return Padding(
                 padding: EdgeInsets.only(top: 16, bottom: 16),
                 child: Column(
@@ -66,6 +69,7 @@ class ValidatorListState extends State<ValidatorListTab> with
                     ],
                   ));
             }else {
+              loaded = true;
               String body = utf8.decode(snapshot.data.bodyBytes);
               final json = jsonDecode(body);
               ValidatorList model = new ValidatorList.fromJson(json);
@@ -107,7 +111,15 @@ class ValidatorListState extends State<ValidatorListTab> with
       return 0;
     }
   }
+  infiniteLoop(){
 
+      new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
+        _loadList = ApiWrapper.getValidatorList();
+      }));
+
+
+
+  }
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive =>true;

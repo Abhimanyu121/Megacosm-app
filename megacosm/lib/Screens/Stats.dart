@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
@@ -54,6 +55,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       }
       else {
         setState(() {
+          print("here");
           error =true;
         });
         return ;
@@ -88,6 +90,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       setState(() {
         loading = false;
         this.address = address;
+        error= false;
       });
     }catch(e){
       setState(() {
@@ -114,7 +117,9 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   @override
   void initState() {
     try {
-      getInfo();
+      getInfo().then((){
+
+      });
     } catch(e){
       setState(() {
         error = true;
@@ -130,15 +135,16 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       }
     };
     widget.toTop=scrollToTop;
+    infiniteLoop();
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return error?Center(
-      child: Text("Something went wrong :(\nCheck your internet and your network settings"),
-    ):loading==true?Center(
+    return loading==true?Center(
       child: SpinKitCubeGrid(size:50, color: appTheme),
+    ):error?Center(
+      child: Text("Something went wrong :(\nCheck your internet and your network settings"),
     ):ListView(
       controller: controller,
       cacheExtent: 1000,
@@ -509,5 +515,55 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     controller.animateTo(0.0,
       curve: Curves.easeOut,
       duration: const Duration(milliseconds: 300),);
+  }
+  _refresh()async {
+    
+    try{
+      print("refreshing");
+      final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+      var nw = await database.networkDao.findActiveNetwork();
+      denom = (nw[0].denom).substring(1).toUpperCase();
+      Response pools = await ApiWrapper.getPool();
+      String body = utf8.decode(pools.bodyBytes);
+      final json = jsonDecode(body);
+      BondedNotBondedWrapper model = new BondedNotBondedWrapper.fromJson(json);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String address = prefs.getString("address");
+      print(address);
+      Response balModel = await ApiWrapper.getBalance(address);
+      String body1 = utf8.decode(balModel.bodyBytes);
+      final json1 = jsonDecode(body1);
+      Response delegations = await ApiWrapper.getDelegations(address);
+      String delBody = utf8.decode(delegations.bodyBytes);
+      final delJson = jsonDecode(delBody);
+      BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
+      valList = ValidatorList.fromJson(delJson);
+      var ls = valList.result;
+      ls.sort(mySortComparison);
+      bondedStake = BalOperations.toBNT(model.result.bonded_tokens);
+      unbondedStake = BalOperations.toBNT(model.result.not_bonded_tokens);
+      if(balanceWrapper.result.isEmpty){
+        balance = "0.0";
+      }else {
+        balance = BalOperations.toBNT(balanceWrapper.result[0].amount);
+      }
+      setState(() {
+        loading = false;
+        this.address = address;
+      });
+    }catch(e){
+      setState(() {
+        print(e.toString());
+
+        loading = false;
+      });
+    }
+
+  }
+  infiniteLoop(){
+    new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
+      _refresh();
+    }));
+
   }
 }
