@@ -5,6 +5,7 @@ import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 import 'package:megacosm/Constants.dart';
 import 'package:megacosm/DBUtils/DBHelper.dart';
 import 'package:megacosm/DBUtils/NetworkModel.dart';
+import 'package:megacosm/Screens/NetworkInfo.dart';
 import 'package:megacosm/Utils/ColorRandminator.dart';
 import 'package:sacco/sacco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,23 +87,13 @@ class NetworkCard extends StatelessWidget{
                         ),
                         OutlineButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                          child: Center(child: Text("DELETE NETWORK")),
+                          child: Center(child: Text("NETWORK DETAILS")),
                           onPressed: ()async {
-                            if(nwrk.active){
-                              Toast.show("Please Change Active Network", context);
-                              return;
-                            }
-                            final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-                            var nw = await database.networkDao.allNetworks();
-                            if(nw.length ==1){
-                              Toast.show("Can not delete last network.", context);
-                              return;
-                            }
-                            database.networkDao.deleteNetworks([nwrk]);
-                            refresh();
+                            Navigator.pushNamed(context, NetworkInformation.routeName, arguments: nwrk);
                           },
-                          borderSide: BorderSide(color: Colors.red,style: BorderStyle.solid),
+                          borderSide: BorderSide(color: Colors.deepOrange,style: BorderStyle.solid),
                         ),
+
                         nwrk.active?OutlineButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                           child: Center(child: Text("GAS FEE")),
@@ -127,7 +118,53 @@ class NetworkCard extends StatelessWidget{
                         ):SizedBox(
                           height: 0,
                           width: 0,
-                        )
+                        ),
+                        OutlineButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                          child: Center(child: Text("DELETE NETWORK")),
+                          onPressed: ()async {
+                            if(nwrk.active){
+                              Toast.show("Please Change Active Network", context);
+                              return;
+                            }
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            final cryptor = new PlatformStringCryptor();
+                            String enc= prefs.getString("mnemonic");
+                            var seed = "";
+                            var salt = prefs.getString("salt");
+                            bool status =true;
+                            bool dec = false;
+                            do{
+                              String password = await _asyncInputDialog(context, status);
+                              if(password =="cancel"){
+                                return;
+                              }else {
+                                final String key = await cryptor.generateKeyFromPassword(password, salt);
+                                try {
+                                  final String decrypted = await cryptor.decrypt(enc, key);
+                                  seed = decrypted;
+                                  status = true;
+                                  dec = true;// - A string to encrypt.
+                                } on MacMismatchException {
+                                  status =false;
+                                  dec = false;
+                                }
+                              }
+                            }while(!status);
+                            if(!dec){
+                              return;
+                            }
+                            final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+                            var nw = await database.networkDao.allNetworks();
+                            if(nw.length ==1){
+                              Toast.show("Can not delete last network.", context);
+                              return;
+                            }
+                            database.networkDao.deleteNetworks([nwrk]);
+                            refresh();
+                          },
+                          borderSide: BorderSide(color: Colors.red,style: BorderStyle.solid),
+                        ),
                       ],
                     ),
                   ),

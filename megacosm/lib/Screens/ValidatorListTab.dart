@@ -113,11 +113,13 @@ class ValidatorListState extends State<ValidatorListTab> with
   }
   infiniteLoop(){
 
-      new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
-        _loadList = ApiWrapper.getValidatorList();
-      }));
-
-
+      new Timer.periodic(Duration(seconds: 30), (Timer t){
+        if(mounted){
+          setState(() {
+            _loadList = ApiWrapper.getValidatorList();
+          });
+        }
+      });
 
   }
   @override
