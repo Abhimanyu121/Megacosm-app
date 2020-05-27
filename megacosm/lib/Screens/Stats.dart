@@ -562,11 +562,11 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
 
   }
   infiniteLoop(){
-    new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
+    new Timer.periodic(Duration(seconds: 30), (Timer t){
       if(mounted){
         _refresh();
       }
-    }));
+    });
 
   }
 }

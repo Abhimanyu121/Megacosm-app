@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:megacosm/Screens/AboutBluzelle.dart';
+import 'package:megacosm/Screens/NetworkInfo.dart';
 import 'package:megacosm/Screens/RecoveryPhrase.dart';
+import 'package:sacco/network_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Constants.dart';
 import 'Screens/ConfirmVote.dart';
@@ -106,7 +108,8 @@ class _MyAppState extends State<MyApp> {
         SendTokens.routeName:(context) => SendTokens(),
         NewNetwork.routeName:(context) => NewNetwork(),
         RecoveryPhrase.routeName:(context) => RecoveryPhrase(),
-        AboutBluzelle.routeName:(context) => AboutBluzelle()
+        AboutBluzelle.routeName:(context) => AboutBluzelle(),
+        NetworkInformation.routeName: (context) => NetworkInformation()
       },
       title: 'Flutter Demo',
       theme: ThemeData(

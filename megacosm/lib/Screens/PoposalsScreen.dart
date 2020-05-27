@@ -113,12 +113,13 @@ class ProposalListState extends State<ProposalListTab> with
   }
     infiniteLoop(){
 
-        new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
+        new Timer.periodic(Duration(seconds: 30), (Timer t){
           if(mounted){
-            _loadingData = ApiWrapper.proposalList();
-
+            setState(() {
+              _loadingData = ApiWrapper.proposalList();
+            });
           }
-        }));
+        });
 
 
     }

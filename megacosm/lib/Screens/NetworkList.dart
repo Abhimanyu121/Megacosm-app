@@ -88,7 +88,7 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
                     ],
                   ));
             }else {
-
+              loaded = true;
               return Expanded(
                 child: ListView.builder(
                   cacheExtent: 100,
@@ -110,12 +110,14 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
   }
   infiniteLoop(){
 
-    new Timer.periodic(Duration(seconds: 30), (Timer t) => setState((){
-      if(mounted){
-        future = getNetwork();
-      }
-    }));
 
+    new Timer.periodic(Duration(seconds: 30), (Timer t){
+      if(mounted){
+        setState(() {
+          future = getNetwork();
+        });
+      }
+    });
 
 
   }
