@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:megacosm/Models/VoteModel.dart';
-import 'package:megacosm/Utils/ApiWrapper.dart';
-import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:bluzelle/Models/VoteModel.dart';
+import 'package:bluzelle/Utils/ApiWrapper.dart';
+import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 

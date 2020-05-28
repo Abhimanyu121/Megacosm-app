@@ -2,9 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:megacosm/Screens/AboutBluzelle.dart';
-import 'package:megacosm/Screens/NetworkInfo.dart';
-import 'package:megacosm/Screens/RecoveryPhrase.dart';
+import 'package:bluzelle/Screens/AboutBluzelle.dart';
+import 'package:bluzelle/Screens/NetworkInfo.dart';
+import 'package:bluzelle/Screens/RecoveryPhrase.dart';
 import 'package:sacco/network_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Constants.dart';

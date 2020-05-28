@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:bluzelle/Widgets/HeadingCard.dart';
 
 
 import '../BlzData.dart';

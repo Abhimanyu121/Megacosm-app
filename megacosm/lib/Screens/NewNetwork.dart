@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:megacosm/DBUtils/DBHelper.dart';
-import 'package:megacosm/DBUtils/NetworkModel.dart';
-import 'package:megacosm/Utils/ApiWrapper.dart';
-import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:bluzelle/DBUtils/DBHelper.dart';
+import 'package:bluzelle/DBUtils/NetworkModel.dart';
+import 'package:bluzelle/Utils/ApiWrapper.dart';
+import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
 
 import '../Constants.dart';

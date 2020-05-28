@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:megacosm/Models/HomeToNewStake.dart';
-import 'package:megacosm/Screens/NewStake.dart';
-import 'package:megacosm/Utils/AmountOps.dart';
-import 'package:megacosm/Utils/ColorRandminator.dart';
+import 'package:bluzelle/Models/HomeToNewStake.dart';
+import 'package:bluzelle/Screens/NewStake.dart';
+import 'package:bluzelle/Utils/AmountOps.dart';
+import 'package:bluzelle/Utils/ColorRandminator.dart';
 import 'package:http/http.dart'as http;
 class ValidatorCard extends StatefulWidget{
   final String name;

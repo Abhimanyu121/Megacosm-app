@@ -4,12 +4,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:megacosm/Models/CurrentDelegationWrapper.dart';
-import 'package:megacosm/Models/DelegationInfo.dart';
-import 'package:megacosm/Screens/DelegationInfo.dart';
-import 'package:megacosm/Utils/AmountOps.dart';
-import 'package:megacosm/Utils/ApiWrapper.dart';
-import 'package:megacosm/Utils/ColorRandminator.dart';
+import 'package:bluzelle/Models/CurrentDelegationWrapper.dart';
+import 'package:bluzelle/Models/DelegationInfo.dart';
+import 'package:bluzelle/Screens/DelegationInfo.dart';
+import 'package:bluzelle/Utils/AmountOps.dart';
+import 'package:bluzelle/Utils/ApiWrapper.dart';
+import 'package:bluzelle/Utils/ColorRandminator.dart';
 import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
 class ValidatorCardStats extends StatefulWidget{

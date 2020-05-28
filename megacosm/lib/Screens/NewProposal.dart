@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
-import 'package:megacosm/Models/BalanceWrapper.dart';
-import 'package:megacosm/Models/NewProposalModel.dart';
-import 'package:megacosm/Utils/ApiWrapper.dart';
-import 'package:megacosm/Utils/AmountOps.dart';
-import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:bluzelle/Models/BalanceWrapper.dart';
+import 'package:bluzelle/Models/NewProposalModel.dart';
+import 'package:bluzelle/Utils/ApiWrapper.dart';
+import 'package:bluzelle/Utils/AmountOps.dart';
+import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 

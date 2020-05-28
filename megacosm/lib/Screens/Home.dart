@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_string_encryption/flutter_string_encryption.dart';
-import 'package:megacosm/DBUtils/DBHelper.dart';
-import 'package:megacosm/Utils/TransactionsWrapper.dart';
-import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:bluzelle/DBUtils/DBHelper.dart';
+import 'package:bluzelle/Utils/TransactionsWrapper.dart';
+import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
