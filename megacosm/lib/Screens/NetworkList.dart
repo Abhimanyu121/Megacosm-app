@@ -42,71 +42,81 @@ class _SwtichNetworkState extends State<SwtichNetwork> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8.0,10,8,25),
-          child: OutlineButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: SizedBox(width:MediaQuery.of(context).size.width*0.7,
-                  child: Center(child: Text("ADD NEW NETWORK"))),
-              onPressed: ()async {
-                await Navigator.pushNamed(context, NewNetwork.routeName);
-                refresh();
-              },
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0,10,8,25),
+            child: OutlineButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                child: SizedBox(width:MediaQuery.of(context).size.width*0.7,
+                    child: Center(child: Text("ADD NEW NETWORK"))),
+                onPressed: ()async {
+                  await Navigator.pushNamed(context, NewNetwork.routeName);
+                  refresh();
+                },
 
-              borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
-            ),
-        ),
-        FutureBuilder(
-          future: future,
-          builder: (context, snapshot){
-            if (snapshot.connectionState == ConnectionState.waiting&&loaded ==false) {
-              return Padding(
-                padding: EdgeInsets.only(top: 16, bottom: 16),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height*0.3,
-                    ),
-                    Center(child: SpinKitCubeGrid(size:50, color: appTheme)),
-                  ],
-                ),
-              );
-            } else if (snapshot.error != null) {
-              print(snapshot.error);
-              return Padding(
+                borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+              ),
+          ),
+          FutureBuilder(
+            future: future,
+            builder: (context, snapshot){
+              if (snapshot.connectionState == ConnectionState.waiting&&loaded ==false) {
+                return Padding(
                   padding: EdgeInsets.only(top: 16, bottom: 16),
                   child: Column(
                     children: <Widget>[
                       SizedBox(
                         height: MediaQuery.of(context).size.height*0.3,
                       ),
-                      Center(
-                        child: Text('Something went wrong :('),
-                      ),
+                      Center(child: SpinKitCubeGrid(size:50, color: appTheme)),
                     ],
-                  ));
-            }else {
-              loaded = true;
-              return Expanded(
-                child: ListView.builder(
-                  cacheExtent: 100,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext ctx, int index ){
+                  ),
+                );
+              } else if (snapshot.error != null) {
+                print(snapshot.error);
+                return Padding(
+                    padding: EdgeInsets.only(top: 16, bottom: 16),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*0.3,
+                        ),
+                        Center(
+                          child: Text('Something went wrong :('),
+                        ),
+                      ],
+                    ));
+              }else {
+                loaded = true;
+                return Expanded(
+                  child: ListView.builder(
+                    cacheExtent: 100,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext ctx, int index ){
 
-                    return NetworkCard(
-                      refresh: widget.refetch,
-                      nwrk: snapshot.data[index],
-                    );
-                  },
-                ),
-              );
-            }
-          },
-        ),
-      ],
+                      return NetworkCard(
+                        refresh: widget.refetch,
+                        nwrk: snapshot.data[index],
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
     );
+  }
+  Future<void> _refresh() async{
+    await Future.delayed(Duration(microseconds:0));
+    setState(()  {
+      future = getNetwork();
+
+    });
   }
   infiniteLoop(){
 

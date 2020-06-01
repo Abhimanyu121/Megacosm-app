@@ -145,320 +145,323 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       child: SpinKitCubeGrid(size:50, color: appTheme),
     ):error?Center(
       child: Text("Something went wrong :(\nCheck your internet and your network settings"),
-    ):ListView(
-      controller: controller,
-      cacheExtent: 1000,
-      children: <Widget>[
-        Card(
-          elevation: 0,
-          color: nearlyWhite,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-          child: Container(
-            width: MediaQuery.of(context).size.width*0.9,
-            //height: MediaQuery.of(context).size.height*0.3,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Colors.black,
-                Colors.black87
-              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  bottomLeft: Radius.circular(20.0),
-                  bottomRight: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0)),
+    ):RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView(
+        controller: controller,
+        cacheExtent: 1000,
+        children: <Widget>[
+          Card(
+            elevation: 0,
+            color: nearlyWhite,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+            child: Container(
+              width: MediaQuery.of(context).size.width*0.9,
+              //height: MediaQuery.of(context).size.height*0.3,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Colors.black,
+                  Colors.black87
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    bottomLeft: Radius.circular(20.0),
+                    bottomRight: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0)),
 
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(5.0,5,5,35),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16,5,5,4),
-                        child: Text("Account",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16,5,5,4),
-                        child: SizedBox(
-                            height: MediaQuery.of(context).size.height*0.05,
-                            width: MediaQuery.of(context).size.width*0.2,
-                            child: Image.asset("logo.png"))
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(5.0,5,5,35),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                          child: Text("Balance: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                          padding: const EdgeInsets.fromLTRB(16,5,5,4),
+                          child: Text("Account",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                          child: Text(BalOperations.seperator(balance)+" $denom", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                          child: Row(
-                            children: <Widget>[
-                              Text("Address: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                              SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
-                                onPressed: ()async{
-                                  Toast.show("Address Copied", context);
-                                  await Clipboard.setData(ClipboardData(text: address));
-                                },
-                                  icon: Icon(Icons.content_copy,
-                                    color: Colors.white70,
-                                  )
-
-                              )),
-                              SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
-                                  onPressed: ()async{
-                                    String url = await ApiWrapper.expAccountLinkBuilder(address);
-                                    if (await canLaunch(url)) {
-                                      await launch(url);
-                                    } else {
-                                      Toast.show("Invalid URL", context);
-                                    }
-                                  },
-                                  icon: Icon(Icons.open_in_new,
-                                    color: Colors.white70,
-                                  )
-
-                              ))
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.8,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                            child: Text(address, textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(5,20,5,0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width* 0.34,
-                                child: OutlineButton(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children:<Widget>[Text("SEND",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
-                                      Text("$denom",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
-                                    ] ),
-                                  ),
-                                  onPressed: (){
-                                    Navigator.pushNamed(context, SendTokens.routeName,);
-                                  },
-
-                                  borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width* 0.34,
-                                child: OutlineButton(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children:<Widget>[Text("SHOW",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
-                                          Text("QR",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
-                                        ] ),
-                                  ),
-                                  onPressed: (){
-                                    asyncInputDialog(context);
-                                  },
-
-                                  borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
-                                ),
-                              ),
-
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 6),
-                          child: OutlineButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                  width: MediaQuery.of(context).size.width*0.81,
-                                  height: MediaQuery.of(context).size.width*0.1,
-                                  child: Center(child: Text("SHOW MNEMONIC",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),))),
-                            ),
-                            onPressed: ()async {
-                              SharedPreferences prefs = await SharedPreferences.getInstance();
-                              final cryptor = new PlatformStringCryptor();
-                              String enc= prefs.getString("mnemonic");
-                              var seed = "";
-                              var salt = prefs.getString("salt");
-                              bool status =true;
-                              do{
-                                String password = await Transactions.asyncInputDialog(context, status);
-                                if(password =="cancel"){
-                                  //return "cancel";
-                                }else {
-                                  final String key = await cryptor.generateKeyFromPassword(password, salt);
-                                  try {
-                                    final String decrypted = await cryptor.decrypt(enc, key);
-                                    seed = decrypted;
-                                    status = true;// - A string to encrypt.
-                                    Navigator.pushNamed(context, RecoveryPhrase.routeName, arguments: seed);
-                                  } on MacMismatchException {
-                                    status =false;
-                                  }
-                                }
-                              }while(!status);
-
-                            },
-
-                            borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
-                          ),
+                          padding: const EdgeInsets.fromLTRB(16,5,5,4),
+                          child: SizedBox(
+                              height: MediaQuery.of(context).size.height*0.05,
+                              width: MediaQuery.of(context).size.width*0.2,
+                              child: Image.asset("logo.png"))
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-
-        Card(
-          elevation: 0,
-          color: Colors.transparent,
-          child: Container(
-            //height: MediaQuery.of(context).size.height*0.35,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                HexColor("#00264d"),
-                HexColor("#003366"),
-              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  bottomLeft: Radius.circular(20.0),
-                  bottomRight: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0)),
-
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(5.0,8,5,15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16,20,5,6),
-                        child: Text("Staking Pools",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(
-                  //  height: MediaQuery.of(context).size.height*0.25,
-                    width: MediaQuery.of(context).size.width*0.83,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 30),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        alignment: WrapAlignment.spaceBetween,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width*0.4,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text("Balance: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Text(BalOperations.seperator(balance)+" $denom", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                            child: Row(
                               children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                                  child: Text("Bonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0,0,8,15),
-                                  child: Text(BalOperations.seperator(bondedStake)+" $denom", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                                ),
+                                Text("Address: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                                SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                                  onPressed: ()async{
+                                    Toast.show("Address Copied", context);
+                                    await Clipboard.setData(ClipboardData(text: address));
+                                  },
+                                    icon: Icon(Icons.content_copy,
+                                      color: Colors.white70,
+                                    )
 
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                                  child: Text("Unbonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                                  child: Text(BalOperations.seperator(unbondedStake) +" $denom", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
-                                ),
+                                )),
+                                SizedBox(height: MediaQuery.of(context).size.height*0.06,child: IconButton(
+                                    onPressed: ()async{
+                                      String url = await ApiWrapper.expAccountLinkBuilder(address);
+                                      if (await canLaunch(url)) {
+                                        await launch(url);
+                                      } else {
+                                        Toast.show("Invalid URL", context);
+                                      }
+                                    },
+                                    icon: Icon(Icons.open_in_new,
+                                      color: Colors.white70,
+                                    )
+
+                                ))
                               ],
                             ),
                           ),
-
-                          CustomPaint(
-                            painter: CurvePainter(
-                                colors: [
-                                  Colors.greenAccent,
-                                  Colors.green,
-                                  Colors.lightGreen
-                                ],
-                                angle: _curveAngle()
-                            ),
-                            child: SizedBox(
-                              width: 108,
-                              height: 108,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width*0.8,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                              child: Text(address, textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(5,20,5,0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width* 0.34,
+                                  child: OutlineButton(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children:<Widget>[Text("SEND",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
+                                        Text("$denom",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
+                                      ] ),
+                                    ),
+                                    onPressed: (){
+                                      Navigator.pushNamed(context, SendTokens.routeName,);
+                                    },
 
+                                    borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width* 0.34,
+                                  child: OutlineButton(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children:<Widget>[Text("SHOW",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),),
+                                            Text("QR",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),)
+                                          ] ),
+                                    ),
+                                    onPressed: (){
+                                      asyncInputDialog(context);
+                                    },
+
+                                    borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 6),
+                            child: OutlineButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.81,
+                                    height: MediaQuery.of(context).size.width*0.1,
+                                    child: Center(child: Text("SHOW MNEMONIC",style: TextStyle(fontSize:15,color: Colors.white70, fontWeight: FontWeight.bold),))),
+                              ),
+                              onPressed: ()async {
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                final cryptor = new PlatformStringCryptor();
+                                String enc= prefs.getString("mnemonic");
+                                var seed = "";
+                                var salt = prefs.getString("salt");
+                                bool status =true;
+                                do{
+                                  String password = await Transactions.asyncInputDialog(context, status);
+                                  if(password =="cancel"){
+                                    //return "cancel";
+                                  }else {
+                                    final String key = await cryptor.generateKeyFromPassword(password, salt);
+                                    try {
+                                      final String decrypted = await cryptor.decrypt(enc, key);
+                                      seed = decrypted;
+                                      status = true;// - A string to encrypt.
+                                      Navigator.pushNamed(context, RecoveryPhrase.routeName, arguments: seed);
+                                    } on MacMismatchException {
+                                      status =false;
+                                    }
+                                  }
+                                }while(!status);
+
+                              },
+
+                              borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
 
-        SizedBox(
-          height: MediaQuery.of(context).size.height*0.02,
-        ),
+          Card(
+            elevation: 0,
+            color: Colors.transparent,
+            child: Container(
+              //height: MediaQuery.of(context).size.height*0.35,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  HexColor("#00264d"),
+                  HexColor("#003366"),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    bottomLeft: Radius.circular(20.0),
+                    bottomRight: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0)),
 
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16,5,5,10),
-          child: Text("Delegations",style: TextStyle(fontSize:25,color: grey, fontWeight: FontWeight.bold),),
-        ),
-        valList.result.length==0?Padding(
-          padding: const EdgeInsets.fromLTRB(16,25,15,16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(child: Text("No Delegations",style: TextStyle(fontSize:20,color: grey, fontWeight: FontWeight.normal),)),
-            ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(5.0,8,5,15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16,20,5,6),
+                          child: Text("Staking Pools",style: TextStyle(fontSize:25,color: Colors.white70, fontWeight: FontWeight.bold),),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(
+                    //  height: MediaQuery.of(context).size.height*0.25,
+                      width: MediaQuery.of(context).size.width*0.83,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 30),
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.spaceBetween,
+                          children: <Widget>[
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width*0.4,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                                    child: Text("Bonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0,0,8,15),
+                                    child: Text(BalOperations.seperator(bondedStake)+" $denom", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                                    child: Text("Unbonded Stake: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white70)),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                                    child: Text(BalOperations.seperator(unbondedStake) +" $denom", overflow: TextOverflow.ellipsis , textAlign: TextAlign.start , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white)),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            CustomPaint(
+                              painter: CurvePainter(
+                                  colors: [
+                                    Colors.greenAccent,
+                                    Colors.green,
+                                    Colors.lightGreen
+                                  ],
+                                  angle: _curveAngle()
+                              ),
+                              child: SizedBox(
+                                width: 108,
+                                height: 108,
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+            ),
           ),
-        ):SizedBox(height: 0,),
-        ListView.builder(
-          cacheExtent: 1000,
-            itemCount: valList.result.length,
-            shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index){
-              return ValidatorCardStats(address: valList.result[index].operator_address,name: valList.result[index].description.moniker,commission: valList.result[index].commission.commission_rates.max_rate,identity: valList.result[index].description.identity,);
-            }
-        )
-      ],
+
+          SizedBox(
+            height: MediaQuery.of(context).size.height*0.02,
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16,5,5,10),
+            child: Text("Delegations",style: TextStyle(fontSize:25,color: grey, fontWeight: FontWeight.bold),),
+          ),
+          valList.result.length==0?Padding(
+            padding: const EdgeInsets.fromLTRB(16,25,15,16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(child: Text("No Delegations",style: TextStyle(fontSize:20,color: grey, fontWeight: FontWeight.normal),)),
+              ],
+            ),
+          ):SizedBox(height: 0,),
+          ListView.builder(
+            cacheExtent: 1000,
+              itemCount: valList.result.length,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (BuildContext context, int index){
+                return ValidatorCardStats(address: valList.result[index].operator_address,name: valList.result[index].description.moniker,commission: valList.result[index].commission.commission_rates.max_rate,identity: valList.result[index].description.identity,);
+              }
+          )
+        ],
+      ),
     );
   }
 
@@ -516,7 +519,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       curve: Curves.easeOut,
       duration: const Duration(milliseconds: 300),);
   }
-  _refresh()async {
+  Future<void>_refresh()async {
     
     try{
       print("refreshing");
