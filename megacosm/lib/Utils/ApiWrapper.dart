@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:megacosm/DBUtils/DBHelper.dart';
+import 'package:bluzelle/DBUtils/DBHelper.dart';
 
 class ApiWrapper{
   static Future<http.Response> getValidatorList() async {

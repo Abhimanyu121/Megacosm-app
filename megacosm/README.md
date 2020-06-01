@@ -1,4 +1,4 @@
-# megacosm
+# bluzelle
 
 A new Flutter application.
 

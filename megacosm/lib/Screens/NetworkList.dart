@@ -4,10 +4,10 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:megacosm/DBUtils/DBHelper.dart';
-import 'package:megacosm/DBUtils/NetworkModel.dart';
-import 'package:megacosm/Screens/NewNetwork.dart';
-import 'package:megacosm/Widgets/NetworkCard.dart';
+import 'package:bluzelle/DBUtils/DBHelper.dart';
+import 'package:bluzelle/DBUtils/NetworkModel.dart';
+import 'package:bluzelle/Screens/NewNetwork.dart';
+import 'package:bluzelle/Widgets/NetworkCard.dart';
 
 import '../Constants.dart';
 

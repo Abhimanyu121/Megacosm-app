@@ -2,11 +2,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_string_encryption/flutter_string_encryption.dart';
-import 'package:megacosm/Constants.dart';
-import 'package:megacosm/DBUtils/DBHelper.dart';
-import 'package:megacosm/DBUtils/NetworkModel.dart';
-import 'package:megacosm/Screens/NetworkInfo.dart';
-import 'package:megacosm/Utils/ColorRandminator.dart';
+import 'package:bluzelle/Constants.dart';
+import 'package:bluzelle/DBUtils/DBHelper.dart';
+import 'package:bluzelle/DBUtils/NetworkModel.dart';
+import 'package:bluzelle/Screens/NetworkInfo.dart';
+import 'package:bluzelle/Utils/ColorRandminator.dart';
 import 'package:sacco/sacco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';

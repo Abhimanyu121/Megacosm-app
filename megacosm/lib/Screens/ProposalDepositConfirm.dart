@@ -3,11 +3,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:megacosm/DBUtils/DBHelper.dart';
-import 'package:megacosm/Models/ProposalDepositModel.dart';
-import 'package:megacosm/Utils/AmountOps.dart';
-import 'package:megacosm/Utils/TransactionsWrapper.dart';
-import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:bluzelle/DBUtils/DBHelper.dart';
+import 'package:bluzelle/Models/ProposalDepositModel.dart';
+import 'package:bluzelle/Utils/AmountOps.dart';
+import 'package:bluzelle/Utils/TransactionsWrapper.dart';
+import 'package:bluzelle/Widgets/HeadingCard.dart';
 
 import '../Constants.dart';
 import 'ProposalDepositTx.dart';

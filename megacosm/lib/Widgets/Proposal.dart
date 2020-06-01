@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:megacosm/Models/Proposal.dart';
-import 'package:megacosm/Screens/ProposalDetails.dart';
-import 'package:megacosm/Utils/AmountOps.dart';
-import 'package:megacosm/Utils/ColorRandminator.dart';
+import 'package:bluzelle/Models/Proposal.dart';
+import 'package:bluzelle/Screens/ProposalDetails.dart';
+import 'package:bluzelle/Utils/AmountOps.dart';
+import 'package:bluzelle/Utils/ColorRandminator.dart';
 
 class ProposalsWidget extends StatelessWidget{
   final Proposal model;

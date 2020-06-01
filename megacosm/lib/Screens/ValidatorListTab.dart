@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:megacosm/Models/Validator.dart';
-import 'package:megacosm/Models/ValidatorList.dart';
-import 'package:megacosm/Utils/ApiWrapper.dart';
-import 'package:megacosm/Widgets/ValidatorCard.dart';
+import 'package:bluzelle/Models/Validator.dart';
+import 'package:bluzelle/Models/ValidatorList.dart';
+import 'package:bluzelle/Utils/ApiWrapper.dart';
+import 'package:bluzelle/Widgets/ValidatorCard.dart';
 
 import '../Constants.dart';
 class ValidatorListTab extends StatefulWidget {

@@ -3,11 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:megacosm/Models/RedelegationAmountModel.dart';
-import 'package:megacosm/Models/RelegationSelection.dart';
-import 'package:megacosm/Screens/RedelegationAmount.dart';
-import 'package:megacosm/Utils/AmountOps.dart';
-import 'package:megacosm/Utils/ColorRandminator.dart';
+import 'package:bluzelle/Models/RedelegationAmountModel.dart';
+import 'package:bluzelle/Models/RelegationSelection.dart';
+import 'package:bluzelle/Screens/RedelegationAmount.dart';
+import 'package:bluzelle/Utils/AmountOps.dart';
+import 'package:bluzelle/Utils/ColorRandminator.dart';
 import 'package:http/http.dart'as http;
 class RedelegationCard extends StatefulWidget{
   final String name;

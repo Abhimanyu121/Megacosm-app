@@ -1,13 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:megacosm/DBUtils/DBHelper.dart';
-import 'package:megacosm/Models/RedelegationTxModel.dart';
-import 'package:megacosm/Models/RedelegatorConfirmation.dart';
-import 'package:megacosm/Utils/AmountOps.dart';
-import 'package:megacosm/Utils/ApiWrapper.dart';
-import 'package:megacosm/Utils/TransactionsWrapper.dart';
-import 'package:megacosm/Widgets/HeadingCard.dart';
+import 'package:bluzelle/DBUtils/DBHelper.dart';
+import 'package:bluzelle/Models/RedelegationTxModel.dart';
+import 'package:bluzelle/Models/RedelegatorConfirmation.dart';
+import 'package:bluzelle/Utils/AmountOps.dart';
+import 'package:bluzelle/Utils/ApiWrapper.dart';
+import 'package:bluzelle/Utils/TransactionsWrapper.dart';
+import 'package:bluzelle/Widgets/HeadingCard.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 

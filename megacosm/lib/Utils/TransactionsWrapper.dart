@@ -1,6 +1,6 @@
 import 'package:flutter_string_encryption/flutter_string_encryption.dart';
-import 'package:megacosm/Constants.dart';
-import 'package:megacosm/DBUtils/DBHelper.dart';
+import 'package:bluzelle/Constants.dart';
+import 'package:bluzelle/DBUtils/DBHelper.dart';
 import 'package:sacco/sacco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';

@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:megacosm/Models/ProposalListModel.dart';
-import 'package:megacosm/Utils/ApiWrapper.dart';
-import 'package:megacosm/Widgets/Proposal.dart';
+import 'package:bluzelle/Models/ProposalListModel.dart';
+import 'package:bluzelle/Utils/ApiWrapper.dart';
+import 'package:bluzelle/Widgets/Proposal.dart';
 
 import '../Constants.dart';
 import 'NewProposal.dart';
