@@ -36,7 +36,7 @@ class ProposalListState extends State<ProposalListTab> with
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _refresh,
-      child: ListView(
+      child: Column(
         //  mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
@@ -95,7 +95,7 @@ class ProposalListState extends State<ProposalListTab> with
                   fit: FlexFit.loose,
                   child: ListView.builder(
                     cacheExtent: 100,
-                    shrinkWrap: true,
+                   // shrinkWrap: true,
                     physics: AlwaysScrollableScrollPhysics(),
                     itemCount: model.result.length,
                     itemBuilder: (BuildContext ctx, int index ){
