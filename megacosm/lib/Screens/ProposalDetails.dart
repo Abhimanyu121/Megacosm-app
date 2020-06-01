@@ -31,7 +31,7 @@ class ProposalInfoState extends State<ProposalInfo>{
   Proposal args;
   String bal = "0";
   var gas = 0.0;
-  _getAddress() async {
+  Future<void>_getAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     gas = double.parse(prefs.getString("gas"));    setState(() {
       delegatorAddress = prefs.getString("address");
@@ -71,299 +71,302 @@ class ProposalInfoState extends State<ProposalInfo>{
             iconTheme: IconThemeData(color:Colors.black),
             title: HeaderTitle(first: "Proposal", second: "Details",)
         ),
-        body: loading?_loader():ListView(
-          cacheExtent: 100,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16,8,8,8),
-              child: Text(args.content.value.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
-            ),
-            Padding(
-                padding: const EdgeInsets.fromLTRB(30,8,8,8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(args.content.value.description, style: TextStyle(color: Colors.grey,))
-                  ],
-                )
-            ),
-            args.proposal_status=="DepositPeriod"? Padding(
-                padding: const EdgeInsets.fromLTRB(30,8,8,8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text("Deposits: ", style: TextStyle(color: Colors.black,)),
-                    Text(BalOperations.toBNT(args.total_deposit[0].amount)+" BNT", style: TextStyle(color: Colors.grey,))
-                  ],
-                )
-            ): SizedBox(height: 0,),
-            args.proposal_status!="DepositPeriod"&&args.proposal_status!="VotingPeriod"?Padding(
-                padding: const EdgeInsets.fromLTRB(30,8,8,8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text("Votes: ", style: TextStyle(color: Colors.black,)),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Yes: "+args.final_tally_result.yes, style: TextStyle(color: Colors.grey,)),
-                          Text("No: "+args.final_tally_result.no, style: TextStyle(color: Colors.grey,)),
-                          Text("Abstain: "+args.final_tally_result.abstain, style: TextStyle(color: Colors.grey,)),
-                          Text("No With Veto: "+args.final_tally_result.no_with_veto, style: TextStyle(color: Colors.grey,)),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-            ):SizedBox(height: 0,),
-            args.proposal_status == "VotingPeriod"?FutureBuilder(
-              future : ApiWrapper.castedVote(args.id, delegatorAddress),
-              builder: (BuildContext context, snapshot){
-                try{
-                  if(snapshot.error==null){
-                    print("status error");
-                    if(snapshot.data.statusCode == 404){
-                      print("status 404");
+        body: loading?_loader():RefreshIndicator(
+          onRefresh: _getAddress,
+          child: ListView(
+            cacheExtent: 100,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16,8,8,8),
+                child: Text(args.content.value.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)
+              ),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(args.content.value.description, style: TextStyle(color: Colors.grey,))
+                    ],
+                  )
+              ),
+              args.proposal_status=="DepositPeriod"? Padding(
+                  padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Deposits: ", style: TextStyle(color: Colors.black,)),
+                      Text(BalOperations.toBNT(args.total_deposit[0].amount)+" BNT", style: TextStyle(color: Colors.grey,))
+                    ],
+                  )
+              ): SizedBox(height: 0,),
+              args.proposal_status!="DepositPeriod"&&args.proposal_status!="VotingPeriod"?Padding(
+                  padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Votes: ", style: TextStyle(color: Colors.black,)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Yes: "+args.final_tally_result.yes, style: TextStyle(color: Colors.grey,)),
+                            Text("No: "+args.final_tally_result.no, style: TextStyle(color: Colors.grey,)),
+                            Text("Abstain: "+args.final_tally_result.abstain, style: TextStyle(color: Colors.grey,)),
+                            Text("No With Veto: "+args.final_tally_result.no_with_veto, style: TextStyle(color: Colors.grey,)),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+              ):SizedBox(height: 0,),
+              args.proposal_status == "VotingPeriod"?FutureBuilder(
+                future : ApiWrapper.castedVote(args.id, delegatorAddress),
+                builder: (BuildContext context, snapshot){
+                  try{
+                    if(snapshot.error==null){
+                      print("status error");
+                      if(snapshot.data.statusCode == 404){
+                        print("status 404");
+                        return SizedBox(
+                          height: 0,
+                        );
+                      }
+                      else{
+                        print("status not 404");
+                        String body = utf8.decode(snapshot.data.bodyBytes);
+                        final json = jsonDecode(body);
+                        UserVoteWrapper model = UserVoteWrapper.fromJson(json);
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text("You have casted:"),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(model.result.option),
+                              )
+                            ],
+                          ),
+                        );
+
+                      }
+                    }
+                    else{
+                      print("status not error");
                       return SizedBox(
                         height: 0,
                       );
                     }
-                    else{
-                      print("status not 404");
-                      String body = utf8.decode(snapshot.data.bodyBytes);
-                      final json = jsonDecode(body);
-                      UserVoteWrapper model = UserVoteWrapper.fromJson(json);
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(30,8,8,8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text("You have casted:"),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(model.result.option),
-                            )
-                          ],
-                        ),
-                      );
-
-                    }
                   }
-                  else{
-                    print("status not error");
+                  catch(e){
+                    print(e);
                     return SizedBox(
                       height: 0,
                     );
                   }
-                }
-                catch(e){
-                  print(e);
-                  return SizedBox(
-                    height: 0,
-                  );
-                }
 
-              },
-            ):SizedBox(height: 0,),
-            args.proposal_status=="DepositPeriod"? Padding(
-                padding: const EdgeInsets.fromLTRB(30,8,30,8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    depositing?SizedBox(height: 0,):RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      onPressed: (){
-                       setState(() {
-                         depositing =true;
-                       });
-                      },
-                      padding: EdgeInsets.all(12),
-                      color: appTheme,
-                      child:Text('Make a deposit', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                    ),
-                    depositing?Padding(
-                      padding: const EdgeInsets.fromLTRB(8,8,8,8),
-                      child: TextFormField(
-                        controller: _amount,
-                        keyboardType: TextInputType.numberWithOptions(decimal: true),
-                        autovalidate: true,
-                        validator: (val) => (val!=""?double.parse(val)<double.parse(bal):true)
-                            ? null
-                            : 'Please enter a valid amount',
-                        decoration: InputDecoration(
-                          hintText: "Amount to Stake",
-                          border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                          contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                },
+              ):SizedBox(height: 0,),
+              args.proposal_status=="DepositPeriod"? Padding(
+                  padding: const EdgeInsets.fromLTRB(30,8,30,8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      depositing?SizedBox(height: 0,):RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
                         ),
+                        onPressed: (){
+                         setState(() {
+                           depositing =true;
+                         });
+                        },
+                        padding: EdgeInsets.all(12),
+                        color: appTheme,
+                        child:Text('Make a deposit', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                       ),
-                    ):SizedBox(height: 0,),
-                    depositing?Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Center(
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                            onPressed: (){
-                              if(double.parse(bal)<gas){
-                                Toast.show("Insufficent Balance",context);
-                              }
-                              Navigator.of(context).popAndPushNamed(
-                                ProposalDepositConfirm.routeName,
-                                arguments: ProposalDepositModel(
-                                  model: args,
-                                  amount: _amount.text,
-                                  balance: bal,
-                                )
-                              );
-                            },
-                            padding: EdgeInsets.all(12),
-                            color: appTheme,
-                            child:Text('Deposit', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                      depositing?Padding(
+                        padding: const EdgeInsets.fromLTRB(8,8,8,8),
+                        child: TextFormField(
+                          controller: _amount,
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          autovalidate: true,
+                          validator: (val) => (val!=""?double.parse(val)<double.parse(bal):true)
+                              ? null
+                              : 'Please enter a valid amount',
+                          decoration: InputDecoration(
+                            hintText: "Amount to Stake",
+                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                            contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                           ),
                         ),
-                      ],
-                    ):SizedBox(height: 0,),
-                  ],
-                )
-            ):SizedBox(height: 0,) ,
-            args.proposal_status=="VotingPeriod"?Padding(
-                padding: const EdgeInsets.fromLTRB(30,8,8,8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text("Vote or change Vote", style: TextStyle(color: Colors.black,)),
-                  ],
-                )
-            ):SizedBox(height: 0,) ,
-            args.proposal_status=="VotingPeriod"?
-            Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
+                      ):SizedBox(height: 0,),
+                      depositing?Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Center(
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              onPressed: (){
+                                if(double.parse(bal)<gas){
+                                  Toast.show("Insufficent Balance",context);
+                                }
+                                Navigator.of(context).popAndPushNamed(
+                                  ProposalDepositConfirm.routeName,
+                                  arguments: ProposalDepositModel(
+                                    model: args,
+                                    amount: _amount.text,
+                                    balance: bal,
+                                  )
+                                );
+                              },
+                              padding: EdgeInsets.all(12),
+                              color: appTheme,
+                              child:Text('Deposit', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                        ],
+                      ):SizedBox(height: 0,),
+                    ],
+                  )
+              ):SizedBox(height: 0,) ,
+              args.proposal_status=="VotingPeriod"?Padding(
+                  padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Vote or change Vote", style: TextStyle(color: Colors.black,)),
+                    ],
+                  )
+              ):SizedBox(height: 0,) ,
+              args.proposal_status=="VotingPeriod"?
+              Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
 
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      onPressed: (){
-                        if(double.parse(bal)<gas){
-                          Toast.show("Insufficent Balance",context);
-                        }
-                        Navigator.of(context).popAndPushNamed(
-                            ConfirmVote.routeName,
-                            arguments: VoteModel(
-                              model: args,
-                              vote : "Yes"
-                            )
-                        );
-                      },
-                      padding: EdgeInsets.all(12),
-                      color: appTheme,
-                      child:SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: Center(child: Text('Yes', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)))
-                      )
-                    ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      onPressed: (){
-                        if(double.parse(bal)<gas){
-                          Toast.show("Insufficent Balance",context);
-                        }
-                        Navigator.of(context).popAndPushNamed(
-                            ConfirmVote.routeName,
-                            arguments: VoteModel(
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: (){
+                          if(double.parse(bal)<gas){
+                            Toast.show("Insufficent Balance",context);
+                          }
+                          Navigator.of(context).popAndPushNamed(
+                              ConfirmVote.routeName,
+                              arguments: VoteModel(
                                 model: args,
-                                vote : "No"
-                            )
-                        );
-                      },
-                      padding: EdgeInsets.all(12),
-                      color: appTheme,
-                      child:SizedBox(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          child: SizedBox(
-                              width: MediaQuery.of(context).size.width*0.3,
-                              child: Center(child: Text('No', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)))
-                          )
+                                vote : "Yes"
+                              )
+                          );
+                        },
+                        padding: EdgeInsets.all(12),
+                        color: appTheme,
+                        child:SizedBox(
+                            width: MediaQuery.of(context).size.width*0.3,
+                            child: Center(child: Text('Yes', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)))
+                        )
                       ),
-                    ),
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        onPressed: (){
+                          if(double.parse(bal)<gas){
+                            Toast.show("Insufficent Balance",context);
+                          }
+                          Navigator.of(context).popAndPushNamed(
+                              ConfirmVote.routeName,
+                              arguments: VoteModel(
+                                  model: args,
+                                  vote : "No"
+                              )
+                          );
+                        },
+                        padding: EdgeInsets.all(12),
+                        color: appTheme,
+                        child:SizedBox(
+                            width: MediaQuery.of(context).size.width*0.3,
+                            child: SizedBox(
+                                width: MediaQuery.of(context).size.width*0.3,
+                                child: Center(child: Text('No', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)))
+                            )
+                        ),
+                      ),
 
-                  ],
-                ),
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                   children: <Widget>[
-                     RaisedButton(
-                       shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(24),
+                    ],
+                  ),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                     children: <Widget>[
+                       RaisedButton(
+                         shape: RoundedRectangleBorder(
+                           borderRadius: BorderRadius.circular(24),
+                         ),
+                         onPressed: (){
+                           if(double.parse(bal)<gas){
+                             Toast.show("Insufficent Balance",context);
+                           }
+                           Navigator.of(context).popAndPushNamed(
+                               ConfirmVote.routeName,
+                               arguments: VoteModel(
+                                   model: args,
+                                   vote : "Abstain"
+                               )
+                           );
+                         },
+                         padding: EdgeInsets.all(12),
+                         color: appTheme,
+                         child:SizedBox(
+                             width: MediaQuery.of(context).size.width*0.3,
+                             child: Center(child: Text('Abstain', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)))
+                         )
                        ),
-                       onPressed: (){
-                         if(double.parse(bal)<gas){
-                           Toast.show("Insufficent Balance",context);
-                         }
-                         Navigator.of(context).popAndPushNamed(
-                             ConfirmVote.routeName,
-                             arguments: VoteModel(
-                                 model: args,
-                                 vote : "Abstain"
-                             )
-                         );
-                       },
-                       padding: EdgeInsets.all(12),
-                       color: appTheme,
-                       child:SizedBox(
-                           width: MediaQuery.of(context).size.width*0.3,
-                           child: Center(child: Text('Abstain', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)))
-                       )
-                     ),
-                     RaisedButton(
-                       shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(24),
+                       RaisedButton(
+                         shape: RoundedRectangleBorder(
+                           borderRadius: BorderRadius.circular(24),
+                         ),
+                         onPressed: (){
+                           if(double.parse(bal)<gas){
+                             Toast.show("Insufficent Balance",context);
+                           }
+                           Navigator.of(context).popAndPushNamed(
+                               ConfirmVote.routeName,
+                               arguments: VoteModel(
+                                   model: args,
+                                   vote : "NoWithVeto"
+                               )
+                           );
+                         },
+                         padding: EdgeInsets.all(12),
+                         color: appTheme,
+                         child:SizedBox(
+                             width: MediaQuery.of(context).size.width*0.3,
+                             child: Center(child: Text('No With Veto', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)))
+                         )
                        ),
-                       onPressed: (){
-                         if(double.parse(bal)<gas){
-                           Toast.show("Insufficent Balance",context);
-                         }
-                         Navigator.of(context).popAndPushNamed(
-                             ConfirmVote.routeName,
-                             arguments: VoteModel(
-                                 model: args,
-                                 vote : "NoWithVeto"
-                             )
-                         );
-                       },
-                       padding: EdgeInsets.all(12),
-                       color: appTheme,
-                       child:SizedBox(
-                           width: MediaQuery.of(context).size.width*0.3,
-                           child: Center(child: Text('No With Veto', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)))
-                       )
-                     ),
 
-                   ],
-                 ),
+                     ],
+                   ),
 
-              ],
-            ) :
-            SizedBox(height: 0,),
+                ],
+              ) :
+              SizedBox(height: 0,),
 
-          ],
+            ],
+          ),
         )
     );
   }
