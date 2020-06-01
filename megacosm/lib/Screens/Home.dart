@@ -216,7 +216,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           elevation: 1,
           backgroundColor: nearlyWhite,
           title: Text('Are you sure?'),
-          content:  Text("After you logout you will need to enter your mnemonic againg to get access to this account. Mnemonic will be copied on logout, please store it securely.",style: TextStyle(color: Colors.red),),
+          content:  Text("After you logout, you will need to enter your mnemonic again, to get access to this account. The mnemonic will be copied on logout, to the clipboard. Please store it securely.",style: TextStyle(color: Colors.red),),
           actions: <Widget>[
             FlatButton(
                 child: Text("Cancel"),
