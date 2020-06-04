@@ -282,7 +282,17 @@ class NewStakeState extends State<NewStake>{
                       Text(BalOperations.seperator(stake) +" $denom", style: TextStyle(color: Colors.grey,))
                     ],
                   )
-              ):SizedBox(height: 0,width: 0,),
+              ):Padding(
+                  padding: const EdgeInsets.fromLTRB(30,8,8,8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Already Staked Amount", style: TextStyle(color: Colors.black,)),
+                      Text("0" +" $denom", style: TextStyle(color: Colors.grey,))
+                    ],
+                  )
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8,8,8,8),
                 child: TextFormField(
