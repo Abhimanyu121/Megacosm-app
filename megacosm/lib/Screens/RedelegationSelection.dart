@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -26,16 +27,12 @@ class RedelegationSelectionState extends State<RedelegationSelection>{
     Future.delayed(Duration.zero,() {
       args = ModalRoute.of(context).settings.arguments;
       print(args.delegatorAddress);
+      infiniteLoop();
 
     });
 
   }
-  Future<void>_refresh()async {
-    await Future.delayed(Duration(microseconds: 1));
-    setState(() {
-      future = ApiWrapper.getValidatorList();
-    });
-  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -156,6 +153,14 @@ class RedelegationSelectionState extends State<RedelegationSelection>{
     } else {
       return 0;
     }
+  }
+  infiniteLoop(){
+    new Timer.periodic(Duration(seconds: 30), (Timer t){
+      if(mounted){
+        refresh();
+      }
+    });
+
   }
 
 }

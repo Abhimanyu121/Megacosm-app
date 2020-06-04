@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -87,7 +88,9 @@ class DelegationInfoState extends State<DelegationInfo>{
       args = ModalRoute.of(context).settings.arguments;
       var intCom = double.parse(args.commission);
       str = intCom.toStringAsFixed(5);
-      _getAddress();
+      _getAddress().then((val){
+        infiniteLoop();
+      });
       setState(() {
         placingOrder= false;
       });
@@ -393,6 +396,14 @@ class DelegationInfoState extends State<DelegationInfo>{
       this.url= url;
       image = true;
     });
+  }
+  infiniteLoop(){
+    new Timer.periodic(Duration(seconds: 30), (Timer t){
+      if(mounted){
+        _getAddress();
+      }
+    });
+
   }
   _loader(){
     return Center(
