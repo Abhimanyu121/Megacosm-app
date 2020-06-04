@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -54,7 +55,9 @@ class ProposalInfoState extends State<ProposalInfo>{
   void initState() {
     Future.delayed(Duration.zero,() {
       args = ModalRoute.of(context).settings.arguments;
-      _getAddress();
+      _getAddress().then((val){
+        infiniteLoop();
+      });
     });
 
   }
@@ -378,5 +381,13 @@ class ProposalInfoState extends State<ProposalInfo>{
         color: appTheme,
       ),
     );
+  }
+  infiniteLoop(){
+    new Timer.periodic(Duration(seconds: 30), (Timer t){
+      if(mounted){
+        _getAddress();
+      }
+    });
+
   }
 }
