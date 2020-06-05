@@ -267,15 +267,9 @@ class ValidatorListState extends State<ValidatorListTab> with
     });
   }
   int nameComp(Validator a, Validator b) {
-    final propertyA = a.description.moniker.toLowerCase();
-    final propertyB = b.description.moniker.toLowerCase();
-    if (propertyA.trim().codeUnitAt(0) < propertyB.trim().codeUnitAt(0)) {
-      return -1;
-    } else if (propertyA.trim().codeUnitAt(0) >  propertyB.trim().codeUnitAt(0)) {
-      return 1;
-    } else {
-      return 0;
-    }
+    final String propertyA = a.description.moniker.toLowerCase();
+    final String propertyB = b.description.moniker.toLowerCase();
+    return propertyA.compareTo(propertyB);
   }
   Future<void> _refresh() async  {
     await _getWithoutLoader();
