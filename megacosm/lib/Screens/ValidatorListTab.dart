@@ -117,9 +117,9 @@ class ValidatorListState extends State<ValidatorListTab> with
           ],
         )):RefreshIndicator(
           onRefresh: _refresh,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: ListView(
+//              mainAxisAlignment: MainAxisAlignment.start,
+//              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0,10,8,5),
@@ -174,26 +174,26 @@ class ValidatorListState extends State<ValidatorListTab> with
                     borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
                   ),
                 ),
-            Expanded(
-                  child: ListView.builder(
-                    cacheExtent: 1000,
-                    itemCount: valList.length,
-                    itemBuilder: (BuildContext ctx, int index ){
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              cacheExtent: 1000,
+              itemCount: valList.length,
+              itemBuilder: (BuildContext ctx, int index ){
 
-                      return ValidatorCard(
-                        commission: valList[index].commission.commission_rates.rate,
-                        name: valList[index].description.moniker,
-                        address: valList[index].operator_address,
-                        details: valList[index].description.details,
-                        website: valList[index].description.website,
-                        security_contract: valList[index].description.security_contact,
-                        identity: valList[index].description.identity,
-                        stake: valList[index].delegator_shares,
-                        ct: ct,
-                      );
-                    },
-                  ),
-                )
+                return ValidatorCard(
+                  commission: valList[index].commission.commission_rates.rate,
+                  name: valList[index].description.moniker,
+                  address: valList[index].operator_address,
+                  details: valList[index].description.details,
+                  website: valList[index].description.website,
+                  security_contract: valList[index].description.security_contact,
+                  identity: valList[index].description.identity,
+                  stake: valList[index].delegator_shares,
+                  ct: ct,
+                );
+              },
+            )
 
             ],
           ),
