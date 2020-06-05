@@ -42,7 +42,8 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   bool error = false;
   String denom="";
   String address;
-  ValidatorList valList;
+  int ct =0;
+  List <Validator>valList;
   getInfo()async {
     setState(() {
       error =false;
@@ -77,9 +78,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       String delBody = utf8.decode(delegations.bodyBytes);
       final delJson = jsonDecode(delBody);
       BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
-      valList = ValidatorList.fromJson(delJson);
-      var ls = valList.result;
-      ls.sort(mySortComparison);
+      var ls = ValidatorList.fromJson(delJson);
       bondedStake = BalOperations.toBNT(model.result.bonded_tokens);
       unbondedStake = BalOperations.toBNT(model.result.not_bonded_tokens);
       if(balanceWrapper.result.isEmpty){
@@ -91,12 +90,15 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
         loading = false;
         this.address = address;
         error= false;
+        valList = ls.result;
+        valList.sort(mySortComparison);
       });
     }catch(e){
       setState(() {
         print(e.toString());
         error = true;
         loading = false;
+
       });
     }
 
@@ -442,7 +444,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
             padding: const EdgeInsets.fromLTRB(16,5,5,10),
             child: Text("Delegations",style: TextStyle(fontSize:25,color: grey, fontWeight: FontWeight.bold),),
           ),
-          valList.result.length==0?Padding(
+          valList.length==0?Padding(
             padding: const EdgeInsets.fromLTRB(16,25,15,16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -450,14 +452,15 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
                 Center(child: Text("No Delegations",style: TextStyle(fontSize:20,color: grey, fontWeight: FontWeight.normal),)),
               ],
             ),
-          ):SizedBox(height: 0,),
+          ):
           ListView.builder(
             cacheExtent: 1000,
-              itemCount: valList.result.length,
+              itemCount: valList.length,
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemBuilder: (BuildContext context, int index){
-                return ValidatorCardStats(address: valList.result[index].operator_address,name: valList.result[index].description.moniker,commission: valList.result[index].commission.commission_rates.max_rate,identity: valList.result[index].description.identity,);
+                ct ++;
+                return ValidatorCardStats(ct: ct, address: valList[index].operator_address,name: valList[index].description.moniker,commission: valList[index].commission.commission_rates.rate,identity: valList[index].description.identity,);
               }
           )
         ],
@@ -477,7 +480,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
           elevation: 1,
           backgroundColor: nearlyWhite,
-          title: Text('Scan to recieve $denom'),
+          title: Text('Scan to receive $denom'),
           content:  Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -506,9 +509,9 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
     final propertyA = double.parse(a.delegator_shares);
     final propertyB = double.parse(b.delegator_shares);
     if (propertyA < propertyB) {
-      return 1;
-    } else if (propertyA > propertyB) {
       return -1;
+    } else if (propertyA > propertyB) {
+      return 1;
     } else {
       return 0;
     }
@@ -522,7 +525,8 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
   Future<void>_refresh()async {
     
     try{
-      print("refreshing");
+
+      print("refreshing1");
       final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
       var nw = await database.networkDao.findActiveNetwork();
       denom = (nw[0].denom).substring(1).toUpperCase();
@@ -540,9 +544,8 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       String delBody = utf8.decode(delegations.bodyBytes);
       final delJson = jsonDecode(delBody);
       BalanceWrapper balanceWrapper =  BalanceWrapper.fromJson(json1);
-      valList = ValidatorList.fromJson(delJson);
-      var ls = valList.result;
-      ls.sort(mySortComparison);
+      var ls = ValidatorList.fromJson(delJson);
+
       bondedStake = BalOperations.toBNT(model.result.bonded_tokens);
       unbondedStake = BalOperations.toBNT(model.result.not_bonded_tokens);
       if(balanceWrapper.result.isEmpty){
@@ -550,15 +553,17 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       }else {
         balance = BalOperations.toBNT(balanceWrapper.result[0].amount);
       }
+      ls.result.sort(mySortComparison);
+
 
       setState(() {
         loading = false;
         this.address = address;
+        valList = ls.result;
       });
     }catch(e){
       setState(() {
         print(e.toString());
-
         loading = false;
       });
     }

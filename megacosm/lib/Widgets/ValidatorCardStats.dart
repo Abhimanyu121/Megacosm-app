@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -17,7 +18,9 @@ class ValidatorCardStats extends StatefulWidget{
   final String commission;
   final String address;
   final String identity;
-  ValidatorCardStats({this.commission, this.address, this.name, this.identity});
+  final int ct;
+  Function refresh;
+  ValidatorCardStats({this.commission, this.address, this.name, this.identity, this.ct});
 
   @override
   _ValidatorCardStatsState createState() => _ValidatorCardStatsState();
@@ -26,6 +29,7 @@ class ValidatorCardStats extends StatefulWidget{
 class _ValidatorCardStatsState extends State<ValidatorCardStats> {
   bool loading = true;
   String url;
+  bool loaded = false;
   String stake="";
   _getPicture()async {
     var id = widget.identity;
@@ -41,6 +45,8 @@ class _ValidatorCardStatsState extends State<ValidatorCardStats> {
     });
   }
   _stake()async{
+    print("fetching stake");
+    stake = "Staked Amount: ";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Response resp2 = await ApiWrapper.delegatedAmount(prefs.getString("address"),widget.address);
     String body2 = utf8.decode(resp2.bodyBytes);
@@ -50,16 +56,27 @@ class _ValidatorCardStatsState extends State<ValidatorCardStats> {
     setState(() {
       stake = "Staked Amount: $amt BNT";
     });
+    loaded = true;
 
   }
   @override
   void initState() {
     _stake();
     _getPicture();
+    widget.refresh=_stake;
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
+    if(loaded){
+      loaded = false;
+    }
+    else{
+      if(mounted){
+        _stake();
+      }
+
+    }
     var commission = double.parse(widget.commission);
     String str = commission.toStringAsFixed(5);
     return Center(
@@ -133,5 +150,16 @@ class _ValidatorCardStatsState extends State<ValidatorCardStats> {
           shape: BoxShape.circle
       ),
     );
+  }
+  infiniteLoop(){
+
+    new Timer.periodic(Duration(seconds: 30), (Timer t){
+      if(mounted){
+        setState(() {
+          _stake();
+        });
+      }
+    });
+
   }
 }

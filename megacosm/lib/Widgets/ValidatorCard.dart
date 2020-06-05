@@ -18,7 +18,8 @@ class ValidatorCard extends StatefulWidget{
   final String security_contract;
   final String details;
   final String stake;
-  ValidatorCard({this.commission, this.address, this.name,this.website,this.identity, this.details, this.security_contract, this.stake});
+  final int ct;
+  ValidatorCard({this.commission, this.address, this.name,this.website,this.identity, this.details, this.security_contract, this.stake, this.ct});
 
   @override
   _ValidatorCardState createState() => _ValidatorCardState();
@@ -26,12 +27,21 @@ class ValidatorCard extends StatefulWidget{
 
 class _ValidatorCardState extends State<ValidatorCard> {
   bool loading =true;
+  bool loaded = false;
   String url;
+  int ct=-1;
   _getPicture()async {
+    setState(() {
+      loading = true;
+    });
     var id = widget.identity;
     var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
     var js = jsonDecode(resp.body);
     if(js["them"]==null){
+      setState(() {
+        loading =true;
+        loaded = true;
+      });
       return;
     }
     var url = js["them"][0]["pictures"]["primary"]["url"];
@@ -39,6 +49,7 @@ class _ValidatorCardState extends State<ValidatorCard> {
       this.url= url;
       loading = false;
     });
+    loaded = true;
   }
 
   @override
@@ -48,12 +59,24 @@ class _ValidatorCardState extends State<ValidatorCard> {
   }
   @override
   Widget build(BuildContext context) {
+
+      if(loaded){
+        loaded = false;
+      }
+      else{
+        if(ct!= widget.ct){
+          _getPicture();
+          ct = widget.ct;
+        }
+      }
+
     var stake = BalOperations.seperator(BalOperations.toBNT( widget.stake));
     var intCom = double.parse(widget.commission);
     var str = intCom.toStringAsFixed(5);
     return Center(
       child: FlatButton(
         onPressed: (){
+          FocusScope.of(context).requestFocus(FocusNode());
           Navigator.pushNamed(
             context,
             NewStake.routeName,
