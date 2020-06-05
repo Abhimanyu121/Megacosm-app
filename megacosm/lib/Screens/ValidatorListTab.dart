@@ -23,8 +23,9 @@ class ValidatorListState extends State<ValidatorListTab> with
   bool error = false;
   bool loading = true;
   bool searching =false;
-  var valList;
+  List valList;
   var orignal;
+  bool asc = true;
   int ct=0;
   TextEditingController search = TextEditingController();
   _getData()async {
@@ -75,6 +76,9 @@ class ValidatorListState extends State<ValidatorListTab> with
     }
     else{
       ls.sort(mySortComparison);
+    }
+    if(!asc){
+      ls= ls.reversed.toList();
     }
     setState(() {
       valList = ls;
@@ -148,31 +152,65 @@ class ValidatorListState extends State<ValidatorListTab> with
                     ),
                   ),
                 ),
-                searching?Container():Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0,10,8,25),
-                  child: OutlineButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: SizedBox(width:MediaQuery.of(context).size.width*0.7,
-                        child: Center(child: Text(sort?"SORT BY STAKE":"SORT BY NAME"))),
-                    onPressed: (){
-                      if(sort){
-                        setState(() {
-                          ct++;
-                          sort = false;
-                        });
-                        srt();
-                      }
-                      else{
-                        setState(() {
-                          ct ++;
-                          sort = true;
-                        });
-                        srt();
-                      }
-                    },
+                searching?Container():Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0,10,8,25),
+                      child: OutlineButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                        child: SizedBox(width:MediaQuery.of(context).size.width*0.5,
+                            child: Center(child: Text(sort?"SORT BY STAKE":"SORT BY NAME"))),
+                        onPressed: (){
+                          if(sort){
+                            setState(() {
+                              ct++;
+                              sort = false;
+                              asc= true;
+                            });
+                            srt();
+                          }
+                          else{
+                            setState(() {
+                              ct ++;
+                              sort = true;
+                              asc =true;
+                            });
+                            srt();
+                          }
+                        },
 
-                    borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
-                  ),
+                        borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0,10,8,25),
+                      child: OutlineButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                        child: SizedBox(width:MediaQuery.of(context).size.width*0.1,
+                            child: Center(child: Icon(asc?Icons.arrow_downward:Icons.arrow_upward))),
+                        onPressed: (){
+                          if(asc){
+                            setState(() {
+                             asc = false;
+                             ct++;
+                             valList = valList.reversed.toList();
+                            });
+                          }
+                          else{
+                            setState(() {
+                             asc = true;
+                             ct++;
+                             valList = valList.reversed.toList();
+                            });
+                            srt();
+                          }
+                        },
+
+                        borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
+                      ),
+                    ),
+                  ],
                 ),
             ListView.builder(
               shrinkWrap: true,
@@ -211,20 +249,23 @@ class ValidatorListState extends State<ValidatorListTab> with
     }
   }
   srt(){
-    var ls = valList;
+    var ls = orignal;
     if(sort){
       ls.sort(nameComp);
     }
     else{
       ls.sort(mySortComparison);
     }
+    setState(() {
+      valList = ls;
+    });
   }
   int nameComp(Validator a, Validator b) {
-    final propertyA = a.description.moniker.toLowerCase().codeUnitAt(0);
-    final propertyB = b.description.moniker.toLowerCase().codeUnitAt(0);
-    if (propertyA < propertyB) {
+    final propertyA = a.description.moniker.toLowerCase();
+    final propertyB = b.description.moniker.toLowerCase();
+    if (propertyA.trim().codeUnitAt(0) < propertyB.trim().codeUnitAt(0)) {
       return -1;
-    } else if (propertyA > propertyB) {
+    } else if (propertyA.trim().codeUnitAt(0) >  propertyB.trim().codeUnitAt(0)) {
       return 1;
     } else {
       return 0;
