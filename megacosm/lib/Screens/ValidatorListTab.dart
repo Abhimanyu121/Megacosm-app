@@ -78,12 +78,18 @@ class ValidatorListState extends State<ValidatorListTab> with
       ls.sort(mySortComparison);
     }
     if(!asc){
-      ls= ls.reversed.toList();
+     var  rev= ls.reversed.toList();
+     setState(() {
+       orignal = ls;
+       valList =rev;
+     });
     }
-    setState(() {
-      valList = ls;
-      orignal = ls;
-    });
+    else{
+      setState(() {
+        orignal = ls;
+        valList =ls;
+      });
+    }
     return;
   }
   @override
