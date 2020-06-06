@@ -9,6 +9,7 @@ import 'package:bluzelle/Screens/NewStake.dart';
 import 'package:bluzelle/Utils/AmountOps.dart';
 import 'package:bluzelle/Utils/ColorRandminator.dart';
 import 'package:http/http.dart'as http;
+import 'package:transparent_image/transparent_image.dart';
 class ValidatorCard extends StatefulWidget{
   final String name;
   final String commission;
@@ -141,7 +142,12 @@ class _ValidatorCardState extends State<ValidatorCard> {
       child: Center(
         child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: Image.network(url)),
+            child: FadeInImage.memoryNetwork(
+                image:url,
+              placeholder: kTransparentImage,
+              imageScale: 0.1,
+            )
+        ),
       ),
       decoration: BoxDecoration(
           color: ColorRandominator.getColor() ,

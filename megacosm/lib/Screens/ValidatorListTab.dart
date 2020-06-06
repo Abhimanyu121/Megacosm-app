@@ -128,8 +128,7 @@ class ValidatorListState extends State<ValidatorListTab> with
         )):RefreshIndicator(
           onRefresh: _refresh,
             child: ListView(
-//              mainAxisAlignment: MainAxisAlignment.start,
-//              crossAxisAlignment: CrossAxisAlignment.center,
+              cacheExtent: 6000,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0,10,8,5),
