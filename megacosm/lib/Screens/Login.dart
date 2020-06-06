@@ -58,6 +58,7 @@ class _LoginState extends State<Login> {
                       ? null
                       : 'Invalid Mnemonic',
                   decoration: InputDecoration(
+                    labelText: "Mnemonic",
                     hintText: "Enter Your Mnemonic",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                     contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
@@ -73,9 +74,10 @@ class _LoginState extends State<Login> {
                   autovalidate: true,
                   validator: (val) => (val.isEmpty||val.length>=5)
                       ? null
-                      : 'Password Should be atleast 5 Characters',
+                      : 'Password Should have at least 5 Characters',
                   decoration: InputDecoration(
-                    hintText: "Enter Your Password",
+                    labelText: "Password",
+                    hintText: "Enter Your Password(at least 5 characters)",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                     contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                   ),
@@ -135,7 +137,7 @@ class _LoginState extends State<Login> {
           var mnemonic = bip39.generateMnemonic();
           _mnemonic.text= mnemonic;
           await Clipboard.setData(ClipboardData(text: mnemonic));
-          Toast.show("Mnemonic Copied", context, duration: Toast.LENGTH_LONG);
+          Toast.show("Enter a password", context, duration: Toast.LENGTH_LONG);
         },
       ):SizedBox(
         height: 0,

@@ -127,13 +127,13 @@ class ValidatorListState extends State<ValidatorListTab> with
           ],
         )):RefreshIndicator(
           onRefresh: _refresh,
-            child: ListView(
-              cacheExtent: 6000,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0,10,8,5),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width*0.79,
+                    width: MediaQuery.of(context).size.width*0.85,
                     height:MediaQuery.of(context).size.height*0.06 ,
                     child: TextFormField(
                       autovalidate: false,
@@ -157,12 +157,13 @@ class ValidatorListState extends State<ValidatorListTab> with
                     ),
                   ),
                 ),
-                searching?Container():Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0,10,8,25),
-                      child: OutlineButton(
+                searching?Container():
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*0.85,
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    children: <Widget>[
+                      OutlineButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                         child: SizedBox(width:MediaQuery.of(context).size.width*0.5,
                             child: Center(child: Text(sort?"SORT BY STAKE":"SORT BY NAME"))),
@@ -187,10 +188,7 @@ class ValidatorListState extends State<ValidatorListTab> with
 
                         borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0,10,8,25),
-                      child: OutlineButton(
+                      OutlineButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                         child: SizedBox(width:MediaQuery.of(context).size.width*0.1,
                             child: Center(child: Icon(asc?Icons.arrow_downward:Icons.arrow_upward))),
@@ -214,28 +212,30 @@ class ValidatorListState extends State<ValidatorListTab> with
 
                         borderSide: BorderSide(color: Colors.blue,style: BorderStyle.solid),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              cacheExtent: 1000,
-              itemCount: valList.length,
-              itemBuilder: (BuildContext ctx, int index ){
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                cacheExtent: 100000,
+               // physics: AlwaysScrollableScrollPhysics(),
+                itemCount: valList.length,
+                itemBuilder: (BuildContext ctx, int index ){
 
-                return ValidatorCard(
-                  commission: valList[index].commission.commission_rates.rate,
-                  name: valList[index].description.moniker,
-                  address: valList[index].operator_address,
-                  details: valList[index].description.details,
-                  website: valList[index].description.website,
-                  security_contract: valList[index].description.security_contact,
-                  identity: valList[index].description.identity,
-                  stake: valList[index].delegator_shares,
-                  ct: ct,
-                );
-              },
+                  return ValidatorCard(
+                    commission: valList[index].commission.commission_rates.rate,
+                    name: valList[index].description.moniker,
+                    address: valList[index].operator_address,
+                    details: valList[index].description.details,
+                    website: valList[index].description.website,
+                    security_contract: valList[index].description.security_contact,
+                    identity: valList[index].description.identity,
+                    stake: valList[index].delegator_shares,
+                    ct: ct,
+                  );
+                },
+              ),
             )
 
             ],

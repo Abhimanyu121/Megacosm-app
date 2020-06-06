@@ -35,6 +35,7 @@ class _ValidatorCardState extends State<ValidatorCard> {
     setState(() {
       loading = true;
     });
+
     var id = widget.identity;
     var resp = await http.get("https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=$id&fields=pictures");
     var js = jsonDecode(resp.body);
