@@ -459,7 +459,6 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemBuilder: (BuildContext context, int index){
-                ct ++;
                 return ValidatorCardStats(ct: ct, address: valList[index].operator_address,name: valList[index].description.moniker,commission: valList[index].commission.commission_rates.rate,identity: valList[index].description.identity,);
               }
           )
@@ -559,6 +558,7 @@ class StatsState extends State<Stats>with AutomaticKeepAliveClientMixin{
       setState(() {
         loading = false;
         this.address = address;
+        ct++;
         valList = ls.result;
       });
     }catch(e){
