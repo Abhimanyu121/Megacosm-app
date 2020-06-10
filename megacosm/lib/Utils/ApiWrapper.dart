@@ -71,12 +71,9 @@ class ApiWrapper{
     var nw = await database.networkDao.findActiveNetwork();
     String baseUrl = nw[0].url;
     var start = 0;
-
+    baseUrl = baseUrl.replaceAll("dev", "explorer");
     while (start < baseUrl.length) {
-      if(baseUrl[start]+baseUrl[start+1]=="//"){
-        baseUrl=baseUrl.substring(0,start+1)+"explorer."+baseUrl.substring((start+2));
-      }
-      else if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
+      if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
         baseUrl=baseUrl.substring(0,start+4)+":3000";
         break;
       }
@@ -90,12 +87,9 @@ class ApiWrapper{
     var nw = await database.networkDao.findActiveNetwork();
     String baseUrl = nw[0].url;
     var start = 0;
-
+    baseUrl = baseUrl.replaceAll("dev", "explorer");
     while (start < baseUrl.length) {
-      if(baseUrl[start]+baseUrl[start+1]=="//"){
-        baseUrl=baseUrl.substring(0,start+1)+"explorer."+baseUrl.substring((start+2));
-      }
-      else if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
+      if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
         baseUrl=baseUrl.substring(0,start+4)+":3000";
         break;
       }
@@ -109,12 +103,9 @@ class ApiWrapper{
     var nw = await database.networkDao.findActiveNetwork();
     String baseUrl = nw[0].url;
     var start = 0;
-
+    baseUrl = baseUrl.replaceAll("dev", "explorer");
     while (start < baseUrl.length) {
-      if(baseUrl[start]+baseUrl[start+1]=="//"){
-        baseUrl=baseUrl.substring(0,start+1)+"explorer."+baseUrl.substring((start+2));
-      }
-      else if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
+     if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
         baseUrl=baseUrl.substring(0,start+4)+":3000";
         break;
       }
@@ -128,12 +119,9 @@ class ApiWrapper{
     var nw = await database.networkDao.findActiveNetwork();
     String baseUrl = nw[0].url;
     var start = 0;
-
+    baseUrl = baseUrl.replaceAll("dev", "explorer");
     while (start < baseUrl.length) {
-      if(baseUrl[start]+baseUrl[start+1]=="//"){
-        baseUrl=baseUrl.substring(0,start+1)+"explorer."+baseUrl.substring((start+2));
-      }
-      else if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
+       if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
         baseUrl=baseUrl.substring(0,start+4)+":3000";
         break;
       }

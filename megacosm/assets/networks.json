@@ -2,12 +2,12 @@
   "networks": [
     { "nick" : "Bluzelle-Public",
       "name": "bluzelle",
-      "url": "http://testnet.public.bluzelle.com:1317",
+      "url": "http://dev.testnet.public.bluzelle.com:1317",
       "denom": "ubnt"
     },
     { "nick" : "Bluzelle-Private",
       "name": "bluzelle",
-      "url": "http://testnet.private.bluzelle.com:1317",
+      "url": "http://dev.testnet.private.bluzelle.com:1317",
       "denom": "ubnt"
     }
   ]
