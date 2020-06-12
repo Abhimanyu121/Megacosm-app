@@ -33,3 +33,11 @@ You can watch the small demo video [here](https://drive.google.com/file/d/1v3Ykx
 |<img src="Screenshots/5.png" width="400">|<img src="Screenshots/8.png" width="400">
 |<img src="Screenshots/9.png" width="400">|<img src="Screenshots/10.png" width="400">
 - Head over to screenshots folder for more screenshots.
+
+- Be sure to run "pod install" in the ios folder, for a newly installed copy of the code.
+
+- Be sure to also place a key.properties file in the android folder with the following contents:
+  storePassword=*******
+  keyPassword=*******
+  keyAlias=key
+  storeFile=/path/to/key.jks
