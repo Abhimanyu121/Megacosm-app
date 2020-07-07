@@ -34,7 +34,15 @@ You can watch the small demo video [here](https://drive.google.com/file/d/1v3Ykx
 |<img src="Screenshots/9.png" width="400">|<img src="Screenshots/10.png" width="400">
 - Head over to screenshots folder for more screenshots.
 
-- Be sure to run "pod install" in the ios folder, for a newly installed copy of the code.
+Instructions to build:
+
+https://flutter.dev/docs/get-started/install/macos
+https://flutter.dev/docs/deployment/android
+https://flutter.dev/docs/deployment/ios
+
+- Be sure to run "pod install" in the ios folder, for a newly installed copy of the code. Then, "open the Runner.xcworkspace" folder. Increment the build number, build an archive, distribute to app store, wait for approval, and then goto AppStoreConnect, and distribute as required.
+
+- For Android, update the "version" in pubspec.yaml in the application folder to a new version (increment, typically). Then, run "flutter build appbundle". Then, goto Google Play Console (https://play.google.com), goto Release Management, App Releases, Manage the Internal Test under "Internal Test Track", click "Create Release" to create a new release, upload the new app bundle created, wait till it completes and then click save at the bottom, then review, then "start rollout to internal test"
 
 - Be sure to also place a key.properties file in the android folder with the following contents:
   storePassword=*******
