@@ -1,13 +1,13 @@
 {
   "networks": [
     { "nick" : "Bluzelle-Public",
-      "name": "bluzelle",
-      "url": "http://dev.testnet.public.bluzelle.com:1317",
+      "name": "bluzelleTestPublic-1",
+      "url": "http://client.sentry.testnet.public.bluzelle.com:1317",
       "denom": "ubnt"
     },
     { "nick" : "Bluzelle-Private",
       "name": "bluzelle",
-      "url": "http://dev.testnet.private.bluzelle.com:1317",
+      "url": "http://testnet.private.bluzelle.com:1317",
       "denom": "ubnt"
     }
   ]
