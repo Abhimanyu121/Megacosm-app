@@ -91,7 +91,7 @@ class NewNetworkState extends State<NewNetwork>{
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     labelText: "Network URL",
-                    hintText: "http://testnet.public.bluzelle.com:1317/",
+                    hintText: "http://client.sentry.testnet.public.bluzelle.com:1317/",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                     contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
                   ),
