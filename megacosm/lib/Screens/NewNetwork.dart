@@ -17,6 +17,7 @@ class NewNetworkState extends State<NewNetwork>{
   TextEditingController _name = TextEditingController();
   TextEditingController _nick = TextEditingController();
   TextEditingController _url = TextEditingController();
+  TextEditingController _exp = TextEditingController();
   bool fetching  = false;
   RegExp regex = new RegExp(
     r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+',
@@ -28,6 +29,7 @@ class NewNetworkState extends State<NewNetwork>{
   void initState() {
     _name.text= "bluzelle";
     _denom.text = "ubnt";
+    _exp.text = "http://explorer.testnet.public.bluzelle.com/";
   }
   @override
   Widget build(BuildContext context) {
@@ -113,6 +115,22 @@ class NewNetworkState extends State<NewNetwork>{
                 ),
               ),
               Padding(
+                padding: const EdgeInsets.fromLTRB(8,8,8,8),
+                child: TextFormField(
+                  controller: _exp,
+                  keyboardType: TextInputType.text,
+                  autovalidate: false,
+                  validator: (val) => (val.isEmpty||regex.firstMatch(val)!=null)?null:"Invalid URL",
+                  decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: "Block Explorer",
+                    hintText: "http://explorer.testnet.public.bluzelle.com",
+                    border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
+                  ),
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text("Please make sure you enter correct details or app will act abnoramlly, leave network name and denom as it is if you dont know what you are doing."),
               ),
@@ -133,12 +151,21 @@ class NewNetworkState extends State<NewNetwork>{
                       Toast.show("Invalid URL", context);
                       return;
                     }
+                    var ex = regex.firstMatch(_exp.text);
+                    if(exp==null){
+                      Toast.show("Invalid Explorer URL", context);
+                      return;
+                    }
                     setState(() {
                       fetching= true;
                     });
                     FocusScope.of(context).requestFocus(FocusNode());
                     var url = _url.text;
                     if(url.endsWith("/")){
+                      url = url.substring(0, url.length-1);
+                    }
+                    var explorer = _url.text;
+                    if(explorer.endsWith("/")){
                       url = url.substring(0, url.length-1);
                     }
                     print(url);
@@ -148,7 +175,7 @@ class NewNetworkState extends State<NewNetwork>{
                     print(url);
                     if(await ApiWrapper.checkUrl(url)){
                       final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-                      await database.networkDao.insertNetwork(Network(_name.text,url,_denom.text,_nick.text,false));
+                      await database.networkDao.insertNetwork(Network(_name.text,url,_denom.text,_nick.text,false, _exp.text));
 
                       Navigator.pop(context);
                       return;

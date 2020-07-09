@@ -8,7 +8,8 @@ class Network {
   final String denom;
   final bool active;
   final String nick;
-  Network( this.name, this.url, this.denom, this.nick,this.active);
+  final String explorer;
+  Network( this.name, this.url, this.denom, this.nick,this.active, this.explorer);
 }
 
 @dao

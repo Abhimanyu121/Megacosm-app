@@ -16,6 +16,7 @@ class ApiWrapper{
     String baseUrl = nw[0].url;
     var url = baseUrl+"/bank/balances/"+address;
     var resp = await http.get(url);
+    print(url);
     return resp;
   }
   static Future<http.Response> getPool() async {
@@ -69,64 +70,28 @@ class ApiWrapper{
   static Future<String> explorerLinkBuilder(String hash) async {
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
-    String baseUrl = nw[0].url;
-    var start = 0;
-    baseUrl = baseUrl.replaceAll("dev", "explorer");
-    while (start < baseUrl.length) {
-      if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
-        baseUrl=baseUrl.substring(0,start+4)+":3000";
-        break;
-      }
-     start++;
-    }
+    String baseUrl = nw[0].explorer;
     String url= "$baseUrl/transactions/$hash";
     return url;
   }
   static Future<String> expValidatorLinkBuilder(String hash) async {
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
-    String baseUrl = nw[0].url;
-    var start = 0;
-    baseUrl = baseUrl.replaceAll("dev", "explorer");
-    while (start < baseUrl.length) {
-      if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
-        baseUrl=baseUrl.substring(0,start+4)+":3000";
-        break;
-      }
-      start++;
-    }
+    String baseUrl = nw[0].explorer;
     String url= "$baseUrl/validator/$hash";
     return url;
   }
   static Future<String> expAccountLinkBuilder(String hash) async {
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
-    String baseUrl = nw[0].url;
-    var start = 0;
-    baseUrl = baseUrl.replaceAll("dev", "explorer");
-    while (start < baseUrl.length) {
-     if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
-        baseUrl=baseUrl.substring(0,start+4)+":3000";
-        break;
-      }
-      start++;
-    }
+    String baseUrl = nw[0].explorer;
     String url= "$baseUrl/account/$hash";
     return url;
   }
   static Future<String> explink() async {
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     var nw = await database.networkDao.findActiveNetwork();
-    String baseUrl = nw[0].url;
-    var start = 0;
-    baseUrl = baseUrl.replaceAll("dev", "explorer");
-    while (start < baseUrl.length) {
-       if(baseUrl[start]+baseUrl[start+1]+baseUrl[start+2]+baseUrl[start+3]==".com"){
-        baseUrl=baseUrl.substring(0,start+4)+":3000";
-        break;
-      }
-      start++;
-    }
+    String baseUrl = nw[0].explorer;
     String url= "$baseUrl/";
     return url;
   }

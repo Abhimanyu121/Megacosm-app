@@ -81,7 +81,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Network` (`name` TEXT, `url` TEXT, `denom` TEXT, `active` INTEGER, `nick` TEXT, PRIMARY KEY (`url`))');
+            'CREATE TABLE IF NOT EXISTS `Network` (`name` TEXT, `url` TEXT, `denom` TEXT, `active` INTEGER, `nick` TEXT, `explorer` TEXT, PRIMARY KEY (`url`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -105,7 +105,8 @@ class _$NetworkDao extends NetworkDao {
                   'url': item.url,
                   'denom': item.denom,
                   'active': item.active ? 1 : 0,
-                  'nick': item.nick
+                  'nick': item.nick,
+                  'explorer': item.explorer
                 },
             changeListener),
         _networkUpdateAdapter = UpdateAdapter(
@@ -117,7 +118,8 @@ class _$NetworkDao extends NetworkDao {
                   'url': item.url,
                   'denom': item.denom,
                   'active': item.active ? 1 : 0,
-                  'nick': item.nick
+                  'nick': item.nick,
+                  'explorer': item.explorer
                 },
             changeListener),
         _networkDeletionAdapter = DeletionAdapter(
@@ -129,7 +131,8 @@ class _$NetworkDao extends NetworkDao {
                   'url': item.url,
                   'denom': item.denom,
                   'active': item.active ? 1 : 0,
-                  'nick': item.nick
+                  'nick': item.nick,
+                  'explorer': item.explorer
                 },
             changeListener);
 
@@ -144,7 +147,8 @@ class _$NetworkDao extends NetworkDao {
       row['url'] as String,
       row['denom'] as String,
       row['nick'] as String,
-      (row['active'] as int) != 0);
+      (row['active'] as int) != 0,
+      row['explorer'] as String);
 
   final InsertionAdapter<Network> _networkInsertionAdapter;
 

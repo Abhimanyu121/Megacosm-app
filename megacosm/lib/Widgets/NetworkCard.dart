@@ -49,8 +49,8 @@ class NetworkCard extends StatelessWidget{
                           onPressed: ()async{
                             final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
                             var active =await  database.networkDao.findActiveNetwork();
-                            var newActive = Network(nwrk.name,nwrk.url,nwrk.denom,nwrk.nick,true);
-                            var changedActive = Network(active[0].name,active[0].url,active[0].denom,active[0].nick,false);
+                            var newActive = Network(nwrk.name,nwrk.url,nwrk.denom,nwrk.nick,true, nwrk.explorer);
+                            var changedActive = Network(active[0].name,active[0].url,active[0].denom,active[0].nick,false,active[0].explorer);
                             var ls = [newActive,changedActive];
                             var  networkInfo = NetworkInfo(bech32Hrp: newActive.name, lcdUrl: newActive.url, defaultTokenDenom: newActive.denom);
 
