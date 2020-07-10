@@ -95,7 +95,7 @@ class NetworkInformationState extends State<NetworkInformation> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text("Network Name: ",
+                    Text("Chain ID: ",
                         style: TextStyle(fontSize: 17, color: Colors.black)),
 
                     Text(args.name, style: TextStyle(color: Colors.grey,))
