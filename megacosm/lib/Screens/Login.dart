@@ -87,7 +87,7 @@ class _LoginState extends State<Login> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 onPressed: ()async{
                   FocusScope.of(context).requestFocus(FocusNode());
-                  var str =_mnemonic.text;
+                  var str =_mnemonic.text.trim();
                   var ln =str.split(" ").length;
                   print(ln);
                   print(ln>=11);
