@@ -49,3 +49,19 @@ https://flutter.dev/docs/deployment/ios
   keyPassword=*******
   keyAlias=key
   storeFile=/path/to/key.jks
+
+If you want to just run a local debug build, run:
+
+flutter run
+
+You might have to specify the device if you have multiple devices (physical or simulators). 
+
+The following command is your friend to get details and diagnostics:
+
+flutter doctor
+
+Update the following to add/modify/delete networks that are pre-configured with the app:
+
+assets/networks.json
+
+You can specify things like: Chain id (cid), Big Dipper base URL, REST (1317) URL for network's client sentry round-robin endpoint.
