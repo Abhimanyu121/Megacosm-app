@@ -73,7 +73,7 @@ class NewNetworkState extends State<NewNetwork>{
                   validator: (val) => (val.isEmpty||val.length>=4)?null:"Invalid Name",
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    labelText: "Chain ID",
+                    labelText: "Network Name (Network Prefix)",
                     hintText: "bluzelle",
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                     contentPadding: EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 10.0),
