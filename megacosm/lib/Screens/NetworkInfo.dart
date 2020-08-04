@@ -20,7 +20,7 @@ class NetworkInformationState extends State<NetworkInformation> {
   bool loading = true;
   Network args;
   var gas = "";
-  var exp ="";
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
@@ -31,7 +31,7 @@ class NetworkInformationState extends State<NetworkInformation> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       gas =
           prefs.getString("gas") + " ${args.denom.substring(1).toUpperCase()}";
-      exp = await ApiWrapper.explink();
+
       setState(() {
         loading = false;
       });
@@ -149,8 +149,8 @@ class NetworkInformationState extends State<NetworkInformation> {
                             .height * 0.06, child: IconButton(
                             onPressed: () async {
 
-                              if (await canLaunch(exp)) {
-                                await launch(exp);
+                              if (await canLaunch(args.explorer)) {
+                                await launch(args.explorer);
                               } else {
                                 Toast.show("Invalid URL", context);
                               }
