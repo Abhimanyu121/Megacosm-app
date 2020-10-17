@@ -18,7 +18,7 @@ Find apk [here](https://github.com/Abhimanyu121/Megacosm-app/releases).
 2. Adding deposits to the proposals.
 3. Voting to a proposal.
 ### Codebase
-1. This application is purely written in dart thus it can run on both iOS and android without changing a single line of code.
+1. This application is purely written in dart, thus it can run on both iOS and android without changing a single line of code.
 2. Clean codebase for easy modeification and usage.
 
 #### NOTE 1:- This application is throughly tested to be running on android as well as iOS without any change in code, but if you face any issues please reach out to me on telegram `@abhimanyu121`
