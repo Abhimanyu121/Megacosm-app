@@ -45,10 +45,10 @@ https://flutter.dev/docs/deployment/ios
 - For Android, update the "version" in pubspec.yaml in the application folder to a new version (increment, typically). Then, run "flutter build appbundle". Then, goto Google Play Console (https://play.google.com), goto Release Management, App Releases, Manage the Internal Test under "Internal Test Track", click "Create Release" to create a new release, upload the new app bundle created, wait till it completes and then click save at the bottom, then review, then "start rollout to internal test"
 
 - Be sure to also place a key.properties file in the android folder with the following contents:
-  storePassword=*******
-  keyPassword=*******
-  keyAlias=key
-  storeFile=/path/to/key.jks
+  StorePassword=*******
+  KeyPassword=*******
+  KeyAlias=key
+  StoreFile=/path/to/key.jks
 
 If you want to just run a local debug build, run:
 
