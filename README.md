@@ -1,5 +1,5 @@
 # Project Megacosm
-This Flutter based application aims to facilitate the delegation and governance process of any COSMOS based Blockchain network.<br>
+This Flutter based Application aims to facilitate the delegation and governance process of any COSMOS based Blockchain Network.<br>
 Find apk [here](https://github.com/Abhimanyu121/Megacosm-app/releases).
 ## Feature List
 ## App Side Features
@@ -7,7 +7,7 @@ Find apk [here](https://github.com/Abhimanyu121/Megacosm-app/releases).
 2. Users can switch between some predefined networks, or add new network.
 3. Users can swtich between networks instantly.
 ### Banking
-1. Transfer Tokens to a different account
+1. Transfer Tokens to a different Account
 ### Staking
 1. Stake tokens to a validator.
 2. Withdraw rewards from Validators.
