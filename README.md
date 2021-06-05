@@ -30,7 +30,7 @@ This Flutter based application aims to facilitate the delegation and governance 
 |<img src="Screenshots/9.png" width="400">|<img src="Screenshots/10.png" width="400">
 - Head over to screenshots folder for more screenshots.
 
-Instructions to build:
+## Instructions to build:
 
 https://flutter.dev/docs/get-started/install/macos
 https://flutter.dev/docs/deployment/android
@@ -46,18 +46,18 @@ https://flutter.dev/docs/deployment/ios
   keyAlias=key
   storeFile=/path/to/key.jks
 
-If you want to just run a local debug build, run:
+## If you want to just run a local debug build, run:
 
-flutter run
+`flutter run`
 
-You might have to specify the device if you have multiple devices (physical or simulators). 
+`You might have to specify the device if you have multiple devices (physical or simulators). `
 
 The following command is your friend to get details and diagnostics:
 
-flutter doctor
+`flutter doctor`
 
 Update the following to add/modify/delete networks that are pre-configured with the app:
 
 assets/networks.json
 
-You can specify things like: Chain id (cid), Big Dipper base URL, REST (1317) URL for network's client sentry round-robin endpoint.
+`You can specify things like: Chain id (cid), Big Dipper base URL, REST (1317) URL for network's client sentry round-robin endpoint.`
