@@ -5,7 +5,7 @@ This Flutter based application aims to facilitate the delegation and governance 
 ## Feature List
 ## App Side Features
 1. Mnemonic is stored in encrypted way and user password is not stored at all, so app is really secure.
-2. Users can switch between some predefined networks, or add new network.
+2. Users can switch between some predefined networks, or add new networks.
 3. Users can swtich between networks instantly.
 ### Banking
 1. Transfer Tokens to a different account
