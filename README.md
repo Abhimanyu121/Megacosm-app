@@ -20,7 +20,7 @@ This Flutter based application aims to facilitate the delegation and governance 
 3. Voting to a proposal.
 ### Codebase
 1. This application is purely written in dart thus it can run on both iOS and android without changing a single line of code.
-2. Clean codebase for easy modeification and usage.
+2. Clean codebase for easy modeification and usage. No platform specific code.
 
 #
 ### Screenshots
