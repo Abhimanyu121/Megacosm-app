@@ -1,4 +1,4 @@
-# Project Megacosm
+# Project Megacosm-app
 This Flutter based application aims to facilitate the delegation and governance process of any COSMOS based Blockchain network.<br>
 ## Project strtucture
 ![Imgur Image](https://imgur.com/VWVN7YB.png)
@@ -8,7 +8,7 @@ This Flutter based application aims to facilitate the delegation and governance 
 2. Users can switch between some predefined networks, or add new network.
 3. Users can swtich between networks instantly.
 ### Banking
-1. Transfer Tokens to a different account
+1. Transfer Tokens to a different account.
 ### Staking
 1. Stake tokens to a validator.
 2. Withdraw rewards from Validators.
@@ -38,7 +38,7 @@ https://flutter.dev/docs/deployment/ios
 
 - Be sure to run "pod install" in the ios folder, for a newly installed copy of the code. Then, "open the Runner.xcworkspace" folder. Increment the build number, build an archive, distribute to app store, wait for approval, and then goto AppStoreConnect, and distribute as required.
 
-- For Android, update the "version" in pubspec.yaml in the application folder to a new version (increment, typically). Then, run "flutter build appbundle". Then, goto Google Play Console (https://play.google.com), goto Release Management, App Releases, Manage the Internal Test under "Internal Test Track", click "Create Release" to create a new release, upload the new app bundle created, wait till it completes and then click save at the bottom, then review, then "start rollout to internal test"
+- For Android, update the "version" in pubspec.yaml in the application folder to a new version (increment, typically). Then, run "flutter build appbundle". Then, goto Google Play Console (https://play.google.com), goto Release Management, App Releases, Manage the Internal Test under "Internal Test Track", click "Create Release" to create a new release, upload the new app bundle created, wait till it completes and then click save at the bottom, then review, then "start rollout to internal test".
 
 - Be sure to also place a key.properties file in the android folder with the following contents:
   storePassword=*******
